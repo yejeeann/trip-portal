@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,700;1,400;1,700&amp;family=Manrope:wght@400;500;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "surface-container-lowest": "#ffffff",
+                    "on-secondary": "#ffffff",
+                    "on-tertiary": "#ffffff",
+                    "tertiary-container": "#7b5d1d",
+                    "on-surface": "#1c1c18",
+                    "secondary-container": "#bed6ff",
+                    "inverse-on-surface": "#f3f0ea",
+                    "on-surface-variant": "#3e494a",
+                    "on-primary-fixed-variant": "#004f56",
+                    "surface-dim": "#dcdad4",
+                    "on-tertiary-container": "#ffd995",
+                    "surface-container": "#f0eee8",
+                    "on-tertiary-fixed-variant": "#5d4201",
+                    "outline": "#6f797a",
+                    "surface-tint": "#006972",
+                    "tertiary-fixed": "#ffdea5",
+                    "surface-variant": "#e5e2dc",
+                    "secondary-fixed": "#d5e3ff",
+                    "on-primary-container": "#9becf7",
+                    "on-secondary-fixed-variant": "#30486a",
+                    "background": "#fcf9f3",
+                    "surface-container-low": "#f6f3ed",
+                    "secondary": "#485f83",
+                    "on-primary": "#ffffff",
+                    "surface": "#fcf9f3",
+                    "tertiary": "#614604",
+                    "on-secondary-fixed": "#001c3b",
+                    "on-primary-fixed": "#001f23",
+                    "on-error": "#ffffff",
+                    "on-tertiary-fixed": "#261900",
+                    "primary-fixed-dim": "#82d3de",
+                    "on-background": "#1c1c18",
+                    "surface-container-highest": "#e5e2dc",
+                    "surface-bright": "#fcf9f3",
+                    "inverse-primary": "#82d3de",
+                    "secondary-fixed-dim": "#b0c8f0",
+                    "tertiary-fixed-dim": "#e9c176",
+                    "outline-variant": "#bec8ca",
+                    "error-container": "#ffdad6",
+                    "on-secondary-container": "#455c80",
+                    "inverse-surface": "#31312d",
+                    "error": "#ba1a1a",
+                    "primary-fixed": "#9ff0fb",
+                    "primary": "#00535b",
+                    "surface-container-high": "#ebe8e2",
+                    "primary-container": "#006d77",
+                    "on-error-container": "#93000a"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.125rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "fontFamily": {
+                    "headline": ["Noto Serif"],
+                    "display": ["Noto Serif"],
+                    "body": ["Manrope"],
+                    "label": ["Manrope"]
+            }
+          }
+        }
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        body { font-family: 'Manrope', sans-serif; }
+        h1, h2, h3 { font-family: 'Noto Serif', serif; }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-surface min-h-screen pb-24">
+<!-- TopAppBar -->
+<header class="bg-[#fcf9f3] dark:bg-stone-900 fixed top-0 left-0 w-full z-50 flex justify-between items-center w-full px-6 py-4">
+<div class="flex items-center gap-4">
+<span class="material-symbols-outlined text-[#00535b] dark:text-teal-400 cursor-pointer" data-icon="menu">menu</span>
+<h1 class="font-serif italic text-2xl text-[#00535b] dark:text-teal-400">The Limestone Editorial</h1>
+</div>
+<div class="flex items-center gap-4">
+<span class="material-symbols-outlined text-[#00535b]/60" data-icon="print">print</span>
+<div class="w-8 h-8 rounded-full bg-surface-container-highest overflow-hidden">
+<img alt="Traveler" data-alt="Close-up portrait of a sophisticated traveler with sun-kissed skin and linen shirt, Mediterranean aesthetic" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBr6MtcCDZHZVjgkHMOhXDNo-2531wqp6SW8tqOyU_iB2AB-QmDNeNvqiY8O2KCIG4xDegoFgqa93bUXTAgBeriFmcLA1aF3b4g6LR2-FiTC_SXRczYRkxyD6pZC11MhiKFmO9V-TOShcnQg9_Xb2CFPlFuel8hVrHi7Q0PsZ3d3jBR2gOSLvAT4AdBKlKG0LkcOBncVbppRvZxQItyvvcnE1H1s9M4Se3W_-IkCpEWkVCDKoXY1ouF5cu88zYqNjLVUEGSbMb904dm"/>
+</div>
+</div>
+</header>
+<!-- Main Content -->
+<main class="pt-20 px-4 space-y-8">
+<!-- Editorial Hero -->
+<section class="relative -mx-4">
+<div class="h-[420px] w-full overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="Cinematic wide shot of an Italian coastal town with limestone cliffs and deep turquoise Mediterranean waters at sunrise" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBbAI2cyH8LlQoX3nTkyuNOhNtMpKwE_loHCaacm2TlGMOGfCjFzqgKbDmVhUOoIQEFqFa6chAsPwfTSKE_mpXlyulmzgJABXMEZ1XbWPB1EOCcaKuss2oWbZ_-xE_HFrMTc37OA4AFLR2Zwgr5OjunpHfpwik0pvLFZvTQXrbqZmE8iouloo4Nj7fLUbJkw-tKpWlbNA0cWAuQ9UChZMsdMZaBnJbtAplRZH_6iyDlPBWw0WujdCVZ0N6N-WwvGC8Un_A5xzor5a4a"/>
+<div class="absolute inset-0 bg-gradient-to-t from-background via-transparent to-transparent"></div>
+</div>
+<div class="absolute bottom-6 left-6 right-6">
+<p class="font-label font-bold text-xs uppercase tracking-[0.2em] text-primary mb-2">Private Expedition</p>
+<h2 class="text-4xl font-display font-bold leading-tight mb-2">Grand Tyrrhenian Circuit</h2>
+<p class="font-body text-sm text-on-surface-variant max-w-[280px]">A 17-day curated journey through Sicily, Malta, Amalfi, and the Eternal City.</p>
+</div>
+</section>
+<!-- Route Summary Section -->
+<section class="bg-surface-container-low rounded-lg p-5 space-y-4">
+<div class="flex justify-between items-center">
+<h3 class="text-xl font-bold">The Route</h3>
+<span class="text-tertiary font-bold font-label text-[10px] uppercase tracking-widest">1,240 KM Total</span>
+</div>
+<div class="flex items-start gap-4">
+<div class="flex flex-col items-center gap-1 pt-1">
+<div class="w-2 h-2 rounded-full bg-primary"></div>
+<div class="w-0.5 h-12 bg-outline-variant/30"></div>
+<div class="w-2 h-2 rounded-full border-2 border-primary bg-background"></div>
+</div>
+<div class="flex-1 space-y-4">
+<div>
+<p class="font-label font-bold text-[10px] text-primary uppercase">Departure</p>
+<p class="font-display text-lg">Palermo, Sicily</p>
+</div>
+<div>
+<p class="font-label font-bold text-[10px] text-primary uppercase">Destination</p>
+<p class="font-display text-lg">Rome, Lazio</p>
+</div>
+</div>
+<div class="bg-surface-container-highest rounded-lg p-3 text-center min-w-[80px]">
+<span class="block text-2xl font-display font-bold">17</span>
+<span class="block font-label text-[10px] uppercase">Days</span>
+</div>
+</div>
+</section>
+<!-- Destination Bento Grid -->
+<section class="space-y-4">
+<h3 class="text-xl font-bold px-2">Destinations</h3>
+<div class="grid grid-cols-2 gap-3">
+<!-- Sicily -->
+<div class="bg-surface-container-lowest rounded-lg overflow-hidden group">
+<div class="h-32 overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="Ancient Greek temple ruins in Sicily with dry grass and deep blue sky in the background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBKR3JF09IEFI7SCL0it3WPCYPs-YbWXkbLs0oADthCLZOrw8LuplS7VUOfWJMvlJWX6Z7c09WcPGJeoMlCEq57JTc_xg1n1P8GL5PyvsPMelbhN2dl4wtJfwPIKup5D5ZLtyRG8C_Pc8GGM_eO3tOYABaiQBOZUewZOpgA2-pgjLHwjqXTNCOfwGbJunuzwG9ur7p7lyL_kYjjADBmyqzbUjIP9xARophEnEykRXYDRT6WAw_z_J_wz8dZzrJoa6py_3m48X1dBqtg"/>
+</div>
+<div class="p-3">
+<h4 class="font-display font-bold text-base">Sicily</h4>
+<p class="font-body text-[11px] text-on-surface-variant italic">Days 1—5</p>
+</div>
+</div>
+<!-- Malta -->
+<div class="bg-surface-container-lowest rounded-lg overflow-hidden group">
+<div class="h-32 overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="Valletta Malta skyline with honey-colored limestone buildings and church domes at dusk" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCfKslDtorI2EC00257_4alIixcJtu179IlZQ6zpSsN4Vx0gRpsebKTs3yv3ocykUqoLLztqDnPiQQMSVvdkXbFpkVqVPAhtpYDEqJuMsH6EZ5UaXOp3m68GENlPcCbM7h1CSyNeUl4Nz5Ui9hPe9KrMn6NPHj3O0FbVYo2AB1kByGbabyZ-X1NO1Ip_V7cZJRgbVRMwTJXYkjZ1GLaxO4Kr1jw3cUo4w4L83hWJXYOPf7fbAwgNqb-19mn4SavwI8DVP6Mr0v6rFhF"/>
+</div>
+<div class="p-3">
+<h4 class="font-display font-bold text-base">Malta</h4>
+<p class="font-body text-[11px] text-on-surface-variant italic">Days 6—9</p>
+</div>
+</div>
+<!-- Amalfi -->
+<div class="bg-surface-container-lowest rounded-lg overflow-hidden group">
+<div class="h-32 overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="Positano colorful houses perched on cliffs overlooking the Amalfi coast with lemon trees in foreground" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCULqgVYTKoKoCW_rABSE8buGMyUQx-hVJ9e_FwUlv2yXK8l5Xu5C3mbFdGTJcPrbejW-tFPrMwGuqcB4g04kF6LxBwsxSxvG5rdrOfQAZPxa1j2WoluZNCJuREPW9cuhCr_i7acszKOdnuGXLYHncGnnJyrxGkGrE2OWS-2KjaQAYM4SN9NZ-4-brQj2TfYxeNW5RZS1As0TuBX5tar5pRPghKuTpg2RX-wUXVyZZ1raKuFurKuiNhFzjp8DeanmpgbU7UcZIw9UkK"/>
+</div>
+<div class="p-3">
+<h4 class="font-display font-bold text-base">Amalfi</h4>
+<p class="font-body text-[11px] text-on-surface-variant italic">Days 10—13</p>
+</div>
+</div>
+<!-- Rome -->
+<div class="bg-surface-container-lowest rounded-lg overflow-hidden group">
+<div class="h-32 overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="The Roman Colosseum at sunset with warm orange lighting and soft shadows on the stone arches" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDLDSFXHVU54Kzd1gLmaBFshYCVoUNo11WVfMVXx_7WE6u3uho6bgND1oeTrhQrPVL0HN2rFjntxwLn3oEbri_HmjMIw0FY-5iO6gbrVfgFJUjuS-JfqWHH5TsrAWOMo9KcmjH_kw59ZZqpX0RhIw0dLFWKPEEbuPoW6h1wmz6KXnEfZelNQssBFyhgS0vIAJckJn99JWYzG_9zoTwGg3jvo6-JHqf9ysHvzpqSroGgyjUm1BQ9dHlnylXHhgz_KhEBVszLuXsy4pY2"/>
+</div>
+<div class="p-3">
+<h4 class="font-display font-bold text-base">Rome</h4>
+<p class="font-body text-[11px] text-on-surface-variant italic">Days 14—17</p>
+</div>
+</div>
+</div>
+</section>
+<!-- Itinerary Timeline -->
+<section class="space-y-6">
+<div class="flex justify-between items-end px-2">
+<div>
+<h3 class="text-xl font-bold">The Itinerary</h3>
+<p class="font-body text-xs text-on-surface-variant">Dense preview of your daily path.</p>
+</div>
+<button class="bg-primary text-on-primary rounded-full px-4 py-1.5 text-xs font-bold font-label uppercase tracking-wider">Expand</button>
+</div>
+<div class="space-y-4">
+<!-- Day 1 -->
+<div class="flex gap-4 group">
+<div class="w-12 shrink-0 text-center">
+<span class="block font-display font-bold text-lg text-primary">01</span>
+<span class="block font-label text-[9px] uppercase font-bold text-on-surface-variant">OCT</span>
+</div>
+<div class="flex-1 bg-surface-container rounded-lg p-4 relative overflow-hidden">
+<div class="absolute top-0 right-0 p-3 opacity-10">
+<span class="material-symbols-outlined text-4xl" data-icon="flight_land">flight_land</span>
+</div>
+<h5 class="font-display font-bold text-sm mb-1">Palermo Arrival</h5>
+<div class="flex flex-wrap gap-2 mb-3">
+<span class="bg-surface-container-highest text-[9px] px-2 py-0.5 rounded font-bold uppercase tracking-tighter">Airport Transfer</span>
+<span class="bg-surface-container-highest text-[9px] px-2 py-0.5 rounded font-bold uppercase tracking-tighter">Hotel Palazzo</span>
+</div>
+<p class="text-xs text-on-surface-variant line-clamp-2">Check-in at the historic center. Evening street food tour through Ballarò market with a local curator.</p>
+</div>
+</div>
+<!-- Day 2 -->
+<div class="flex gap-4 group">
+<div class="w-12 shrink-0 text-center">
+<span class="block font-display font-bold text-lg text-primary">02</span>
+<span class="block font-label text-[9px] uppercase font-bold text-on-surface-variant">OCT</span>
+</div>
+<div class="flex-1 border-l-2 border-primary pl-4 py-1 space-y-3">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-sm text-tertiary" data-icon="restaurant">restaurant</span>
+<p class="text-xs font-bold">Breakfast at Antico Caffè Spinnato</p>
+</div>
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-sm text-tertiary" data-icon="museum">museum</span>
+<p class="text-xs font-bold">Monreale Cathedral Private Tour</p>
+</div>
+<div class="bg-tertiary-container/10 p-3 rounded-lg border-l-2 border-tertiary">
+<div class="flex items-center gap-2 mb-1">
+<span class="material-symbols-outlined text-sm text-tertiary" data-icon="priority_high">priority_high</span>
+<p class="text-[10px] font-bold uppercase text-tertiary">Pro Tip</p>
+</div>
+<p class="text-[11px] leading-relaxed">Book the 'Roof Walk' at Monreale for an unmatched view of the Conca d'Oro.</p>
+</div>
+</div>
+</div>
+<!-- Day 3 -->
+<div class="flex gap-4 group">
+<div class="w-12 shrink-0 text-center">
+<span class="block font-display font-bold text-lg text-primary">03</span>
+<span class="block font-label text-[9px] uppercase font-bold text-on-surface-variant">OCT</span>
+</div>
+<div class="flex-1 bg-surface-container-low rounded-lg p-4">
+<h5 class="font-display font-bold text-sm mb-1">Cefalù Coastal Escape</h5>
+<p class="text-xs text-on-surface-variant mb-2">Morning train to the medieval seaside town. Hike up La Rocca for the sunset.</p>
+<div class="flex items-center gap-4 text-primary text-[10px] font-bold">
+<span class="flex items-center gap-1"><span class="material-symbols-outlined text-xs" data-icon="train">train</span> 1h 10m</span>
+<span class="flex items-center gap-1"><span class="material-symbols-outlined text-xs" data-icon="map">map</span> 70km</span>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Interactive Map Preview -->
+<section class="space-y-4">
+<div class="flex justify-between items-center px-2">
+<h3 class="text-xl font-bold">Interactive Map</h3>
+<span class="text-xs text-primary font-bold">Live Tracking</span>
+</div>
+<div class="h-64 rounded-lg overflow-hidden relative shadow-sm">
+<img class="w-full h-full object-cover" data-alt="Stylized map showing the Italian peninsula and the Mediterranean islands with elegant line work and sea teal accents" data-location="Sicily" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBHqOuqOXb4qpdkETguZLBnXJt3bfrnXNR3RJdCKmLd7fS0STEmYdbJ_PdLQMROd1iSVi5AO3LjjkLRzu2iRZfa_k4K34lyzsooO9olbnXMIrsVZP0vfJSj6WLGYDDCrPMbWpECUIsEN5Z1pjlfik4Bj06pbM1Qf5EBCxsB42V8Y7haz148fouU4q1MPSTEiM1Fa_WEFKLcCHG3uOQfszggL1Z_I8Qxw8bJij1mvwBRP1Yz_4JIq8-lUe2PTh_QrOTMtvvlbOSn1YTJ"/>
+<div class="absolute inset-0 bg-primary/5"></div>
+<div class="absolute bottom-4 left-4 right-4 bg-surface-container-lowest p-3 rounded shadow-lg flex items-center justify-between">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 bg-surface-container-high rounded-full flex items-center justify-center">
+<span class="material-symbols-outlined text-primary" data-icon="location_on">location_on</span>
+</div>
+<div>
+<p class="text-[10px] font-bold uppercase text-on-surface-variant">Current Focus</p>
+<p class="text-sm font-display font-bold">Palermo Center</p>
+</div>
+</div>
+<span class="material-symbols-outlined text-primary" data-icon="open_in_new">open_in_new</span>
+</div>
+</div>
+</section>
+<!-- Travel Tips / Wiki -->
+<section class="pb-12 space-y-4">
+<h3 class="text-xl font-bold px-2">Essential Notes</h3>
+<div class="space-y-3">
+<div class="bg-surface-container-highest p-4 rounded-lg">
+<div class="flex items-center gap-3 mb-2">
+<span class="material-symbols-outlined text-primary" data-icon="account_balance_wallet">account_balance_wallet</span>
+<h4 class="font-bold text-sm uppercase font-label">Currency &amp; Cash</h4>
+</div>
+<p class="text-xs leading-relaxed text-on-surface-variant">Small shops in Sicily and Amalfi often prefer cash (Euro). Keep €20-€50 in small bills for local trattorias.</p>
+</div>
+<div class="bg-surface-container-highest p-4 rounded-lg">
+<div class="flex items-center gap-3 mb-2">
+<span class="material-symbols-outlined text-primary" data-icon="directions_car">directions_car</span>
+<h4 class="font-bold text-sm uppercase font-label">Transport Logic</h4>
+</div>
+<p class="text-xs leading-relaxed text-on-surface-variant">Driving in Amalfi is for the brave. We suggest the Ferry (Travelmar) for coastal hops between Positano and Salerno.</p>
+</div>
+<div class="bg-error-container/10 p-4 rounded-lg border border-error/10">
+<div class="flex items-center gap-3 mb-2 text-error">
+<span class="material-symbols-outlined text-sm" data-icon="warning">warning</span>
+<h4 class="font-bold text-sm uppercase font-label">Safety Alert</h4>
+</div>
+<p class="text-xs leading-relaxed text-on-surface-variant">Keep bags secure in Rome Termini station and crowded tourist spots in Naples.</p>
+</div>
+</div>
+</section>
+</main>
+<!-- BottomNavBar -->
+<nav class="bg-[#fcf9f3] dark:bg-stone-900 fixed bottom-0 left-0 w-full z-50 shadow-[0_-4px_20px_rgba(0,0,0,0.03)] flex justify-around items-center w-full px-4 pb-6 pt-3">
+<a class="flex flex-col items-center justify-center bg-[#00535b] text-white rounded-full px-5 py-2" href="#">
+<span class="material-symbols-outlined" data-icon="home_pin" data-weight="fill" style="font-variation-settings: 'FILL' 1;">home_pin</span>
+<span class="font-sans text-[11px] uppercase tracking-widest font-bold mt-0.5">Home</span>
+</a>
+<a class="flex flex-col items-center justify-center text-[#00535b]/60 dark:text-teal-100/40 hover:text-[#614604] dark:hover:text-gold-400 transition-colors" href="#">
+<span class="material-symbols-outlined" data-icon="calendar_today">calendar_today</span>
+<span class="font-sans text-[11px] uppercase tracking-widest font-bold mt-0.5">Itinerary</span>
+</a>
+<a class="flex flex-col items-center justify-center text-[#00535b]/60 dark:text-teal-100/40 hover:text-[#614604] dark:hover:text-gold-400 transition-colors" href="#">
+<span class="material-symbols-outlined" data-icon="map">map</span>
+<span class="font-sans text-[11px] uppercase tracking-widest font-bold mt-0.5">Map</span>
+</a>
+<a class="flex flex-col items-center justify-center text-[#00535b]/60 dark:text-teal-100/40 hover:text-[#614604] dark:hover:text-gold-400 transition-colors" href="#">
+<span class="material-symbols-outlined" data-icon="menu_book">menu_book</span>
+<span class="font-sans text-[11px] uppercase tracking-widest font-bold mt-0.5">Guide</span>
+</a>
+</nav>
+<!-- FAB (Suppressed based on context rules, but adding print/offline float for mobile functionality) -->
+<button class="fixed bottom-24 right-6 w-14 h-14 bg-tertiary-container text-on-tertiary-container rounded-full shadow-xl flex items-center justify-center z-40">
+<span class="material-symbols-outlined" data-icon="download_for_offline">download_for_offline</span>
+</button>
+</body></html>

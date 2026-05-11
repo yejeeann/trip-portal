@@ -1,0 +1,45 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 760" role="img" aria-labelledby="title desc">
+  <title id="title">Sicily fishing village</title>
+  <desc id="desc">Coastal fishing village with low stone buildings, boats, and calm Mediterranean water.</desc>
+  <defs>
+    <linearGradient id="sky" x1="0" x2="0" y1="0" y2="1">
+      <stop offset="0" stop-color="#78b8d3"/>
+      <stop offset="1" stop-color="#f8d39a"/>
+    </linearGradient>
+    <linearGradient id="sea" x1="0" x2="1" y1="0" y2="1">
+      <stop offset="0" stop-color="#2b8aa0"/>
+      <stop offset="1" stop-color="#84c9bd"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="760" fill="url(#sky)"/>
+  <rect y="455" width="1200" height="305" fill="url(#sea)"/>
+  <path d="M0 430 C180 390 310 420 465 370 C640 315 815 355 1200 290 L1200 470 L0 470 Z" fill="#c99b5f"/>
+  <g stroke="#6f5138" stroke-width="5" stroke-linejoin="round">
+    <path d="M105 305 h170 v125 H105 Z" fill="#f0d199"/>
+    <path d="M275 270 h190 v160 H275 Z" fill="#d59b65"/>
+    <path d="M465 325 h155 v105 H465 Z" fill="#f3dcae"/>
+    <path d="M710 285 h205 v145 H710 Z" fill="#e5bd78"/>
+    <path d="M915 330 h175 v100 H915 Z" fill="#f1d6a4"/>
+    <path d="M85 305 l105 -70 105 70 Z" fill="#9d573f"/>
+    <path d="M260 270 l115 -75 110 75 Z" fill="#8d4e3a"/>
+    <path d="M690 285 l120 -75 125 75 Z" fill="#9d573f"/>
+  </g>
+  <g fill="#4f392d">
+    <rect x="155" y="350" width="38" height="80" rx="16"/>
+    <rect x="350" y="330" width="40" height="100" rx="18"/>
+    <rect x="765" y="345" width="38" height="85" rx="16"/>
+    <rect x="980" y="370" width="34" height="60" rx="14"/>
+  </g>
+  <g stroke="#53382b" stroke-width="7" stroke-linecap="round" fill="none">
+    <path d="M215 565 q95 55 190 0"/>
+    <path d="M740 600 q85 48 170 0"/>
+  </g>
+  <path d="M310 505 l55 125" stroke="#53382b" stroke-width="8" stroke-linecap="round"/>
+  <path d="M365 630 l-70 -75 h70 Z" fill="#f4ead1"/>
+  <path d="M825 540 l40 110" stroke="#53382b" stroke-width="8" stroke-linecap="round"/>
+  <path d="M865 650 l-60 -70 h60 Z" fill="#f4ead1"/>
+  <g stroke="#e6f3ee" stroke-width="5" opacity=".75">
+    <path d="M0 525 C190 500 275 548 430 520 S760 490 1200 530"/>
+    <path d="M0 655 C245 625 385 675 610 640 S950 615 1200 645"/>
+  </g>
+</svg>

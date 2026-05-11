@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 760" role="img" aria-labelledby="title desc">
+  <title id="title">Catania airport departure</title>
+  <desc id="desc">Simple static illustration of Catania airport preparation with Etna and runway.</desc>
+  <defs>
+    <linearGradient id="sky" x1="0" x2="0" y1="0" y2="1">
+      <stop offset="0" stop-color="#83b9cf"/>
+      <stop offset="1" stop-color="#f1c98c"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="760" fill="url(#sky)"/>
+  <path d="M0 420 C190 360 340 395 520 310 C700 225 850 300 1200 230 L1200 760 L0 760 Z" fill="#6f785e"/>
+  <path d="M450 335 l140 -190 l160 215 Z" fill="#575b54"/>
+  <path d="M585 150 l55 75 l-90 0 Z" fill="#f5f1df"/>
+  <rect y="520" width="1200" height="240" fill="#3d4b51"/>
+  <path d="M150 650 h900" stroke="#f2dca9" stroke-width="16" stroke-dasharray="80 60" stroke-linecap="round"/>
+  <path d="M210 455 h780 v80 H210 Z" fill="#d9c39b" stroke="#6f5138" stroke-width="8"/>
+  <path d="M285 380 h630 v75 H285 Z" fill="#f0dcae" stroke="#6f5138" stroke-width="8"/>
+  <g fill="#567484">
+    <rect x="330" y="405" width="52" height="34"/>
+    <rect x="420" y="405" width="52" height="34"/>
+    <rect x="510" y="405" width="52" height="34"/>
+    <rect x="600" y="405" width="52" height="34"/>
+    <rect x="690" y="405" width="52" height="34"/>
+    <rect x="780" y="405" width="52" height="34"/>
+  </g>
+  <path d="M390 610 l290 -65 l205 40 q30 6 38 26 q-28 24 -75 18 l-150 -18 l-160 75 l-80 -12 l95 -80 l-135 28 Z" fill="#eef1f0" stroke="#24343c" stroke-width="7" stroke-linejoin="round"/>
+</svg>

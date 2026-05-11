@@ -1,0 +1,264 @@
+{
+  "generatedAt": "2026-05-09T08:03:11.514Z",
+  "results": [
+    {
+      "day": 10,
+      "date": "2026-05-30",
+      "transportMode": "rental-car",
+      "city": "Realmonte / Agrigento",
+      "stops": [
+        "Realmonte",
+        "Valley of the Temples",
+        "Temple of Concordia, Agrigento"
+      ],
+      "optimizedRoute": {
+        "jsonrpc": "2.0",
+        "id": "call",
+        "result": {
+          "content": [
+            {
+              "type": "text",
+              "text": "다음 장소들의 동선을 최적화했습니다: Realmonte, Valley of the Temples, Temple of Concordia, Agrigento"
+            }
+          ],
+          "structuredContent": {
+            "result": "다음 장소들의 동선을 최적화했습니다: Realmonte, Valley of the Temples, Temple of Concordia, Agrigento"
+          },
+          "isError": false
+        }
+      },
+      "mapLinks": {
+        "jsonrpc": "2.0",
+        "id": "call",
+        "result": {
+          "content": [
+            {
+              "type": "text",
+              "text": "구글 지도 링크: https://www.google.com/maps/dir/Realmonte/Valley+of+the+Temples/Temple+of+Concordia,+Agrigento"
+            }
+          ],
+          "structuredContent": {
+            "result": "구글 지도 링크: https://www.google.com/maps/dir/Realmonte/Valley+of+the+Temples/Temple+of+Concordia,+Agrigento"
+          },
+          "isError": false
+        }
+      }
+    },
+    {
+      "day": 12,
+      "date": "2026-06-01",
+      "transportMode": "rental-car",
+      "city": "Western Sicily",
+      "stops": [
+        "Contrada Piano Milano",
+        "Trapani",
+        "Erice"
+      ],
+      "optimizedRoute": {
+        "jsonrpc": "2.0",
+        "id": "call",
+        "result": {
+          "content": [
+            {
+              "type": "text",
+              "text": "다음 장소들의 동선을 최적화했습니다: Contrada Piano Milano, Trapani, Erice"
+            }
+          ],
+          "structuredContent": {
+            "result": "다음 장소들의 동선을 최적화했습니다: Contrada Piano Milano, Trapani, Erice"
+          },
+          "isError": false
+        }
+      },
+      "mapLinks": {
+        "jsonrpc": "2.0",
+        "id": "call",
+        "result": {
+          "content": [
+            {
+              "type": "text",
+              "text": "구글 지도 링크: https://www.google.com/maps/dir/Contrada+Piano+Milano/Trapani/Erice"
+            }
+          ],
+          "structuredContent": {
+            "result": "구글 지도 링크: https://www.google.com/maps/dir/Contrada+Piano+Milano/Trapani/Erice"
+          },
+          "isError": false
+        }
+      }
+    },
+    {
+      "day": 13,
+      "date": "2026-06-02",
+      "transportMode": "rental-car",
+      "city": "Western Sicily",
+      "stops": [
+        "Trapani",
+        "Erice",
+        "Scopello"
+      ],
+      "optimizedRoute": {
+        "jsonrpc": "2.0",
+        "id": "call",
+        "result": {
+          "content": [
+            {
+              "type": "text",
+              "text": "다음 장소들의 동선을 최적화했습니다: Trapani, Erice, Scopello"
+            }
+          ],
+          "structuredContent": {
+            "result": "다음 장소들의 동선을 최적화했습니다: Trapani, Erice, Scopello"
+          },
+          "isError": false
+        }
+      },
+      "mapLinks": {
+        "jsonrpc": "2.0",
+        "id": "call",
+        "result": {
+          "content": [
+            {
+              "type": "text",
+              "text": "구글 지도 링크: https://www.google.com/maps/dir/Trapani/Erice/Scopello"
+            }
+          ],
+          "structuredContent": {
+            "result": "구글 지도 링크: https://www.google.com/maps/dir/Trapani/Erice/Scopello"
+          },
+          "isError": false
+        }
+      }
+    },
+    {
+      "day": 14,
+      "date": "2026-06-03",
+      "transportMode": "rental-car",
+      "city": "Palermo / Monreale",
+      "stops": [
+        "Palermo",
+        "Monreale"
+      ],
+      "optimizedRoute": {
+        "jsonrpc": "2.0",
+        "id": "call",
+        "result": {
+          "content": [
+            {
+              "type": "text",
+              "text": "다음 장소들의 동선을 최적화했습니다: Palermo, Monreale"
+            }
+          ],
+          "structuredContent": {
+            "result": "다음 장소들의 동선을 최적화했습니다: Palermo, Monreale"
+          },
+          "isError": false
+        }
+      },
+      "mapLinks": {
+        "jsonrpc": "2.0",
+        "id": "call",
+        "result": {
+          "content": [
+            {
+              "type": "text",
+              "text": "구글 지도 링크: https://www.google.com/maps/dir/Palermo/Monreale"
+            }
+          ],
+          "structuredContent": {
+            "result": "구글 지도 링크: https://www.google.com/maps/dir/Palermo/Monreale"
+          },
+          "isError": false
+        }
+      }
+    },
+    {
+      "day": 7,
+      "date": "2026-05-27",
+      "transportMode": "taxi",
+      "city": "Malta / Valletta",
+      "stops": [
+        "Malta International Airport",
+        "Valletta",
+        "Birgu",
+        "Senglea"
+      ],
+      "optimizedRoute": {
+        "jsonrpc": "2.0",
+        "id": "call",
+        "result": {
+          "content": [
+            {
+              "type": "text",
+              "text": "다음 장소들의 동선을 최적화했습니다: Malta International Airport, Valletta, Birgu, Senglea"
+            }
+          ],
+          "structuredContent": {
+            "result": "다음 장소들의 동선을 최적화했습니다: Malta International Airport, Valletta, Birgu, Senglea"
+          },
+          "isError": false
+        }
+      },
+      "mapLinks": {
+        "jsonrpc": "2.0",
+        "id": "call",
+        "result": {
+          "content": [
+            {
+              "type": "text",
+              "text": "구글 지도 링크: https://www.google.com/maps/dir/Malta+International+Airport/Valletta/Birgu/Senglea"
+            }
+          ],
+          "structuredContent": {
+            "result": "구글 지도 링크: https://www.google.com/maps/dir/Malta+International+Airport/Valletta/Birgu/Senglea"
+          },
+          "isError": false
+        }
+      }
+    },
+    {
+      "day": 8,
+      "date": "2026-05-28",
+      "transportMode": "taxi",
+      "city": "Gozo / Comino",
+      "stops": [
+        "Gozo",
+        "Citadel",
+        "Ggantija Archaeological Park",
+        "Blue Lagoon"
+      ],
+      "optimizedRoute": {
+        "jsonrpc": "2.0",
+        "id": "call",
+        "result": {
+          "content": [
+            {
+              "type": "text",
+              "text": "다음 장소들의 동선을 최적화했습니다: Gozo, Citadel, Ggantija Archaeological Park, Blue Lagoon"
+            }
+          ],
+          "structuredContent": {
+            "result": "다음 장소들의 동선을 최적화했습니다: Gozo, Citadel, Ggantija Archaeological Park, Blue Lagoon"
+          },
+          "isError": false
+        }
+      },
+      "mapLinks": {
+        "jsonrpc": "2.0",
+        "id": "call",
+        "result": {
+          "content": [
+            {
+              "type": "text",
+              "text": "구글 지도 링크: https://www.google.com/maps/dir/Gozo/Citadel/Ggantija+Archaeological+Park/Blue+Lagoon"
+            }
+          ],
+          "structuredContent": {
+            "result": "구글 지도 링크: https://www.google.com/maps/dir/Gozo/Citadel/Ggantija+Archaeological+Park/Blue+Lagoon"
+          },
+          "isError": false
+        }
+      }
+    }
+  ]
+}

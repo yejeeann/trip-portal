@@ -1,0 +1,62 @@
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap");
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --font-sans: "Inter";
+  --font-serif: "Inter";
+  --color-field-surface: #fbf9f8;
+  --color-field-ink: #051a17;
+  --color-field-forest: #1a2f2b;
+  --color-field-teal: #00696c;
+  --color-field-teal-soft: #d8f4f0;
+  --color-field-brass: #b08a45;
+  --color-field-line: #c2c8c5;
+  --color-field-red: #ba1a1a;
+  color-scheme: light;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  min-height: 100vh;
+  background: var(--color-field-surface);
+  color: var(--color-field-ink);
+}
+
+::selection {
+  background: var(--color-field-forest);
+  color: var(--color-field-surface);
+}
+
+@layer components {
+  .skeleton {
+    position: relative;
+    overflow: hidden;
+    background: rgba(66, 61, 53, 0.1);
+  }
+
+  .skeleton::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    transform: translateX(-100%);
+    background: linear-gradient(
+      90deg,
+      transparent,
+      rgba(255, 255, 255, 0.54),
+      transparent
+    );
+    animation: shimmer 1.5s infinite;
+  }
+}
+
+@keyframes shimmer {
+  100% {
+    transform: translateX(100%);
+  }
+}

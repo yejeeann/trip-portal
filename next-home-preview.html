@@ -1,0 +1,201 @@
+<!doctype html>
+<html lang="ko" class="light">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Trip Portal Next Home Preview</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Noto+Serif:wght@500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <script>
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            fontFamily: {
+              sans: ["Manrope", "ui-sans-serif", "system-ui"],
+              serif: ["Noto Serif", "ui-serif", "Georgia"],
+            },
+            colors: {
+              night: "#080B12",
+              cobalt: "#2563EB",
+              ember: "#F97316",
+            },
+            boxShadow: {
+              glass: "0 24px 80px rgba(15, 23, 42, 0.16)",
+            },
+          },
+        },
+      };
+    </script>
+    <style>
+      body {
+        font-family: Manrope, ui-sans-serif, system-ui;
+      }
+      .font-serif {
+        font-family: "Noto Serif", ui-serif, Georgia, serif;
+      }
+      .glass-panel {
+        border: 1px solid rgba(255, 255, 255, 0.28);
+        background: rgba(255, 255, 255, 0.68);
+        box-shadow: 0 24px 80px rgba(15, 23, 42, 0.14);
+        backdrop-filter: blur(24px);
+        -webkit-backdrop-filter: blur(24px);
+      }
+    </style>
+  </head>
+  <body class="bg-slate-50 text-slate-950">
+    <main class="min-h-screen overflow-hidden">
+      <div
+        class="fixed inset-0 -z-10 bg-[radial-gradient(circle_at_top_left,rgba(37,99,235,0.18),transparent_34%),radial-gradient(circle_at_bottom_right,rgba(249,115,22,0.16),transparent_32%)]"
+      ></div>
+
+      <header class="sticky top-0 z-40 border-b border-white/30 bg-white/60 backdrop-blur-2xl">
+        <div class="mx-auto flex max-w-7xl items-center justify-between px-4 py-4 sm:px-6 lg:px-8">
+          <div>
+            <div class="font-serif text-xl font-bold">The Travel Journal</div>
+            <div class="mt-1 text-xs font-semibold uppercase text-slate-500">
+              Fallback editorial context
+            </div>
+          </div>
+          <button class="inline-flex h-10 w-10 items-center justify-center rounded-full border border-slate-200 bg-white/70 text-slate-800 shadow-sm">
+            ☾
+          </button>
+        </div>
+      </header>
+
+      <section class="mx-auto flex w-full max-w-7xl flex-col gap-10 px-4 pb-36 pt-5 sm:px-6 lg:px-8">
+        <section class="relative min-h-[620px] overflow-hidden rounded-lg">
+          <img
+            src="https://images.unsplash.com/photo-1526481280695-3c687fd5432c?auto=format&fit=crop&w=2400&q=90"
+            alt="Sicily and Malta"
+            class="absolute inset-0 h-full w-full object-cover"
+          />
+          <div class="absolute inset-0 bg-gradient-to-r from-slate-950/90 via-slate-950/55 to-slate-950/10"></div>
+          <div class="absolute inset-x-0 bottom-0 p-5 sm:p-8 lg:p-10">
+            <div class="max-w-3xl">
+              <div class="mb-5 inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-4 py-2 text-sm font-semibold text-white backdrop-blur-xl">
+                <span class="text-ember">✦</span>
+                Upcoming Journey
+              </div>
+              <h1 class="font-serif text-5xl font-bold leading-none text-white sm:text-7xl lg:text-8xl">
+                Sicily & Malta — 17 Days
+              </h1>
+              <p class="mt-5 max-w-2xl text-lg leading-8 text-white/80 sm:text-xl">
+                Rome, Catania, Valletta, Gozo and Amalfi in one editorial route.
+              </p>
+            </div>
+
+            <div class="mt-8 grid gap-3 sm:grid-cols-3">
+              <div class="glass-panel rounded-lg p-4 text-white">
+                <div class="text-xs font-semibold uppercase text-white/60">Period</div>
+                <div class="mt-2 text-sm font-bold leading-6">May 22, 2026 — Jun 7, 2026</div>
+              </div>
+              <div class="glass-panel rounded-lg p-4 text-white">
+                <div class="text-xs font-semibold uppercase text-white/60">Countries</div>
+                <div class="mt-2 text-sm font-bold leading-6">Italy · Malta</div>
+              </div>
+              <div class="glass-panel rounded-lg p-4 text-white">
+                <div class="text-xs font-semibold uppercase text-white/60">Context</div>
+                <div class="mt-2 text-sm font-bold leading-6">Prepared</div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <div class="grid gap-6 lg:grid-cols-[1.5fr_0.9fr]">
+          <section id="itinerary" class="space-y-5">
+            <div>
+              <div class="text-xs font-bold uppercase text-cobalt">Bento Grid Itinerary</div>
+              <h2 class="mt-2 font-serif text-3xl font-bold leading-tight">
+                Day-by-day field cards
+              </h2>
+              <p class="mt-2 text-sm leading-6 text-slate-600">
+                각 일자의 도시, 핵심 장소, 날씨 스냅샷을 잡지형 카드로 압축했습니다.
+              </p>
+            </div>
+            <div class="grid auto-rows-[280px] grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-3">
+              <article class="group relative overflow-hidden rounded-lg md:col-span-2">
+                <img src="https://images.unsplash.com/photo-1552832230-c0197dd311b5?auto=format&fit=crop&w=1200&q=85" class="absolute inset-0 h-full w-full object-cover" alt="" />
+                <div class="absolute inset-0 bg-gradient-to-t from-slate-950/90 via-slate-950/30 to-transparent"></div>
+                <div class="absolute inset-x-0 bottom-0 p-5 text-white">
+                  <div class="mb-4 flex items-center justify-between">
+                    <span class="rounded-full bg-white/10 px-3 py-1 text-xs font-bold backdrop-blur-xl">Day 1</span>
+                    <span class="rounded-full bg-white/10 px-3 py-1 text-xs font-semibold backdrop-blur-xl">22°C</span>
+                  </div>
+                  <h3 class="font-serif text-3xl font-bold leading-tight">Rome</h3>
+                  <p class="mt-2 text-sm text-white/75">Arrival and Night Train</p>
+                </div>
+              </article>
+              <article class="group relative overflow-hidden rounded-lg md:row-span-2">
+                <img src="https://images.unsplash.com/photo-1580595671338-13a7bbcd251f?auto=format&fit=crop&w=1200&q=85" class="absolute inset-0 h-full w-full object-cover" alt="" />
+                <div class="absolute inset-0 bg-gradient-to-t from-slate-950/90 via-slate-950/30 to-transparent"></div>
+                <div class="absolute inset-x-0 bottom-0 p-5 text-white">
+                  <div class="mb-4 flex items-center justify-between">
+                    <span class="rounded-full bg-white/10 px-3 py-1 text-xs font-bold backdrop-blur-xl">Day 2</span>
+                    <span class="rounded-full bg-white/10 px-3 py-1 text-xs font-semibold backdrop-blur-xl">25°C</span>
+                  </div>
+                  <h3 class="font-serif text-3xl font-bold leading-tight">Catania</h3>
+                  <p class="mt-2 text-sm text-white/75">Etna Light and Baroque Streets</p>
+                </div>
+              </article>
+              <article class="group relative overflow-hidden rounded-lg">
+                <img src="https://images.unsplash.com/photo-1589308078059-be1415eab4c3?auto=format&fit=crop&w=1200&q=85" class="absolute inset-0 h-full w-full object-cover" alt="" />
+                <div class="absolute inset-0 bg-gradient-to-t from-slate-950/90 via-slate-950/30 to-transparent"></div>
+                <div class="absolute inset-x-0 bottom-0 p-5 text-white">
+                  <span class="rounded-full bg-white/10 px-3 py-1 text-xs font-bold backdrop-blur-xl">Day 3</span>
+                  <h3 class="mt-4 font-serif text-3xl font-bold leading-tight">Taormina</h3>
+                </div>
+              </article>
+            </div>
+          </section>
+
+          <aside class="space-y-6">
+            <section id="route-map" class="glass-panel rounded-lg p-5">
+              <div class="text-xs font-bold uppercase text-cobalt">Mini Route Map</div>
+              <h2 class="mt-2 font-serif text-3xl font-bold leading-tight">Route at a glance</h2>
+              <p class="mt-2 text-sm leading-6 text-slate-600">
+                Stitch MCP 또는 fallback 좌표를 SVG 경로로 시각화할 준비가 된 위젯입니다.
+              </p>
+              <div class="relative mt-6 h-[360px] overflow-hidden rounded-lg bg-slate-950">
+                <div class="absolute inset-0 bg-[radial-gradient(circle_at_20%_30%,rgba(37,99,235,0.45),transparent_28%),radial-gradient(circle_at_70%_65%,rgba(249,115,22,0.28),transparent_32%)]"></div>
+                <svg class="absolute inset-0 h-full w-full" viewBox="0 0 100 100">
+                  <polyline points="80,42 90,61 88,68 58,77 19,88" fill="none" stroke="rgba(255,255,255,0.75)" stroke-width="0.7" stroke-linecap="round" stroke-linejoin="round" />
+                  <circle cx="80" cy="42" r="2.4" fill="#F97316" />
+                  <circle cx="90" cy="61" r="1.7" fill="#60A5FA" />
+                  <circle cx="88" cy="68" r="1.7" fill="#60A5FA" />
+                  <circle cx="58" cy="77" r="1.7" fill="#60A5FA" />
+                  <circle cx="19" cy="88" r="1.7" fill="#60A5FA" />
+                </svg>
+              </div>
+            </section>
+
+            <section class="glass-panel rounded-lg p-5">
+              <div class="text-xs font-bold uppercase text-cobalt">Nearby Picks</div>
+              <h2 class="mt-2 font-serif text-3xl font-bold leading-tight">AI guide queue</h2>
+              <div class="mt-6 space-y-3">
+                <div class="flex items-center justify-between gap-4 rounded-lg bg-white/70 p-4">
+                  <div>
+                    <div class="text-sm font-bold">Upper Barrakka golden-hour overlook</div>
+                    <div class="mt-1 text-xs text-slate-500">Valletta · Viewpoint</div>
+                  </div>
+                  <div class="text-sm font-bold text-cobalt">0.8 km</div>
+                </div>
+              </div>
+            </section>
+          </aside>
+        </div>
+      </section>
+
+      <nav class="fixed inset-x-0 bottom-4 z-50 mx-auto flex w-[calc(100%-2rem)] max-w-xl items-center justify-between gap-2 rounded-full border border-white/30 bg-white/80 p-2 shadow-glass backdrop-blur-2xl">
+        <a href="#route-map" class="inline-flex flex-1 items-center justify-center gap-2 rounded-full px-4 py-3 text-sm font-bold text-slate-700 hover:bg-slate-100">Map</a>
+        <a href="#itinerary" class="inline-flex flex-1 items-center justify-center gap-2 rounded-full px-4 py-3 text-sm font-bold text-slate-700 hover:bg-slate-100">Itinerary</a>
+        <button class="inline-flex flex-1 items-center justify-center gap-2 rounded-full bg-slate-950 px-4 py-3 text-sm font-bold text-white">AI Guide</button>
+      </nav>
+    </main>
+  </body>
+</html>

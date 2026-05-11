@@ -1,0 +1,2588 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Premium Digital Travel Guidebook</title>
+    <meta name="color-scheme" content="light" />
+    <meta
+      name="description"
+      content="Premium digital travel guidebook — minimalist luxury UI, smart itinerary, expert info, and print-ready PDF engine."
+    />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Noto+Serif:wght@500;600;700&display=swap"
+      rel="stylesheet"
+    />
+
+    <script>
+      // Tailwind CDN config (single-file deployment).
+      window.tailwind = window.tailwind || {};
+      window.tailwind.config = {
+        theme: {
+          extend: {
+            fontFamily: {
+              sans: ["Manrope", "ui-sans-serif", "system-ui"],
+              serif: ["Noto Serif", "ui-serif", "Georgia"],
+            },
+            borderRadius: {
+              "2xl": "0.5rem",
+            },
+            boxShadow: {
+              soft: "0 16px 42px rgba(28,28,24,0.06)",
+              lift: "0 22px 70px rgba(28,28,24,0.08)",
+            },
+            colors: {
+              ink: {
+                900: "#1C1C18",
+                700: "#3E494A",
+              },
+              cream: "#FCF9F3",
+              gold: "#614604",
+              primary: "#00535B",
+              "primary-container": "#006D77",
+              "surface-container": "#F0EEE8",
+              "surface-container-low": "#F6F3ED",
+              "surface-container-high": "#EBE8E2",
+              "outline-soft": "#BEC8CA",
+            },
+          },
+        },
+      };
+    </script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <style>
+      /* Brand: Lumina Mediterranean — limestone surfaces, sea-teal actions, compact editorial cards */
+      :root {
+        --safe-bottom: env(safe-area-inset-bottom, 0px);
+        --paper: #fcf9f3;
+        --paper-deep: #f2eee4;
+        --ink: #1c1c18;
+        --muted: #647074;
+        --rule: rgba(28, 28, 24, 0.14);
+        --teal: #00535b;
+        --gold: #614604;
+      }
+      html,
+      body {
+        height: 100%;
+      }
+      body {
+        font-family: Manrope, ui-sans-serif, system-ui;
+        background:
+          linear-gradient(rgba(28, 28, 24, 0.026) 1px, transparent 1px),
+          linear-gradient(90deg, rgba(28, 28, 24, 0.018) 1px, transparent 1px),
+          var(--paper);
+        background-size: 18px 18px, 18px 18px, auto;
+        color: var(--ink);
+      }
+
+      ::selection {
+        background: rgba(97, 70, 4, 0.18);
+      }
+
+      .glass {
+        background: rgba(252, 249, 243, 0.9);
+        backdrop-filter: blur(14px);
+        -webkit-backdrop-filter: blur(14px);
+        border-bottom: 1px solid var(--rule);
+      }
+
+      .editorial-rule {
+        border-top: 1px solid var(--rule);
+        border-bottom: 1px solid var(--rule);
+      }
+
+      .issue-kicker {
+        color: var(--teal);
+        font-size: 0.68rem;
+        font-weight: 800;
+        letter-spacing: 0.26em;
+        text-transform: uppercase;
+      }
+
+      .issue-number {
+        font-family: "Noto Serif", ui-serif, Georgia, serif;
+        color: rgba(97, 70, 4, 0.72);
+        font-variant-numeric: tabular-nums;
+      }
+
+      .serif-deck {
+        font-family: "Noto Serif", ui-serif, Georgia, serif;
+        color: #3e494a;
+      }
+
+      .image-grain::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        pointer-events: none;
+        background-image:
+          linear-gradient(0deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0)),
+          repeating-linear-gradient(90deg, rgba(255, 255, 255, 0.04) 0 1px, transparent 1px 3px);
+        mix-blend-mode: screen;
+        opacity: 0.28;
+      }
+
+      .mag-card {
+        background: rgba(255, 255, 255, 0.78);
+        border: 1px solid rgba(28, 28, 24, 0.11);
+        box-shadow: 0 18px 48px rgba(28, 28, 24, 0.06);
+      }
+
+      .route-scroll {
+        scrollbar-width: thin;
+        scrollbar-color: rgba(97, 70, 4, 0.3) transparent;
+      }
+
+      .hide-scrollbar::-webkit-scrollbar {
+        width: 0;
+        height: 0;
+      }
+      .hide-scrollbar {
+        scrollbar-width: none;
+      }
+
+      .tap {
+        -webkit-tap-highlight-color: transparent;
+      }
+
+      /* Accordion animation */
+      .acc-panel {
+        max-height: 0px;
+        overflow: hidden;
+        transition: max-height 260ms ease;
+      }
+      .acc-item[data-open="true"] .acc-panel {
+        max-height: 900px;
+      }
+      .acc-item[data-open="true"] .acc-chevron {
+        transform: rotate(180deg);
+      }
+      .acc-chevron {
+        transition: transform 200ms ease;
+      }
+
+      /* Print Engine: Editorial A4 Magazine Layout */
+      @media print {
+        /* Hide web-only UI */
+        .no-print {
+          display: none !important;
+        }
+
+        @page {
+          size: A4 portrait;
+          /* Classic editorial margins: Top 20mm, Outside 16mm, Bottom 24mm, Inside 16mm */
+          margin: 20mm 16mm 24mm 16mm;
+        }
+
+        html, body {
+          background: #ffffff !important;
+          color: #0f172a !important;
+          -webkit-print-color-adjust: exact !important;
+          print-color-adjust: exact !important;
+          /* Slightly scale down base font for professional print proportions */
+          font-size: 11pt !important;
+        }
+
+        .print-only {
+          display: block !important;
+        }
+        .print-book {
+          padding: 0 !important;
+          margin: 0 !important;
+          width: 100% !important;
+          max-width: 100% !important;
+        }
+
+        /* Page breaking & flow */
+        .print-day {
+          break-before: page; /* modern */
+          page-break-before: always; /* legacy */
+          padding-top: 5mm;
+        }
+        .print-avoid-break {
+          break-inside: avoid;
+          page-break-inside: avoid;
+        }
+        h1, h2, h3, h4, h5, h6 {
+          break-after: avoid;
+          page-break-after: avoid;
+        }
+        p, ul, ol, img {
+          orphans: 4;
+          widows: 4;
+        }
+
+        /* Print-specific visual tweaks */
+        .print-cover-img {
+          height: 160mm !important;
+        }
+        .shadow-soft, .shadow-2xl, .shadow-lift {
+          /* Reduce heavy web shadows for cleaner ink printing */
+          box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06) !important;
+          border: 1px solid #f1f5f9 !important;
+        }
+        .backdrop-blur-xl, .backdrop-blur-2xl {
+          /* Fallback for glassmorphism in print */
+          backdrop-filter: none !important;
+          background-color: rgba(255, 255, 255, 0.95) !important;
+        }
+      }
+      .print-only {
+        display: none;
+      }
+    </style>
+  </head>
+
+  <body class="antialiased">
+    <!-- Data: change ONLY this to update the whole app -->
+    <script>
+      const TRAVEL_DATA = {
+        app: {
+          brand: "The Limestone <span class='text-gold italic ml-1'>Editorial</span>",
+          tagline: "MCP-powered 2026 travel companion",
+        },
+        trips: [
+          {
+            id: "sicily-malta-rome-17d",
+            title: "Sicily & Malta — 17 Days",
+            subtitle:
+              "Rome · Catania · Valletta · Gozo · Amalfi — 클래식과 바다, 미식의 균형",
+            dateRange: { start: "2026-05-22", end: "2026-06-07" },
+            cover: {
+              image:
+                "https://images.unsplash.com/photo-1526481280695-3c687fd5432c?auto=format&fit=crop&w=1800&q=80",
+              credit: "Unsplash",
+            },
+            route: {
+              countries: ["Italy", "Malta"],
+              cities: ["Rome", "Catania", "Valletta", "Gozo", "Amalfi"],
+              summary:
+                "로마 인·아웃(5/22~6/7)을 기반으로, 야간열차로 시칠리아(카타니아)를 시작해 몰타(5/27~29)를 다녀오고, 마지막은 렌트카로 아말피 1박 후 로마로 복귀하는 확정 루트입니다.",
+              mapEmbedUrl:
+                "https://www.google.com/maps?q=Rome%20Catania%20Valletta%20Gozo%20Amalfi&output=embed",
+            },
+            days: [
+              {
+                day: 1,
+                date: "2026-05-22",
+                base: "Rome",
+                theme: "Arrival + Night Train to Sicily",
+                weatherNote:
+                  "장거리 이동일입니다. 로마에서는 ‘최소 동선’만 잡고, 야간열차는 숙면 중심으로 준비하세요.",
+                highlights: ["FCO arrival", "Roma Termini", "Night Train 20:30"],
+                mapEmbedUrl:
+                  "https://www.google.com/maps?q=Roma%20Termini&output=embed",
+                timeline: [
+                  {
+                    time: "09:45",
+                    title: "Arrival (ICN → HEL → FCO)",
+                    place: "Fiumicino Airport (FCO)",
+                    tags: ["#Transit", "#SoftLanding"],
+                    details:
+                      "확정: 5/21 ICN 21:50 → 5/22 HEL 05:30, HEL 07:20 → FCO 09:45. 입국 후에는 공항-테르미니 이동을 단순하게 정리하는 게 중요합니다.",
+                    tips: ["이동은 Leonardo Express처럼 단순한 옵션이 체감 스트레스를 줄여요."],
+                    caution: "역/공항 구간은 소매치기 주의. 가방은 앞으로.",
+                  },
+                  {
+                    time: "20:30",
+                    title: "Night Train (Rome → Catania)",
+                    place: "Roma Termini",
+                    tags: ["#NightTrain", "#Transit"],
+                    details:
+                      "확정: 야간열차 20:30. 탑승 전 물/간식/충전 준비를 끝내고 편하게 쉬는 게 내일의 퀄리티를 만듭니다.",
+                    tips: ["귀마개/안대가 숙면에 효과적입니다."],
+                    caution: "플랫폼/차량번호를 마지막까지 확인하세요.",
+                  },
+                ],
+              },
+              {
+                day: 2,
+                date: "2026-05-23",
+                base: "Catania",
+                theme: "Catania Old Town",
+                weatherNote:
+                  "야간열차 다음날은 무리하지 않는 게 중요합니다. 오전 산책 + 한낮 휴식으로 리듬을 잡으세요.",
+                highlights: ["Piazza del Duomo", "La Pescheria", "Via Etnea"],
+                mapEmbedUrl:
+                  "https://www.google.com/maps?q=Piazza%20del%20Duomo%20Catania&output=embed",
+                timeline: [
+                  {
+                    time: "12:30",
+                    title: "Cathedral Square Walk",
+                    place: "Piazza del Duomo (Catania)",
+                    tags: ["#Historic", "#Architecture"],
+                    details:
+                      "검은 용암석 건물 톤이 카타니아의 시그니처입니다. 광장 주변을 짧게 걷고, 카페로 끊어주는 구성이 좋아요.",
+                    tips: ["강한 햇빛엔 그늘에서 사진이 더 예쁘게 나옵니다."],
+                    caution: "차량/스쿠터 횡단 주의.",
+                  },
+                  {
+                    time: "18:30",
+                    title: "Golden Hour Stroll",
+                    place: "Via Etnea",
+                    tags: ["#Walk", "#Design"],
+                    details:
+                      "에트나 방향으로 시야가 열리는 길. ‘천천히 걷는 시간’ 자체가 럭셔리입니다.",
+                    tips: ["오늘은 일찍 쉬어 컨디션을 회복하세요."],
+                    caution: "늦은 밤엔 큰길 위주로 이동.",
+                  },
+                ],
+              },
+              {
+                day: 3,
+                date: "2026-05-24",
+                base: "Catania",
+                theme: "Taormina Day Trip",
+                weatherNote:
+                  "타오르미나는 계단이 많습니다. 한낮 더위를 피하고 노을 시간대에 집중하세요.",
+                highlights: ["Taormina", "Greek Theatre", "Granita"],
+                mapEmbedUrl:
+                  "https://www.google.com/maps?q=Taormina&output=embed",
+                timeline: [
+                  {
+                    time: "11:00",
+                    title: "Granita Break",
+                    place: "Taormina",
+                    tags: ["#Cafe", "#SoftLanding"],
+                    details:
+                      "그라니타(레몬/아몬드) + 브리오슈로 체력 회복. 짧은 당-수분 보충이 하루를 살려줘요.",
+                    tips: ["가방은 최소로, 물은 충분히."],
+                    caution: "돌길/계단에서 미끄럼 주의.",
+                  },
+                  {
+                    time: "16:30",
+                    title: "Teatro Antico di Taormina",
+                    place: "Teatro Antico di Taormina",
+                    tags: ["#Historic", "#Viewpoint"],
+                    details:
+                      "노을 시간대가 가장 드라마틱합니다. 붐비면 한 칸 물러나 큰 프레임으로 담아보세요.",
+                    tips: ["대기 시간을 줄이려면 가능하면 예약을 추천합니다."],
+                    caution: "돌계단 높낮이가 불규칙합니다.",
+                  },
+                ],
+              },
+              {
+                day: 4,
+                date: "2026-05-25",
+                base: "Catania",
+                theme: "Syracuse + Ortigia",
+                weatherNote:
+                  "오르티지아는 ‘걷는 시간’이 콘텐츠입니다. 한낮에는 실내/카페로 끊어주세요.",
+                highlights: ["Ortigia", "Duomo di Siracusa", "Seafront walk"],
+                mapEmbedUrl: "https://www.google.com/maps?q=Ortigia&output=embed",
+                timeline: [
+                  {
+                    time: "11:30",
+                    title: "Ortigia Old Town Walk",
+                    place: "Ortigia",
+                    tags: ["#Walk", "#Design"],
+                    details:
+                      "골목→광장→바다 산책로를 한 번에 엮고, 카페 타임으로 템포를 조절하면 만족도가 높아요.",
+                    tips: ["바다 쪽으로 열리는 골목에서 사진이 특히 예쁩니다."],
+                    caution: "작은 골목에도 스쿠터가 들어오는 경우가 있어요.",
+                  },
+                  {
+                    time: "17:30",
+                    title: "Seaside Promenade",
+                    place: "Lungomare di Ortigia",
+                    tags: ["#Sunset", "#Coastal"],
+                    details:
+                      "해질 무렵 바닷바람이 들어오면 도시의 톤이 바뀝니다. 오늘의 마지막을 바다로 정리하세요.",
+                    tips: ["오늘은 과하게 욕심내지 않는 게 포인트."],
+                    caution: "바위/난간 근처는 미끄럼 주의.",
+                  },
+                ],
+              },
+              {
+                day: 5,
+                date: "2026-05-26",
+                base: "Catania",
+                theme: "Mount Etna + Winery",
+                weatherNote:
+                  "고도 차로 체감 온도가 달라요. 얇은 겉옷과 바람막이를 준비하세요.",
+                highlights: ["Mount Etna", "Volcanic viewpoint", "Etna wine"],
+                mapEmbedUrl: "https://www.google.com/maps?q=Mount%20Etna&output=embed",
+                timeline: [
+                  {
+                    time: "10:00",
+                    title: "Etna Viewpoint Drive",
+                    place: "Mount Etna",
+                    tags: ["#Nature", "#RoadTrip"],
+                    details:
+                      "무리한 트레킹보다 전망 포인트 중심으로 구성해도 충분히 좋습니다.",
+                    tips: ["선글라스/바람막이가 체감 만족도를 올립니다."],
+                    caution: "화산 지형은 미끄럽고 먼지가 많습니다.",
+                  },
+                  {
+                    time: "15:30",
+                    title: "Etna Winery Tasting",
+                    place: "Etna DOC area",
+                    tags: ["#FoodWine", "#Luxury"],
+                    details:
+                      "테이스팅은 2~3잔으로 충분합니다. 풍경과 연결해 느리게 즐기는 게 포인트예요.",
+                    tips: ["예약이 있으면 훨씬 매끄럽습니다."],
+                    caution: "운전자가 있다면 음주는 최소로.",
+                  },
+                ],
+              },
+              {
+                day: 6,
+                date: "2026-05-27",
+                base: "Valletta",
+                theme: "Flight to Malta + Valletta",
+                weatherNote:
+                  "항공 이동일. 오전 공항 동선이 관건입니다. 도착 후 발레타는 가볍게 시작하세요.",
+                highlights: ["CTA → MLA 09:30–10:20", "Valletta", "Upper Barrakka Gardens"],
+                mapEmbedUrl: "https://www.google.com/maps?q=Valletta&output=embed",
+                timeline: [
+                  {
+                    time: "09:30",
+                    title: "Flight to Malta",
+                    place: "Catania Airport (CTA)",
+                    tags: ["#Flight", "#Transit"],
+                    details:
+                      "확정: 5/27 09:30~10:20. 공항은 여유 있게 도착해 체크인/보안을 한 번에.",
+                    tips: ["여권/보딩패스/카드 결제 준비를 한곳에 모아두기."],
+                    caution: "아침 교통 지연을 고려해 출발 시간을 넉넉히 잡으세요.",
+                  },
+                  {
+                    time: "17:00",
+                    title: "Upper Barrakka Gardens",
+                    place: "Upper Barrakka Gardens (Valletta)",
+                    tags: ["#Viewpoint", "#Sunset"],
+                    details:
+                      "발레타를 한 프레임에 정리하는 전망 포인트. 바람이 강할 수 있어요.",
+                    tips: ["골든아워에 오면 돌의 색이 훨씬 따뜻하게 보입니다."],
+                    caution: "난간 근처 촬영 시 안전 우선.",
+                  },
+                ],
+              },
+              {
+                day: 7,
+                date: "2026-05-28",
+                base: "Valletta",
+                theme: "Gozo Day Trip",
+                weatherNote:
+                  "고조는 바람/햇빛이 강할 수 있어요. 모자/선크림/물은 필수입니다.",
+                highlights: ["Gozo ferry", "Victoria Citadel", "Coastal viewpoints"],
+                mapEmbedUrl: "https://www.google.com/maps?q=Gozo&output=embed",
+                timeline: [
+                  {
+                    time: "09:00",
+                    title: "Ferry to Gozo",
+                    place: "Ċirkewwa → Gozo",
+                    tags: ["#Island", "#Transit"],
+                    details:
+                      "아침 페리로 시간을 확보하고, 섬의 리듬에 맞춰 천천히 움직이세요.",
+                    tips: ["왕복 시간표는 전날 저녁에 한 번 확인."],
+                    caution: "바람이 강하면 멀미가 있을 수 있어요.",
+                  },
+                  {
+                    time: "11:00",
+                    title: "The Citadel (Victoria)",
+                    place: "The Citadel, Victoria (Gozo)",
+                    tags: ["#Historic", "#Viewpoint"],
+                    details:
+                      "섬의 지형이 한 번에 들어오는 핵심 스팟. 오래 머물기보다 ‘한 번 크게’ 보고 내려오는 구성이 좋아요.",
+                    tips: ["바람이 강하면 얇은 겉옷이 유용합니다."],
+                    caution: "돌바닥/계단 미끄럼 주의.",
+                  },
+                ],
+              },
+              {
+                day: 8,
+                date: "2026-05-29",
+                base: "Catania",
+                theme: "Flight Back to Sicily",
+                weatherNote:
+                  "저녁 비행 전까지는 무리하지 않고 ‘가벼운 정리’ 중심으로 움직이세요.",
+                highlights: ["Valletta last walk", "MLA → CTA 20:45–21:30", "Late arrival"],
+                mapEmbedUrl:
+                  "https://www.google.com/maps?q=Malta%20International%20Airport&output=embed",
+                timeline: [
+                  {
+                    time: "20:45",
+                    title: "Flight to Catania",
+                    place: "Malta International Airport (MLA)",
+                    tags: ["#Flight", "#Transit"],
+                    details:
+                      "확정: 5/29 20:45~21:30. 공항 도착 후에는 간단히 식사하고 탑승 준비.",
+                    tips: ["지연 가능성을 고려해 다음날 일정을 빡빡하게 잡지 않기."],
+                    caution: "늦은 도착 후 이동은 공식 교통수단 위주로.",
+                  },
+                  {
+                    time: "22:30",
+                    title: "Check-in + Rest",
+                    place: "Catania",
+                    tags: ["#Rest"],
+                    details:
+                      "늦은 시간 도착이라 바로 휴식. 내일부터 다시 시칠리아 리듬으로 전환합니다.",
+                    tips: ["셀프체크인이라면 안내 메시지를 미리 저장해두기."],
+                    caution: "심야 이동은 택시/공식 앱 이용.",
+                  },
+                ],
+              },
+              {
+                day: 9,
+                date: "2026-05-30",
+                base: "Catania",
+                theme: "Noto (Baroque Day)",
+                weatherNote:
+                  "노토는 빛이 건물을 ‘크림색’으로 만듭니다. 한낮엔 카페/실내로 끊어주세요.",
+                highlights: ["Noto", "Baroque streets", "Slow lunch"],
+                mapEmbedUrl: "https://www.google.com/maps?q=Noto%20Sicily&output=embed",
+                timeline: [
+                  {
+                    time: "12:00",
+                    title: "Baroque Core Walk",
+                    place: "Noto center",
+                    tags: ["#Architecture", "#Photography"],
+                    details:
+                      "노토의 핵심은 스팟보다 거리의 연속입니다. 한 방향으로 걷고 카페로 끊어주세요.",
+                    tips: ["디테일 촬영은 2x 줌이 예쁘게 나옵니다."],
+                    caution: "정오~오후는 탈수/열 피로 주의.",
+                  },
+                  {
+                    time: "18:30",
+                    title: "Return + Simple Dinner",
+                    place: "Catania",
+                    tags: ["#Rest", "#FoodWine"],
+                    details:
+                      "장기 일정의 퀄리티는 ‘회복’에서 결정됩니다. 오늘은 가볍게 마무리.",
+                    tips: ["내일 이동을 위해 숙면 우선."],
+                    caution: "늦은 밤 이동은 큰길 위주로.",
+                  },
+                ],
+              },
+              {
+                day: 10,
+                date: "2026-05-31",
+                base: "Catania",
+                theme: "Ragusa & Modica",
+                weatherNote:
+                  "언덕이 있어요. 전망 포인트 + 카페 리듬을 반복하면 피로가 적습니다.",
+                highlights: ["Ragusa Ibla", "Modica", "Chocolate"],
+                mapEmbedUrl: "https://www.google.com/maps?q=Ragusa%20Ibla&output=embed",
+                timeline: [
+                  {
+                    time: "11:00",
+                    title: "Ragusa Ibla View Walk",
+                    place: "Ragusa Ibla",
+                    tags: ["#Viewpoint", "#Historic"],
+                    details:
+                      "올라갈 때는 천천히, 내려올 때는 골목을 즐기면서. 한 번에 다 보려 하지 않아도 충분합니다.",
+                    tips: ["계단이 많아 편한 신발이 필수."],
+                    caution: "한낮 열 피로 주의.",
+                  },
+                  {
+                    time: "15:00",
+                    title: "Modica Chocolate Break",
+                    place: "Modica",
+                    tags: ["#Cafe", "#Local"],
+                    details:
+                      "모디카 초콜릿은 질감이 독특합니다. 기념품은 많이보다 ‘좋은 것 1~2개’가 만족도가 높아요.",
+                    tips: ["더위에 약하니 보관/이동을 고려하세요."],
+                    caution: "주차/도로가 복잡할 수 있어 시간 여유를 두기.",
+                  },
+                ],
+              },
+              {
+                day: 11,
+                date: "2026-06-01",
+                base: "Catania",
+                theme: "Buffer + Logistics Day",
+                weatherNote:
+                  "중반에는 ‘비어 있는 시간’이 여행 퀄리티를 올립니다. 정리/세탁/예약 확인에 집중하세요.",
+                highlights: ["Laundry", "Bookings", "Packing"],
+                mapEmbedUrl: "https://www.google.com/maps?q=Catania&output=embed",
+                timeline: [
+                  {
+                    time: "11:00",
+                    title: "Laundry + Booking Check",
+                    place: "Catania",
+                    tags: ["#Essentials", "#Reset"],
+                    details:
+                      "렌트카 구간(아말피 1박→로마 복귀)을 대비해 픽업/반납 위치와 시간을 정리해두면 스트레스가 크게 줄어요.",
+                    tips: ["서류(여권/면허/보험) 위치를 고정해두기."],
+                    caution: "소지품 분실 리스크가 커지는 날이니 집중.",
+                  },
+                ],
+              },
+              {
+                day: 12,
+                date: "2026-06-02",
+                base: "Catania",
+                theme: "Sicily Finale (Easy Day)",
+                weatherNote:
+                  "내일 장거리 드라이브를 대비해 오늘은 컨디션을 올리는 날로 쓰세요.",
+                highlights: ["Easy walk", "Early dinner", "Pack"],
+                mapEmbedUrl: "https://www.google.com/maps?q=Catania%20Sicily&output=embed",
+                timeline: [
+                  {
+                    time: "17:00",
+                    title: "Early Dinner + Pack",
+                    place: "Catania",
+                    tags: ["#Essentials", "#Rest"],
+                    details:
+                      "내일은 렌트카로 본토 이동(아말피 1박). 저녁을 일찍 마치고 짐을 완전히 정리해두면 출발이 편합니다.",
+                    tips: ["차량 이동 아이템(선글라스/케이블/물)을 한 가방에 묶어두기."],
+                    caution: "늦게 자면 이동일 컨디션이 크게 흔들려요.",
+                  },
+                ],
+              },
+              {
+                day: 13,
+                date: "2026-06-03",
+                base: "Amalfi",
+                theme: "Rental Car: Catania → Amalfi (Overnight)",
+                weatherNote:
+                  "긴 드라이브 데이. 목표는 ‘안전 + 도착’입니다. 중간 휴식 2~3번을 계획에 포함하세요.",
+                highlights: ["Rental car", "Long drive", "Amalfi overnight"],
+                mapEmbedUrl:
+                  "https://www.google.com/maps?q=Catania%20to%20Amalfi&output=embed",
+                timeline: [
+                  {
+                    time: "09:00",
+                    title: "Pick Up Rental Car",
+                    place: "Catania",
+                    tags: ["#RoadTrip", "#Essentials"],
+                    details:
+                      "확정: Catania → Rome 구간은 렌트카, Amalfi 근처에서 1박. 출발 전 차량 외관/연료 정책을 사진으로 남겨두세요.",
+                    tips: ["주차가 가장 큰 스트레스 포인트라 숙소 안내를 미리 확보."],
+                    caution: "ZTL(차량 제한 구역) 진입/주차 위반은 벌금 리스크가 큽니다.",
+                  },
+                  {
+                    time: "19:30",
+                    title: "Arrive in Amalfi",
+                    place: "Amalfi Coast",
+                    tags: ["#Luxury", "#Sunset"],
+                    details:
+                      "오늘은 도착 후 체크인/가벼운 저녁이면 충분합니다. 바다를 ‘잠깐’만 봐도 하루가 완성돼요.",
+                    tips: ["도착 시간은 해질 무렵이 체감이 좋습니다."],
+                    caution: "해안도로는 야간 시야가 좁아 운전이 어려울 수 있어요.",
+                  },
+                ],
+              },
+              {
+                day: 14,
+                date: "2026-06-04",
+                base: "Rome",
+                theme: "Amalfi → Rome",
+                weatherNote:
+                  "이동 후 로마에서는 ‘짧은 산책 + 좋은 저녁’ 정도면 충분합니다.",
+                highlights: ["Drive back", "Rome check-in"],
+                mapEmbedUrl:
+                  "https://www.google.com/maps?q=Amalfi%20to%20Rome&output=embed",
+                timeline: [
+                  {
+                    time: "10:00",
+                    title: "Depart Amalfi",
+                    place: "Amalfi Coast",
+                    tags: ["#RoadTrip", "#Transit"],
+                    details:
+                      "출발 전 마지막으로 바다를 한 번 보고, 로마로 복귀. 오늘은 ‘도착하면 성공’입니다.",
+                    tips: ["톨게이트/주유 포인트를 미리 정해두면 스트레스가 줄어요."],
+                    caution: "차간거리 유지가 중요합니다.",
+                  },
+                  {
+                    time: "17:00",
+                    title: "Arrive in Rome",
+                    place: "Rome",
+                    tags: ["#SoftLanding", "#Rest"],
+                    details:
+                      "로마에서는 컨디션 회복이 목표. 샤워 + 가벼운 산책 + 좋은 저녁이면 충분합니다.",
+                    tips: ["오늘은 일찍 자야 남은 일정 퀄리티가 올라갑니다."],
+                    caution: "관광지 한복판은 야간 소음이 있을 수 있어요.",
+                  },
+                ],
+              },
+              {
+                day: 15,
+                date: "2026-06-05",
+                base: "Rome",
+                theme: "Vatican Classics",
+                weatherNote:
+                  "로마는 ‘대기 시간’이 변수입니다. 오전 일찍 시작하고 오후엔 휴식으로 끊어주세요.",
+                highlights: ["Vatican Museums", "St. Peter's Basilica"],
+                mapEmbedUrl: "https://www.google.com/maps?q=Vatican%20City&output=embed",
+                timeline: [
+                  {
+                    time: "09:00",
+                    title: "Vatican Museums",
+                    place: "Vatican City",
+                    tags: ["#Art", "#Historic"],
+                    details:
+                      "가능하면 예약 시간에 맞춰 입장해 대기 시간을 줄이세요. ‘많이’보다 ‘깊게’가 더 기억에 남습니다.",
+                    tips: ["핵심 포인트 2~3개만 정해도 충분합니다."],
+                    caution: "줄이 길 수 있어 물을 챙기세요.",
+                  },
+                  {
+                    time: "13:30",
+                    title: "St. Peter's Basilica",
+                    place: "St. Peter's Basilica",
+                    tags: ["#Architecture", "#Walk"],
+                    details:
+                      "복장 규정(어깨/무릎)을 지키면 편합니다. 광장에 앉아 쉬는 시간까지 포함해 계획하세요.",
+                    tips: ["한낮 더위엔 실내에서 잠시 쉬어가기."],
+                    caution: "혼잡 구간 가방 주의.",
+                  },
+                ],
+              },
+              {
+                day: 16,
+                date: "2026-06-06",
+                base: "Rome",
+                theme: "Trastevere Slow Luxury",
+                weatherNote:
+                  "마지막 전날은 과욕 금지. 걸을 만큼 걷고, 맛있게 먹고, 일찍 쉬는 게 최고의 마무리입니다.",
+                highlights: ["Trastevere", "Last dinner"],
+                mapEmbedUrl:
+                  "https://www.google.com/maps?q=Trastevere%20Rome&output=embed",
+                timeline: [
+                  {
+                    time: "11:00",
+                    title: "Trastevere Walk",
+                    place: "Trastevere",
+                    tags: ["#Local", "#Walk"],
+                    details:
+                      "계획하지 않은 골목이 하이라이트입니다. 느린 속도로 산책하며 ‘작게’만 담아가세요.",
+                    tips: ["점심은 인기 맛집보다 분위기 좋은 곳이 만족도가 높아요."],
+                    caution: "돌길이 많아 발 피로 관리.",
+                  },
+                  {
+                    time: "19:00",
+                    title: "Last Dinner",
+                    place: "Rome",
+                    tags: ["#FoodWine", "#Luxury"],
+                    details:
+                      "마지막 저녁은 ‘설명하기 쉬운 메뉴’로. 과하게 늘리기보다 맛있게 마무리하는 게 좋은 기억이 됩니다.",
+                    tips: ["내일 출국(10:30 FCO)을 고려해 너무 늦게까지는 피하기."],
+                    caution: "늦은 밤 이동은 공식 택시/앱 이용.",
+                  },
+                ],
+              },
+              {
+                day: 17,
+                date: "2026-06-07",
+                base: "Rome",
+                theme: "Departure (FCO → HEL → ICN)",
+                weatherNote:
+                  "출국일은 ‘시간과 안정감’이 우선입니다. 면세/쇼핑은 보너스예요.",
+                highlights: ["FCO 10:30", "HEL transfer", "ICN 6/8 11:20"],
+                mapEmbedUrl:
+                  "https://www.google.com/maps?q=Fiumicino%20Airport&output=embed",
+                timeline: [
+                  {
+                    time: "10:30",
+                    title: "Flight (FCO → HEL)",
+                    place: "Fiumicino Airport (FCO)",
+                    tags: ["#Flight", "#Transit"],
+                    details:
+                      "확정: 6/7 FCO 10:30 → HEL 14:55, HEL 17:30 → ICN 6/8 11:20. 공항은 여유 있게 도착해 체크인/보안을 끝내세요.",
+                    tips: ["공항 이동은 늦을 리스크를 줄이는 방향으로(택시/공항열차 등)."],
+                    caution: "성수기엔 출국 심사가 길어질 수 있어요.",
+                  },
+                ],
+              },
+            ],
+            wiki: {
+              attractions: [
+                {
+                  id: "roma-termini",
+                  name: "Roma Termini",
+                  city: "Rome",
+                  hero:
+                    "https://images.unsplash.com/photo-1566816699676-2ddc3d92a5b9?auto=format&fit=crop&w=1800&q=80",
+                  sections: [
+                    {
+                      title: "History",
+                      body:
+                        "테르미니는 로마의 가장 큰 관문으로, 도심과 공항·타지역을 연결하는 거대한 허브입니다. 여행의 시작과 끝에서 동선을 ‘정리’해주는 장소로 보면 스트레스가 크게 줄어요.",
+                    },
+                    {
+                      title: "Pro Tips",
+                      body:
+                        "역 안에서는 플랫폼/열차 번호를 마지막까지 확인하세요. 역 주변은 ‘빠르게 통과’하는 동선이 안전하고 효율적입니다.",
+                    },
+                    {
+                      title: "Caution",
+                      body:
+                        "혼잡/스캠 리스크가 높습니다. 가방은 앞으로, 휴대폰은 손에 오래 들지 않기, ‘도와주겠다’ 접근은 정중히 거절.",
+                    },
+                  ],
+                },
+                {
+                  id: "piazza-del-duomo-catania",
+                  name: "Piazza del Duomo",
+                  city: "Catania",
+                  hero:
+                    "https://images.unsplash.com/photo-1584452964155-efc7b015b1a4?auto=format&fit=crop&w=1800&q=80",
+                  sections: [
+                    {
+                      title: "History",
+                      body:
+                        "검은 용암석으로 만들어진 건축 톤이 카타니아의 시그니처입니다. 광장 중심부는 도시의 상징이자, 하루 동선의 기준점이 되기 좋아요.",
+                    },
+                    {
+                      title: "Pro Tips",
+                      body:
+                        "햇빛이 강할 땐 그늘에서 사진을 찍고, 이동을 짧게 끊어 카페 타임을 섞으면 하루가 훨씬 부드러워집니다.",
+                    },
+                    {
+                      title: "Caution",
+                      body:
+                        "광장 주변은 차량/스쿠터가 빠르게 지나갑니다. 횡단 시 주의하고 가방은 몸 쪽으로 유지하세요.",
+                    },
+                  ],
+                },
+                {
+                  id: "teatro-antico-taormina",
+                  name: "Teatro Antico di Taormina",
+                  city: "Taormina",
+                  hero:
+                    "https://images.unsplash.com/photo-1526779259212-6de3d5f6a92b?auto=format&fit=crop&w=1800&q=80",
+                  sections: [
+                    {
+                      title: "History",
+                      body:
+                        "그리스-로마 시대의 유산으로, 바다와 에트나를 동시에 끌어들이는 ‘무대의 풍경’이 핵심입니다. 시야 자체가 작품이에요.",
+                    },
+                    {
+                      title: "Pro Tips",
+                      body:
+                        "노을 시간대는 가장 아름답지만 붐빕니다. 조금 일찍 들어가 자리 확보 후 천천히 관람하면 만족도가 높습니다.",
+                    },
+                    {
+                      title: "Caution",
+                      body:
+                        "돌계단 높낮이가 불규칙합니다. 어두워지기 전 하산 동선을 미리 확인하세요.",
+                    },
+                  ],
+                },
+                {
+                  id: "ortigia",
+                  name: "Ortigia",
+                  city: "Syracuse",
+                  hero:
+                    "https://images.unsplash.com/photo-1544984243-ec57ea16fe25?auto=format&fit=crop&w=1800&q=80",
+                  sections: [
+                    {
+                      title: "History",
+                      body:
+                        "오르티지아는 시라쿠사의 오래된 섬 도심으로, 지중해 도시의 시간이 층층이 쌓인 곳입니다. 짧은 거리 안에 ‘고전’이 밀도 있게 들어 있어요.",
+                    },
+                    {
+                      title: "Pro Tips",
+                      body:
+                        "여기는 목적지를 찍기보다 ‘속도’를 낮추는 게 핵심입니다. 골목→광장→바다 산책로를 한 번에 엮고, 카페 타임으로 끊어주세요.",
+                    },
+                    {
+                      title: "Caution",
+                      body:
+                        "작은 골목에도 스쿠터가 들어오는 경우가 있습니다. 사진에 몰입할수록 주변을 한 번 더 확인하세요.",
+                    },
+                  ],
+                },
+                {
+                  id: "mount-etna",
+                  name: "Mount Etna",
+                  city: "Etna Area",
+                  hero:
+                    "https://images.unsplash.com/photo-1548013146-72479768bada?auto=format&fit=crop&w=1800&q=80",
+                  sections: [
+                    {
+                      title: "History",
+                      body:
+                        "에트나는 유럽에서 가장 활발한 화산 중 하나로, 시칠리아의 풍경과 식탁(와인/농산물)의 배경이 되는 존재입니다.",
+                    },
+                    {
+                      title: "Pro Tips",
+                      body:
+                        "고도 차로 체감 온도가 확 달라집니다. 얇은 겉옷/바람막이, 선글라스, 물을 기본 세팅으로 가져가세요.",
+                    },
+                    {
+                      title: "Caution",
+                      body:
+                        "현장 상황에 따라 접근 제한이 있을 수 있습니다. 안전 안내를 우선하고, 미끄러운 화산 지형에서 무리한 트레킹은 피하세요.",
+                    },
+                  ],
+                },
+                {
+                  id: "upper-barrakka-gardens",
+                  name: "Upper Barrakka Gardens",
+                  city: "Valletta",
+                  hero:
+                    "https://images.unsplash.com/photo-1599828586084-46c0a365f65a?auto=format&fit=crop&w=1800&q=80",
+                  sections: [
+                    {
+                      title: "History",
+                      body:
+                        "발레타의 요새 구조와 그랜드 하버를 한 프레임에 담을 수 있는 대표 전망 포인트입니다. 도시의 ‘스케일’을 이해하는 데 가장 빠른 장소예요.",
+                    },
+                    {
+                      title: "Pro Tips",
+                      body:
+                        "골든아워에 오면 돌의 색이 따뜻하게 변해 사진이 훨씬 고급스럽게 나옵니다. 바람이 강하면 얇은 겉옷이 유용해요.",
+                    },
+                    {
+                      title: "Caution",
+                      body:
+                        "난간 근처 촬영 시 안전이 우선입니다. 바람이 강한 날은 특히 주의하세요.",
+                    },
+                  ],
+                },
+                {
+                  id: "the-citadel-gozo",
+                  name: "The Citadel",
+                  city: "Victoria (Gozo)",
+                  hero:
+                    "https://images.unsplash.com/photo-1600607688969-a5bfcd646b68?auto=format&fit=crop&w=1800&q=80",
+                  sections: [
+                    {
+                      title: "History",
+                      body:
+                        "고조 섬의 중심 성채로, 섬의 방어와 생활이 집중되던 공간입니다. 위에서 내려다보는 시야가 ‘고조의 지도’가 되어줍니다.",
+                    },
+                    {
+                      title: "Pro Tips",
+                      body:
+                        "성채는 오래 머물기보다 ‘한 번 크게 보고’ 내려오는 구성이 피로가 적습니다. 바람/햇빛 대비만 하면 만족도가 높아요.",
+                    },
+                    {
+                      title: "Caution",
+                      body:
+                        "돌바닥과 계단이 미끄러울 수 있습니다. 특히 비가 오거나 이슬이 있을 때 주의하세요.",
+                    },
+                  ],
+                },
+                {
+                  id: "amalfi-coast",
+                  name: "Amalfi Coast",
+                  city: "Amalfi",
+                  hero:
+                    "https://images.unsplash.com/photo-1500375592092-40eb2168fd21?auto=format&fit=crop&w=1800&q=80",
+                  sections: [
+                    {
+                      title: "History",
+                      body:
+                        "아말피 해안은 절벽 위 마을과 바다가 만드는 풍경으로 유명합니다. 이동 자체가 목적이 되는 구간이라, ‘도착’보다 ‘과정’을 즐기면 더 좋습니다.",
+                    },
+                    {
+                      title: "Pro Tips",
+                      body:
+                        "가장 큰 스트레스 포인트는 주차입니다. 숙소/주차장 동선을 미리 확보하고, 도착 시간을 해질 무렵으로 맞추면 체감이 훨씬 좋아요.",
+                    },
+                    {
+                      title: "Caution",
+                      body:
+                        "해안도로는 시야가 좁고 차량이 많습니다. 야간 운전은 피하고, 피로하면 반드시 쉬어가세요.",
+                    },
+                  ],
+                },
+              ],
+            },
+          },
+          {
+            id: "swiss-alps-grand-route-2025",
+            title: "Swiss Alps Grand Route — 19 Days",
+            subtitle:
+              "Venice · Zermatt · Interlaken · Innsbruck · Hallstatt · Prague · Vienna · Bled · Dolomites — Swiss202506.pdf 기반 알프스 로드트립",
+            dateRange: { start: "2025-05-30", end: "2025-06-17" },
+            cover: {
+              image:
+                "https://images.unsplash.com/photo-1501785888041-af3ef285b470?auto=format&fit=crop&w=1800&q=80",
+              credit: "Unsplash",
+            },
+            route: {
+              countries: ["Italy", "Switzerland", "France", "Austria", "Czechia", "Slovenia"],
+              cities: [
+                "Venice",
+                "Verona",
+                "Stalden",
+                "Chamonix",
+                "Zermatt",
+                "Interlaken",
+                "Innsbruck",
+                "Hallstatt",
+                "Prague",
+                "Vienna",
+                "Bled",
+                "Dolomites",
+              ],
+              summary:
+                "Swiss202506.pdf의 항공·숙소·일정표를 바탕으로 만든 알프스 장기 로드트립입니다. 베니스 인/아웃, 스탈덴과 인터라켄을 거점으로 샤모니·체르마트·융프라우·라우터브루넨을 깊게 보고, 후반은 오스트리아·체코·슬로베니아·돌로미티까지 이어지는 확장 루트입니다.",
+              mapEmbedUrl:
+                "https://www.google.com/maps?q=Venice%20Verona%20Stalden%20Chamonix%20Zermatt%20Interlaken%20Innsbruck%20Hallstatt%20Prague%20Vienna%20Bled%20Dolomites&output=embed",
+            },
+            days: [
+              {
+                day: 1,
+                date: "2025-05-30",
+                base: "Venice",
+                theme: "Arrival via Doha + Venice First Walk",
+                weatherNote:
+                  "장거리 비행 후 도착일입니다. 베니스는 수상 동선과 골목이 피로를 크게 만들 수 있어, 숙소 체크인 후 산마르코·리알토 주변만 가볍게 잡으세요.",
+                highlights: ["ICN → DOH → VCE", "Rialto Bridge", "San Marco"],
+                mapEmbedUrl:
+                  "https://www.google.com/maps?q=Rialto%20Bridge%20Doge%27s%20Palace%20Santa%20Maria%20della%20Salute&output=embed",
+                timeline: [
+                  {
+                    time: "01:20",
+                    title: "Flight to Venice via Doha",
+                    place: "Incheon → Doha → Venice",
+                    tags: ["#Flight", "#Transit"],
+                    details:
+                      "PDF 기준 QR859로 인천 01:20 출발, 도하 05:30 도착 후 QR1251로 09:30 출발, 베니스 14:20 도착 흐름입니다.",
+                    tips: ["도하 환승 시간이 길지 않으니 보딩 게이트와 보안 재검색 동선을 먼저 확인하세요."],
+                    caution: "도착 직후 무리한 수상버스 환승은 피로가 큽니다.",
+                  },
+                  {
+                    time: "17:00",
+                    title: "Venice Soft Landing",
+                    place: "Rialto Bridge · Doge's Palace · Salute",
+                    tags: ["#Historic", "#Walk"],
+                    details:
+                      "PDF에 나온 리알토 다리, 두칼레 궁전, 산타 마리아 델라 살루테 성당을 첫날 가벼운 베니스 산책 축으로 묶었습니다.",
+                    tips: ["사진은 리알토 다리 위보다 다리를 살짝 비껴 본 골목 쪽 프레임이 덜 붐빕니다."],
+                    caution: "베니스 골목은 방향 감각이 흐려지기 쉬워 숙소 위치를 오프라인 지도에 저장하세요.",
+                  },
+                ],
+              },
+              {
+                day: 2,
+                date: "2025-05-31",
+                base: "Stalden",
+                theme: "Venice → Verona → Sirmione → Milano → Stalden",
+                weatherNote:
+                  "PDF상 장거리 차량 이동일입니다. 관광 욕심보다 베로나와 밀라노 핵심만 짧게 끊고 스탈덴 숙소 도착을 우선하세요.",
+                highlights: ["Verona Arena", "Sirmione", "Duomo di Milano", "Stalden"],
+                mapEmbedUrl:
+                  "https://www.google.com/maps?q=Venice%20Verona%20Sirmione%20Milano%20Stalden&output=embed",
+                timeline: [
+                  {
+                    time: "09:00",
+                    title: "Verona + Sirmione Stopovers",
+                    place: "Verona Arena · Piazza delle Erbe · Sirmione",
+                    tags: ["#RoadTrip", "#Historic"],
+                    details:
+                      "PDF에는 Venice → Verona 112km, Verona → Sirmione 42km 흐름과 베로나 아레나, 에르베 광장, 줄리엣의 집, 시르미오네 성이 포함되어 있습니다.",
+                    tips: ["베로나는 원형 경기장과 광장 중심으로, 시르미오네는 성 주변 산책 정도로 압축하세요."],
+                    caution: "주차 시간이 길어지면 스탈덴 도착이 늦어집니다.",
+                  },
+                  {
+                    time: "15:00",
+                    title: "Milano Architecture Pass",
+                    place: "Duomo di Milano · Castello Sforzesco",
+                    tags: ["#Architecture", "#Transit"],
+                    details:
+                      "밀라노 대성당, 스포르체스코 성, 산타마리아 델레 그라치에가 PDF에 포함되어 있습니다. 이동일에는 외관 중심으로 보는 구성이 안전합니다.",
+                    tips: ["대성당 내부 입장보다 광장·외관·짧은 카페 휴식이 전체 동선에 맞습니다."],
+                    caution: "밀라노 도심 주차와 ZTL 구역을 반드시 확인하세요.",
+                  },
+                ],
+              },
+              {
+                day: 3,
+                date: "2025-06-01",
+                base: "Stalden",
+                theme: "Chamonix + Mont Blanc Views",
+                weatherNote:
+                  "고도 차가 큰 날입니다. 에귀디미디는 날씨 영향이 커서 오전 전망 예보를 먼저 보고 움직이세요.",
+                highlights: ["Stalden → Chamonix", "Aiguille du Midi", "Mer de Glace"],
+                mapEmbedUrl:
+                  "https://www.google.com/maps?q=Stalden%20Chamonix%20Aiguille%20du%20Midi%20Mer%20de%20Glace&output=embed",
+                timeline: [
+                  {
+                    time: "09:00",
+                    title: "Drive to Chamonix",
+                    place: "Stalden → Chamonix",
+                    tags: ["#Alps", "#RoadTrip"],
+                    details:
+                      "PDF 기준 Stalden에서 Chamonix까지 약 121km, 1시간 50분 이동으로 표시되어 있습니다.",
+                    tips: ["터널·산악도로 구간을 고려해 연료와 통행료 결제 수단을 미리 준비하세요."],
+                    caution: "산악 날씨가 나쁘면 전망 일정은 과감히 줄이는 편이 좋습니다.",
+                  },
+                  {
+                    time: "12:00",
+                    title: "Aiguille du Midi + Mer de Glace",
+                    place: "Chamonix-Mont-Blanc",
+                    tags: ["#Viewpoint", "#Glacier"],
+                    details:
+                      "PDF에는 에귀디미디와 메르드글라스가 핵심으로 정리되어 있습니다. 몽블랑 산군과 빙하 풍경을 보는 날입니다.",
+                    tips: ["케이블카 시간과 운영 여부를 현장에서 다시 확인하세요."],
+                    caution: "고산지대는 체감온도와 자외선이 강합니다.",
+                  },
+                ],
+              },
+              {
+                day: 4,
+                date: "2025-06-02",
+                base: "Interlaken",
+                theme: "Zermatt + Five Lakes + Interlaken Check-in",
+                weatherNote:
+                  "체르마트는 차량 접근 제한과 산악 교통이 변수입니다. 고르너그라트·호수 코스는 날씨가 맑을 때 우선순위를 높이세요.",
+                highlights: ["Zermatt", "Gornergrat", "Stellisee", "Interlaken"],
+                mapEmbedUrl:
+                  "https://www.google.com/maps?q=Stalden%20Zermatt%20Gornergrat%20Interlaken&output=embed",
+                timeline: [
+                  {
+                    time: "08:30",
+                    title: "Zermatt + Gornergrat",
+                    place: "Zermatt · Gornergrat",
+                    tags: ["#Matterhorn", "#ScenicRail"],
+                    details:
+                      "PDF에는 Stalden → Zermatt 약 23km, 고르너그라트와 Stellisee, Grindjisee, Moosjisee, Grünsee, Leisee가 포함되어 있습니다.",
+                    tips: ["마테호른 전망은 오전 구름이 적을 때가 유리합니다."],
+                    caution: "체르마트 접근은 주차 후 셔틀/열차 동선이 필요할 수 있습니다.",
+                  },
+                  {
+                    time: "17:30",
+                    title: "Move to Interlaken Area",
+                    place: "Kientalstrasse 116, Scharnachtal",
+                    tags: ["#CheckIn", "#BaseCamp"],
+                    details:
+                      "PDF 숙소 정보상 6/2 체크인, 6/6 체크아웃으로 인터라켄 일대 4박 거점이 잡혀 있습니다.",
+                    tips: ["스위스 알프스 구간은 숙소에 짐을 풀고 빨래·간식·물 보급을 정리해두면 좋습니다."],
+                    caution: "늦은 산악도로 운전은 피로도가 큽니다.",
+                  },
+                ],
+              },
+              {
+                day: 5,
+                date: "2025-06-03",
+                base: "Interlaken",
+                theme: "Lakes, Castles + Aare Gorge",
+                weatherNote:
+                  "호수와 협곡을 잇는 날입니다. 비가 오면 아레 협곡은 미끄러울 수 있어 신발 접지와 방수 준비가 중요합니다.",
+                highlights: ["Spiez", "Thun", "Harder Kulm", "Aareschlucht", "Iseltwald"],
+                mapEmbedUrl:
+                  "https://www.google.com/maps?q=Spiez%20Thun%20Harder%20Kulm%20Brienz%20Aareschlucht%20Iseltwald&output=embed",
+                timeline: [
+                  {
+                    time: "09:30",
+                    title: "Lake Town Circuit",
+                    place: "Spiez · Thun · Brienz · Iseltwald",
+                    tags: ["#Lakes", "#Castle"],
+                    details:
+                      "PDF 일정표에는 Spiez, Thun, St. Beatus-Höhlen, Harder Kulm, Brienz, Aareschlucht, Iseltwald가 같은 날로 묶여 있습니다.",
+                    tips: ["호수 마을은 긴 입장보다 전망 포인트와 산책을 짧게 반복하는 구성이 좋습니다."],
+                    caution: "이동지가 많아 주차 시간을 합치면 예상보다 하루가 길어집니다.",
+                  },
+                  {
+                    time: "15:00",
+                    title: "Aare Gorge Walk",
+                    place: "Aareschlucht",
+                    tags: ["#Nature", "#Walk"],
+                    details:
+                      "PDF에는 아레 협곡의 석회암 절벽, 산책로, 철도 접근 정보가 길게 정리되어 있어 핵심 자연 스팟으로 보입니다.",
+                    tips: ["협곡은 빛이 강한 시간보다 흐리거나 오후의 부드러운 빛이 사진에 좋습니다."],
+                    caution: "젖은 목재 산책로와 좁은 통로에서 미끄럼 주의.",
+                  },
+                ],
+              },
+              {
+                day: 6,
+                date: "2025-06-04",
+                base: "Interlaken",
+                theme: "Grindelwald + Jungfraujoch",
+                weatherNote:
+                  "Top of Europe 구간은 날씨가 전부입니다. 전망이 닫히면 멘리헨·클라이네 샤이덱 중심으로 조정하세요.",
+                highlights: ["Grindelwald", "Kleine Scheidegg", "Männlichen", "Jungfraujoch", "Eigergletscher"],
+                mapEmbedUrl:
+                  "https://www.google.com/maps?q=Grindelwald%20Kleine%20Scheidegg%20Mannlichen%20Jungfraujoch%20Eigergletscher&output=embed",
+                timeline: [
+                  {
+                    time: "08:00",
+                    title: "Grindelwald + Kleine Scheidegg",
+                    place: "Grindelwald · Kleine Scheidegg",
+                    tags: ["#ScenicRail", "#Alps"],
+                    details:
+                      "PDF에는 그린델발트, 클라이네 샤이덱, 멘리헨, 아이거 글레처가 핵심 동선으로 들어 있습니다.",
+                    tips: ["열차와 곤돌라 시간이 맞물리므로 전날 밤에 첫 이동편만 확정해두세요."],
+                    caution: "산악 교통권은 환불/변경 조건을 확인하세요.",
+                  },
+                  {
+                    time: "12:30",
+                    title: "Jungfraujoch",
+                    place: "Jungfraujoch · Eigergletscher",
+                    tags: ["#TopOfEurope", "#Glacier"],
+                    details:
+                      "PDF에는 융프라우요흐의 고도, 유럽에서 가장 높은 철도역, 스핑크스 전망대, 알레치 빙하 설명이 포함되어 있습니다.",
+                    tips: ["고산에서는 천천히 걷고, 물을 자주 마시세요."],
+                    caution: "두통·어지러움이 있으면 즉시 휴식하고 무리하지 마세요.",
+                  },
+                ],
+              },
+              {
+                day: 7,
+                date: "2025-06-05",
+                base: "Interlaken",
+                theme: "Lauterbrunnen Valley + Schynige Platte",
+                weatherNote:
+                  "계곡과 전망대를 함께 보는 날입니다. 기차·케이블카·도보가 섞이므로 이동 피로를 보며 순서를 조정하세요.",
+                highlights: ["Wilderswil", "Schynige Platte", "Lauterbrunnen", "Wengen", "Mürren", "Schilthorn"],
+                mapEmbedUrl:
+                  "https://www.google.com/maps?q=Wilderswil%20Schynige%20Platte%20Lauterbrunnen%20Wengen%20Murren%20Schilthorn&output=embed",
+                timeline: [
+                  {
+                    time: "09:00",
+                    title: "Schynige Platte from Wilderswil",
+                    place: "Wilderswil · Schynige Platte",
+                    tags: ["#Viewpoint", "#Rail"],
+                    details:
+                      "PDF에는 빌더스빌, 쉬니게 플라테, 벵엔이 같은 구간에 정리되어 있습니다. 쉬니게 플라테는 브리엔츠 호수와 베르너 오버란트 전망대 역할을 합니다.",
+                    tips: ["전망대 날씨가 맑으면 오전에 먼저 올리는 편이 좋습니다."],
+                    caution: "산악열차 막차 시간을 반드시 확인하세요.",
+                  },
+                  {
+                    time: "14:00",
+                    title: "Lauterbrunnen + Wengen + Mürren",
+                    place: "Lauterbrunnen Valley",
+                    tags: ["#Village", "#Waterfall"],
+                    details:
+                      "PDF에는 라우터브루넨, 벵엔, 뮈렌, 트륌멜바흐, 쉴터호른이 포함되어 있습니다. 계곡 마을과 절벽 마을을 보는 하루입니다.",
+                    tips: ["마을 간 이동은 욕심내기보다 한두 구간을 깊게 보는 편이 만족도가 높습니다."],
+                    caution: "케이블카 환승 실패 시 복귀 시간이 크게 늦어질 수 있습니다.",
+                  },
+                ],
+              },
+              {
+                day: 8,
+                date: "2025-06-06",
+                base: "Innsbruck",
+                theme: "Lucerne Stop + Drive to Innsbruck",
+                weatherNote:
+                  "스위스 거점을 떠나는 이동일입니다. 루체른은 짧은 도시 산책으로 압축하고, 인스브루크 숙소 도착 시간을 안정적으로 잡으세요.",
+                highlights: ["Lucerne", "Chapel Bridge", "Innsbruck", "Mutters"],
+                mapEmbedUrl:
+                  "https://www.google.com/maps?q=Interlaken%20Lucerne%20Innsbruck%20Mutters&output=embed",
+                timeline: [
+                  {
+                    time: "09:00",
+                    title: "Interlaken → Lucerne",
+                    place: "Lucerne",
+                    tags: ["#Transit", "#OldTown"],
+                    details:
+                      "PDF에는 Interlaken → Lucerne 약 96km, 1시간 30분, 이후 Innsbruck까지 약 317km, 3시간 50분 이동으로 표시되어 있습니다.",
+                    tips: ["루체른은 카펠교와 호수 산책 정도로 짧게 잡으면 이동일 리듬이 좋습니다."],
+                    caution: "하루 총 운전 시간이 길어 휴식 포인트를 미리 정하세요.",
+                  },
+                  {
+                    time: "18:00",
+                    title: "Check-in near Innsbruck",
+                    place: "Kirchplatz 12, Mutters",
+                    tags: ["#CheckIn", "#Austria"],
+                    details:
+                      "PDF 숙소는 Mutters, Tirol 6162로 6/6 체크인, 6/7 체크아웃입니다.",
+                    tips: ["다음날 잘츠부르크·할슈타트 이동을 위해 짐을 다시 쉽게 꺼낼 수 있게 정리하세요."],
+                    caution: "오스트리아 고속도로 이용 조건과 주차 규칙을 확인하세요.",
+                  },
+                ],
+              },
+              {
+                day: 9,
+                date: "2025-06-07",
+                base: "Hallstatt Area",
+                theme: "Salzburg + Salzkammergut + Hallstatt",
+                weatherNote:
+                  "호수 지역과 도시가 함께 있는 날입니다. 할슈타트는 주차와 인파가 변수라 늦은 오후 접근이 더 편할 수 있습니다.",
+                highlights: ["Salzburg", "Salzkammergut", "Hallstatt", "Traunkirchen"],
+                mapEmbedUrl:
+                  "https://www.google.com/maps?q=Innsbruck%20Salzburg%20Salzkammergut%20Hallstatt%20Traunkirchen&output=embed",
+                timeline: [
+                  {
+                    time: "09:00",
+                    title: "Innsbruck → Salzburg",
+                    place: "Salzburg",
+                    tags: ["#RoadTrip", "#Baroque"],
+                    details:
+                      "PDF에는 Innsbruck → Salzburg 약 186km, 2시간 30분, Salzburg → Hallstatt 약 75km, 1시간 20분으로 표시되어 있습니다.",
+                    tips: ["잘츠부르크는 구시가지와 미라벨 정원 중심으로 짧게 압축하세요."],
+                    caution: "도심 주차와 보행자 구역 진입을 주의하세요.",
+                  },
+                  {
+                    time: "16:00",
+                    title: "Hallstatt Evening",
+                    place: "Hallstatt · Mühlbach · Traunkirchen",
+                    tags: ["#Lake", "#Village"],
+                    details:
+                      "PDF에는 Salzkammergut, Hallstatt, Mühlbach 숙소 정보가 포함되어 있습니다.",
+                    tips: ["할슈타트는 이른 아침이나 늦은 오후가 상대적으로 걷기 편합니다."],
+                    caution: "관광버스와 차량 혼잡이 심할 수 있습니다.",
+                  },
+                ],
+              },
+              {
+                day: 10,
+                date: "2025-06-08",
+                base: "Rodvínov",
+                theme: "Český Krumlov + South Bohemia",
+                weatherNote:
+                  "국경 이동과 체코 소도시가 이어지는 날입니다. 도로 표지와 결제 통화를 바꾸는 구간이라 차분하게 움직이세요.",
+                highlights: ["Český Krumlov", "České Budějovice", "Telč", "Rodvínov"],
+                mapEmbedUrl:
+                  "https://www.google.com/maps?q=Hallstatt%20Cesky%20Krumlov%20Ceske%20Budejovice%20Telc%20Rodvinov&output=embed",
+                timeline: [
+                  {
+                    time: "09:00",
+                    title: "Drive to Český Krumlov",
+                    place: "Český Krumlov",
+                    tags: ["#Czechia", "#OldTown"],
+                    details:
+                      "PDF에는 Český Krumlov, České Budějovice, Telč, Rodvínov이 한 날에 묶여 있고 구간별 이동 시간도 표시되어 있습니다.",
+                    tips: ["크룸로프는 성 전망과 구시가지 루프를 우선하면 짧아도 밀도가 높습니다."],
+                    caution: "체코 진입 후 주차권·톨·교통 규칙을 확인하세요.",
+                  },
+                  {
+                    time: "18:00",
+                    title: "Rodvínov Stay",
+                    place: "Rodvínov 103",
+                    tags: ["#CheckIn", "#Rest"],
+                    details:
+                      "PDF 숙소는 Rodvínov 103, 6/8 체크인, 6/10 체크아웃으로 표시되어 있어 프라하·쿠트나호라 전 거점입니다.",
+                    tips: ["이틀 거점이므로 세탁·충전·식료품 보급을 처리하기 좋습니다."],
+                    caution: "지방 숙소는 체크인 안내를 미리 저장하세요.",
+                  },
+                ],
+              },
+              {
+                day: 11,
+                date: "2025-06-09",
+                base: "Rodvínov",
+                theme: "Prague + Kutná Hora",
+                weatherNote:
+                  "프라하와 쿠트나호라를 함께 보는 날이라 걷는 양이 많습니다. 프라하는 구시가지 핵심, 쿠트나호라는 성 바바라 교회와 납골당 중심으로 압축하세요.",
+                highlights: ["Prague", "Kutná Hora", "Sedlec Ossuary", "St. Barbara's Church"],
+                mapEmbedUrl:
+                  "https://www.google.com/maps?q=Prague%20Kutna%20Hora%20Sedlec%20Ossuary%20St%20Barbara%20Church&output=embed",
+                timeline: [
+                  {
+                    time: "09:30",
+                    title: "Prague Core Walk",
+                    place: "Prague Old Town",
+                    tags: ["#City", "#Historic"],
+                    details:
+                      "PDF에는 Prague와 Kutná Hora가 같은 날로 표시되어 있으며, 프라하 구시가 광장·주요 역사 구역 설명이 포함되어 있습니다.",
+                    tips: ["프라하는 카를교·구시가 광장·전망 포인트 정도로 핵심만 잡으세요."],
+                    caution: "관광지 혼잡 구간에서 소지품 주의.",
+                  },
+                  {
+                    time: "14:30",
+                    title: "Kutná Hora Monuments",
+                    place: "Kutná Hora",
+                    tags: ["#UNESCO", "#Gothic"],
+                    details:
+                      "PDF에는 성 바바라 교회, 세들레츠 납골당, 쿠트나호라의 은광 도시 역사 설명이 포함되어 있습니다.",
+                    tips: ["납골당과 성 바바라 교회 사이 이동 시간을 넉넉히 잡으세요."],
+                    caution: "성당 내부는 조용한 관람 매너와 사진 규칙을 지키세요.",
+                  },
+                ],
+              },
+              {
+                day: 12,
+                date: "2025-06-10",
+                base: "Vienna",
+                theme: "Znojmo + Vienna Classics",
+                weatherNote:
+                  "빈은 궁전·성당·미술관 밀도가 높습니다. 하루에 모두 깊게 보기보다 호프부르크·슈테판·벨베데레 중 우선순위를 정하세요.",
+                highlights: ["Znojmo", "Vienna", "Stephansdom", "Hofburg", "Belvedere", "Schönbrunn"],
+                mapEmbedUrl:
+                  "https://www.google.com/maps?q=Znojmo%20Vienna%20Stephansdom%20Hofburg%20Belvedere%20Schonbrunn&output=embed",
+                timeline: [
+                  {
+                    time: "09:00",
+                    title: "Rodvínov → Znojmo → Vienna",
+                    place: "Znojmo · Vienna",
+                    tags: ["#Transit", "#Austria"],
+                    details:
+                      "PDF에는 Znojmo → Vienna 구간과 빈 숙소 Gerasdorf bei Wien, 6/10 체크인 정보가 포함되어 있습니다.",
+                    tips: ["빈 외곽 숙소라면 대중교통 환승 또는 주차 후 도심 접근을 먼저 정하세요."],
+                    caution: "빈 도심은 주차와 일방통행이 까다롭습니다.",
+                  },
+                  {
+                    time: "13:30",
+                    title: "Vienna Imperial Route",
+                    place: "Stephansdom · Hofburg · Belvedere · Schönbrunn",
+                    tags: ["#Architecture", "#Museum"],
+                    details:
+                      "PDF에는 슈테판 대성당, 벨베데레 궁전, 호프부르크 왕궁, 쇤브룬궁, 카를성당 설명이 포함되어 있습니다.",
+                    tips: ["벨베데레나 쇤브룬 중 하나만 내부 관람으로 깊게 잡아도 충분합니다."],
+                    caution: "박물관·궁전은 입장 마감 시간이 빠를 수 있습니다.",
+                  },
+                ],
+              },
+              {
+                day: 13,
+                date: "2025-06-11",
+                base: "Bled",
+                theme: "Graz + Ljubljana + Bled",
+                weatherNote:
+                  "오스트리아에서 슬로베니아로 넘어가는 날입니다. 블레드는 도착 후 호수 산책만으로도 충분히 좋습니다.",
+                highlights: ["Graz", "Ljubljana", "Dragon Bridge", "Bled Castle"],
+                mapEmbedUrl:
+                  "https://www.google.com/maps?q=Graz%20Ljubljana%20Bled%20Castle%20Zgornje%20Gorje&output=embed",
+                timeline: [
+                  {
+                    time: "09:00",
+                    title: "Vienna Area → Graz → Ljubljana",
+                    place: "Graz · Ljubljana",
+                    tags: ["#RoadTrip", "#Slovenia"],
+                    details:
+                      "PDF에는 Graz → Ljubljana → Bled 구간과 에겐베르크 궁전, 드래곤 브릿지, 류블랴나성 설명이 포함되어 있습니다.",
+                    tips: ["류블랴나는 드래곤 브릿지와 성 전망을 짧게 묶으면 좋습니다."],
+                    caution: "국경 이동 후 통행권·고속도로 규칙을 확인하세요.",
+                  },
+                  {
+                    time: "17:30",
+                    title: "Bled Arrival",
+                    place: "Spodnje Laze 3, Zgornje Gorje",
+                    tags: ["#Lake", "#CheckIn"],
+                    details:
+                      "PDF 숙소는 Zgornje Gorje, 6/11 체크인, 6/12 체크아웃입니다. 블레드 성은 호수를 내려다보는 대표 포인트로 정리되어 있습니다.",
+                    tips: ["블레드 호수는 저녁 산책이 아름답고 사람도 조금 줄어듭니다."],
+                    caution: "호수 주변 주차 가능 시간을 확인하세요.",
+                  },
+                ],
+              },
+              {
+                day: 14,
+                date: "2025-06-12",
+                base: "Dolomites",
+                theme: "Bled → Villach → Lienz → Dolomites",
+                weatherNote:
+                  "돌로미티 거점 이동일입니다. 고갯길과 산악도로가 이어지므로 낮 시간 도착을 목표로 잡으세요.",
+                highlights: ["Villach", "Lienz", "Saviner di Laste", "Cortina d'Ampezzo"],
+                mapEmbedUrl:
+                  "https://www.google.com/maps?q=Bled%20Villach%20Lienz%20Saviner%20di%20Laste%20Cortina%20d%27Ampezzo&output=embed",
+                timeline: [
+                  {
+                    time: "09:00",
+                    title: "Move into the Dolomites",
+                    place: "Bled → Villach → Lienz → Saviner di Laste",
+                    tags: ["#MountainRoad", "#Transit"],
+                    details:
+                      "PDF에는 Villach, Lienz 경유와 Località Saviner di Laste 숙소, 6/12 체크인, 6/16 체크아웃 정보가 포함되어 있습니다.",
+                    tips: ["돌로미티 구간은 날씨가 바뀌기 쉬우니 도착일에는 숙소 주변 적응에 집중하세요."],
+                    caution: "산악도로에서는 일몰 후 운전 난도가 올라갑니다.",
+                  },
+                  {
+                    time: "16:00",
+                    title: "Cortina Preview",
+                    place: "Cortina d'Ampezzo",
+                    tags: ["#Dolomites", "#Village"],
+                    details:
+                      "PDF에는 코르티나 담페초, 산 비토 디 카도레, 트레치메, 친퀘토리, 가르데나 패스 등 돌로미티 주요 포인트가 정리되어 있습니다.",
+                    tips: ["남은 돌로미티 체류일의 날씨를 보고 패스·트레일 순서를 정하세요."],
+                    caution: "산악 주차장은 만차가 빠릅니다.",
+                  },
+                ],
+              },
+              {
+                day: 15,
+                date: "2025-06-13",
+                base: "Dolomites",
+                theme: "Tre Cime + Cortina Area",
+                weatherNote:
+                  "트레치메는 날씨·주차·통행 제한 영향을 많이 받습니다. 맑은 날이면 가장 먼저 배치하세요.",
+                highlights: ["Tre Cime di Lavaredo", "San Vito di Cadore", "Cortina"],
+                mapEmbedUrl:
+                  "https://www.google.com/maps?q=Tre%20Cime%20di%20Lavaredo%20San%20Vito%20di%20Cadore%20Cortina%20d%27Ampezzo&output=embed",
+                timeline: [
+                  {
+                    time: "08:00",
+                    title: "Tre Cime Morning",
+                    place: "Tre Cime di Lavaredo",
+                    tags: ["#Hiking", "#Viewpoint"],
+                    details:
+                      "PDF의 돌로미티 리스트에서 트레치메 디 라바레도가 핵심 자연 스팟으로 포함되어 있습니다.",
+                    tips: ["주차장 진입과 트레일 상태를 아침에 확인하고, 짧은 전망 코스만 걸어도 충분합니다."],
+                    caution: "고산 날씨와 노출 구간에 대비하세요.",
+                  },
+                  {
+                    time: "15:00",
+                    title: "Cortina + San Vito",
+                    place: "Cortina d'Ampezzo · San Vito di Cadore",
+                    tags: ["#Village", "#Rest"],
+                    details:
+                      "트레킹 후에는 코르티나와 산 비토 디 카도레 주변으로 강도를 낮춰 회복하는 구성이 좋습니다.",
+                    tips: ["돌로미티는 ‘한 장면 오래 보기’가 좋은 곳이라 이동지를 줄여도 만족도가 높습니다."],
+                    caution: "무리한 연속 트레일은 다음날 컨디션을 떨어뜨립니다.",
+                  },
+                ],
+              },
+              {
+                day: 16,
+                date: "2025-06-14",
+                base: "Dolomites",
+                theme: "Gardena + Sella Pass",
+                weatherNote:
+                  "패스 드라이브는 시야가 열릴 때 가장 좋습니다. 흐리면 오르티세이·마을 산책 위주로 조정하세요.",
+                highlights: ["Gardena Pass", "Sella Pass", "Ortisei", "Sassolungo"],
+                mapEmbedUrl:
+                  "https://www.google.com/maps?q=Gardena%20Pass%20Sella%20Pass%20Ortisei%20Sassolungo&output=embed",
+                timeline: [
+                  {
+                    time: "09:00",
+                    title: "Pass Road Loop",
+                    place: "Gardena Pass · Sella Pass",
+                    tags: ["#RoadTrip", "#Panorama"],
+                    details:
+                      "PDF에는 가르데나 패스, 셀라 패스, 사쏘 룽고, 오르티세이가 돌로미티 섹션에 포함되어 있습니다.",
+                    tips: ["전망 주차 포인트마다 오래 머물기보다 짧게 반복하면 피로가 적습니다."],
+                    caution: "고갯길은 자전거와 관광 차량이 많아 속도를 낮추세요.",
+                  },
+                  {
+                    time: "14:30",
+                    title: "Ortisei + Sassolungo Views",
+                    place: "Ortisei · Sassolungo",
+                    tags: ["#Village", "#CableCar"],
+                    details:
+                      "오르티세이는 마을 산책과 케이블카 접근성이 좋아 흐린 날 대안으로도 좋습니다.",
+                    tips: ["기념품과 식사는 이 구간에서 처리하기 좋습니다."],
+                    caution: "케이블카 운영 시간과 마지막 하산 시간을 확인하세요.",
+                  },
+                ],
+              },
+              {
+                day: 17,
+                date: "2025-06-15",
+                base: "Dolomites",
+                theme: "Cinque Torri + Buffer Day",
+                weatherNote:
+                  "긴 여행 후반부라 날씨와 체력을 보며 유연하게 쓰는 날입니다. 친퀘토리 또는 숙소 주변 회복일로 운영하세요.",
+                highlights: ["Cinque Torri", "Cimon della Pala", "Rest"],
+                mapEmbedUrl:
+                  "https://www.google.com/maps?q=Cinque%20Torri%20Cimon%20della%20Pala%20Dolomites&output=embed",
+                timeline: [
+                  {
+                    time: "10:00",
+                    title: "Cinque Torri Option",
+                    place: "Cinque Torri",
+                    tags: ["#RockTower", "#Photo"],
+                    details:
+                      "PDF에는 친퀘토리와 시몬 델라 팔라가 돌로미티 포인트로 정리되어 있습니다. 마지막 산악일은 부담을 낮춘 선택형 일정으로 두었습니다.",
+                    tips: ["맑으면 친퀘토리, 흐리면 마을·카페·정비일로 바꾸세요."],
+                    caution: "다음날 출국 이동을 위해 저녁에는 짐 정리를 끝내세요.",
+                  },
+                ],
+              },
+              {
+                day: 18,
+                date: "2025-06-16",
+                base: "Venice",
+                theme: "Dolomites → Venice + Departure",
+                weatherNote:
+                  "출국 이동일입니다. 산악도로에서 베니스 공항권역으로 돌아오는 시간을 여유 있게 잡으세요.",
+                highlights: ["Return to Venice", "QR126", "Doha transfer"],
+                mapEmbedUrl:
+                  "https://www.google.com/maps?q=Saviner%20di%20Laste%20Venice%20Marco%20Polo%20Airport&output=embed",
+                timeline: [
+                  {
+                    time: "16:05",
+                    title: "Venice → Doha",
+                    place: "Venice Marco Polo Airport (VCE)",
+                    tags: ["#Flight", "#Transit"],
+                    details:
+                      "PDF 기준 QR126, 베니스 16:05 출발, 도하 22:30 도착으로 정리되어 있습니다.",
+                    tips: ["렌트카 반납이 있다면 공항 도착 시간을 더 앞당기세요."],
+                    caution: "산악도로 지연과 렌트카 반납 대기 시간을 모두 고려하세요.",
+                  },
+                ],
+              },
+              {
+                day: 19,
+                date: "2025-06-17",
+                base: "Seoul",
+                theme: "Doha → Incheon Arrival",
+                weatherNote:
+                  "귀국일입니다. 긴 여정 후 피로가 누적되어 있으니 도착 후 일정은 비워두는 편이 좋습니다.",
+                highlights: ["QR858", "ICN arrival 17:05"],
+                mapEmbedUrl:
+                  "https://www.google.com/maps?q=Doha%20Hamad%20International%20Airport%20Incheon%20International%20Airport&output=embed",
+                timeline: [
+                  {
+                    time: "02:20",
+                    title: "Doha → Seoul",
+                    place: "Doha → Incheon",
+                    tags: ["#Flight", "#Homebound"],
+                    details:
+                      "PDF 기준 QR858, 도하 02:20 출발, 인천 17:05 도착 흐름입니다.",
+                    tips: ["기내에서 수면 리듬을 맞추고, 사진·영수증·주차 정보를 귀국 전에 정리해두세요."],
+                    caution: "귀국 당일 운전이나 중요한 약속은 피하는 편이 안전합니다.",
+                  },
+                ],
+              },
+            ],
+            wiki: {
+              attractions: [
+                {
+                  id: "aiguille-du-midi",
+                  name: "Aiguille du Midi",
+                  city: "Chamonix",
+                  hero:
+                    "https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=1800&q=80",
+                  sections: [
+                    {
+                      title: "From the PDF",
+                      body:
+                        "PDF에는 에귀디미디가 샤모니 구간의 핵심 전망지로 정리되어 있으며, 몽블랑 산군과 발레 블랑슈로 이어지는 고산 풍경이 강조되어 있습니다.",
+                    },
+                    {
+                      title: "Pro Tips",
+                      body:
+                        "케이블카 운영 여부와 전망 예보를 먼저 확인하세요. 맑은 오전이면 이 일정을 가장 앞에 두는 편이 좋습니다.",
+                    },
+                    {
+                      title: "Caution",
+                      body:
+                        "고도가 높아 체온 저하와 고산 반응이 올 수 있습니다. 천천히 걷고 무리한 이동은 피하세요.",
+                    },
+                  ],
+                },
+                {
+                  id: "gornergrat",
+                  name: "Gornergrat",
+                  city: "Zermatt",
+                  hero:
+                    "https://images.unsplash.com/photo-1519681393784-d120267933ba?auto=format&fit=crop&w=1800&q=80",
+                  sections: [
+                    {
+                      title: "From the PDF",
+                      body:
+                        "체르마트 구간에는 Gornergrat와 Stellisee, Grindjisee, Moosjisee, Grünsee, Leisee가 함께 표시되어 있어 마테호른 전망과 호수 산책을 묶는 구성입니다.",
+                    },
+                    {
+                      title: "Pro Tips",
+                      body:
+                        "마테호른은 오전에 구름이 덜 낄 가능성이 높습니다. 날씨가 좋으면 고르너그라트를 먼저 올리세요.",
+                    },
+                    {
+                      title: "Caution",
+                      body:
+                        "체르마트는 차량 접근 제한이 있으므로 주차 후 산악교통 동선을 미리 확인해야 합니다.",
+                    },
+                  ],
+                },
+                {
+                  id: "jungfraujoch",
+                  name: "Jungfraujoch",
+                  city: "Bernese Oberland",
+                  hero:
+                    "https://images.unsplash.com/photo-1527668752968-14dc70a27c95?auto=format&fit=crop&w=1800&q=80",
+                  sections: [
+                    {
+                      title: "From the PDF",
+                      body:
+                        "PDF에는 융프라우요흐, 아이거글레처, 스핑크스 전망대, 알레치 빙하가 길게 설명되어 있습니다. 알프스 구간의 하이라이트입니다.",
+                    },
+                    {
+                      title: "Pro Tips",
+                      body:
+                        "전망이 닫히면 비용 대비 만족도가 크게 떨어집니다. 날씨가 좋을 때 우선 배치하세요.",
+                    },
+                    {
+                      title: "Caution",
+                      body:
+                        "해발 3,000m 이상 구간이라 두통·어지러움이 있으면 바로 쉬어야 합니다.",
+                    },
+                  ],
+                },
+                {
+                  id: "aareschlucht",
+                  name: "Aareschlucht",
+                  city: "Meiringen",
+                  hero:
+                    "https://images.unsplash.com/photo-1491555103944-7c647fd857e6?auto=format&fit=crop&w=1800&q=80",
+                  sections: [
+                    {
+                      title: "From the PDF",
+                      body:
+                        "아레 협곡은 석회암 절벽과 아레강이 만든 좁은 통로, 목조·금속 산책로가 특징인 자연 명소로 정리되어 있습니다.",
+                    },
+                    {
+                      title: "Pro Tips",
+                      body:
+                        "Spiez, Thun, Brienz, Iseltwald와 함께 호수·협곡 일일 루프로 묶기 좋습니다.",
+                    },
+                    {
+                      title: "Caution",
+                      body:
+                        "비가 오거나 바닥이 젖으면 미끄럽습니다. 방수 신발과 얇은 겉옷을 준비하세요.",
+                    },
+                  ],
+                },
+                {
+                  id: "lauterbrunnen",
+                  name: "Lauterbrunnen Valley",
+                  city: "Interlaken Area",
+                  hero:
+                    "https://images.unsplash.com/photo-1500534314209-a25ddb2bd429?auto=format&fit=crop&w=1800&q=80",
+                  sections: [
+                    {
+                      title: "From the PDF",
+                      body:
+                        "라우터브루넨, 벵엔, 뮈렌, 트륌멜바흐, 쉴터호른이 같은 날 후보로 들어 있어 계곡과 절벽 마을을 잇는 구성입니다.",
+                    },
+                    {
+                      title: "Pro Tips",
+                      body:
+                        "모든 마을을 깊게 보려 하기보다 날씨와 체력에 맞춰 한두 구간을 골라 천천히 걷는 편이 좋습니다.",
+                    },
+                    {
+                      title: "Caution",
+                      body:
+                        "산악 교통 막차와 케이블카 환승 시간을 놓치면 복귀가 복잡해집니다.",
+                    },
+                  ],
+                },
+                {
+                  id: "hallstatt",
+                  name: "Hallstatt",
+                  city: "Salzkammergut",
+                  hero:
+                    "https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=1800&q=80",
+                  sections: [
+                    {
+                      title: "From the PDF",
+                      body:
+                        "잘츠부르크, 잘츠카머구트, 할슈타트가 같은 날로 정리되어 있어 오스트리아 호수 마을 구간의 핵심입니다.",
+                    },
+                    {
+                      title: "Pro Tips",
+                      body:
+                        "인파가 많으므로 아주 이른 아침이나 늦은 오후에 접근하면 걷기 편합니다.",
+                    },
+                    {
+                      title: "Caution",
+                      body:
+                        "주차 공간과 마을 진입 규칙을 확인하세요. 관광버스 시간대에는 매우 혼잡합니다.",
+                    },
+                  ],
+                },
+                {
+                  id: "kutna-hora",
+                  name: "Kutná Hora",
+                  city: "Czechia",
+                  hero:
+                    "https://images.unsplash.com/photo-1519677100203-a0e668c92439?auto=format&fit=crop&w=1800&q=80",
+                  sections: [
+                    {
+                      title: "From the PDF",
+                      body:
+                        "PDF에는 쿠트나 호라의 은광 역사, 세들레츠 납골당, 성 바바라 교회가 상세히 정리되어 있습니다.",
+                    },
+                    {
+                      title: "Pro Tips",
+                      body:
+                        "프라하와 한 날에 묶는다면 성 바바라 교회와 납골당만 중심으로 잡는 것이 좋습니다.",
+                    },
+                    {
+                      title: "Caution",
+                      body:
+                        "종교 시설과 납골당은 조용한 관람 태도와 사진 규칙 확인이 필요합니다.",
+                    },
+                  ],
+                },
+                {
+                  id: "dolomites",
+                  name: "Dolomites",
+                  city: "Northern Italy",
+                  hero:
+                    "https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=1800&q=80",
+                  sections: [
+                    {
+                      title: "From the PDF",
+                      body:
+                        "PDF 돌로미티 구간에는 코르티나 담페초, 트레치메 디 라바레도, 친퀘토리, 가르데나 패스, 셀라 패스, 오르티세이, 사쏘 룽고가 포함되어 있습니다.",
+                    },
+                    {
+                      title: "Pro Tips",
+                      body:
+                        "날씨가 좋은 날은 트레치메나 패스 드라이브를 먼저, 흐린 날은 마을 산책과 카페를 중심으로 조정하세요.",
+                    },
+                    {
+                      title: "Caution",
+                      body:
+                        "산악 주차장 만차와 일몰 후 운전 난도를 고려해 하루를 일찍 시작하는 편이 안전합니다.",
+                    },
+                  ],
+                },
+              ],
+            },
+          },
+        ],
+      };
+    </script>
+
+    <!-- Web App Shell -->
+    <div id="app" class="min-h-dvh pb-28 sm:pb-32">
+      <!-- Top Header -->
+      <header class="no-print sticky top-0 z-40">
+        <div class="glass">
+          <div class="mx-auto max-w-6xl px-4 sm:px-6">
+            <div class="flex items-end justify-between gap-4 py-5 sm:py-6">
+              <div class="flex items-center gap-4">
+                <div class="h-10 w-10 sm:h-12 sm:w-12 bg-primary rounded-[2px] flex items-center justify-center text-white font-serif font-bold text-xl sm:text-2xl shadow-soft shrink-0">L</div>
+                <div class="min-w-0">
+                  <h1 class="font-serif text-xl sm:text-3xl font-bold text-ink-900 tracking-tight flex items-baseline gap-2">
+                    <span id="brandTitle"></span>
+                  </h1>
+                  <div class="text-[9px] sm:text-[11px] tracking-[0.25em] text-slate-500 uppercase font-semibold mt-1" id="brandTagline"></div>
+                </div>
+              </div>
+
+              <button
+                id="pdfBtnTop"
+                type="button"
+                class="tap hidden sm:inline-flex items-center gap-2 rounded-full px-6 py-3 text-xs font-bold tracking-widest uppercase bg-primary text-white shadow-soft hover:bg-gold hover:shadow-lift transition-all duration-300"
+              >
+                <i data-lucide="printer" class="h-4 w-4"></i>
+                Print Issue
+              </button>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      <!-- Page content -->
+      <main class="mx-auto max-w-7xl px-4 sm:px-6 pt-6">
+        <section id="view-home" class="view"></section>
+        <section id="view-overview" class="view hidden"></section>
+        <section id="view-itinerary" class="view hidden"></section>
+        <section id="view-map" class="view hidden"></section>
+        <section id="view-wiki" class="view hidden"></section>
+      </main>
+
+      <!-- Floating Save PDF button -->
+      <button
+        id="pdfFab"
+        type="button"
+        class="no-print tap fixed bottom-24 sm:bottom-28 right-4 sm:right-6 z-50 inline-flex items-center gap-2 rounded-full px-5 py-3.5 text-sm font-bold tracking-widest uppercase text-white shadow-lift hover:scale-105 transition-transform bg-primary"
+      >
+        <i data-lucide="printer" class="h-4 w-4"></i>
+        Print
+      </button>
+
+      <!-- Fixed Bottom Tab Bar (Apple-style Floating Pill) -->
+      <nav
+        class="no-print fixed left-0 right-0 z-50 flex justify-center px-4"
+        style="bottom: calc(env(safe-area-inset-bottom, 0px) + 1.5rem);"
+        role="navigation"
+        aria-label="Bottom tabs"
+      >
+        <div
+          class="bg-cream/80 backdrop-blur-2xl border border-ink-900/10 shadow-[0_16px_32px_-12px_rgba(28,28,24,0.28)] rounded-full p-1.5 w-full max-w-[22rem]"
+        >
+          <div class="grid grid-cols-4 gap-1">
+            <button class="tab tap group" data-tab="home" type="button">
+              <div class="tab__inner">
+                <i data-lucide="home" class="h-5 w-5 transition-transform duration-300 group-hover:scale-110 group-active:scale-95"></i>
+                <span>Home</span>
+              </div>
+            </button>
+            <button class="tab tap group" data-tab="itinerary" type="button">
+              <div class="tab__inner">
+                <i data-lucide="calendar-days" class="h-5 w-5 transition-transform duration-300 group-hover:scale-110 group-active:scale-95"></i>
+                <span>Itinerary</span>
+              </div>
+            </button>
+            <button class="tab tap group" data-tab="map" type="button">
+              <div class="tab__inner">
+                <i data-lucide="map" class="h-5 w-5 transition-transform duration-300 group-hover:scale-110 group-active:scale-95"></i>
+                <span>Map</span>
+              </div>
+            </button>
+            <button class="tab tap group" data-tab="wiki" type="button">
+              <div class="tab__inner">
+                <i data-lucide="info" class="h-5 w-5 transition-transform duration-300 group-hover:scale-110 group-active:scale-95"></i>
+                <span>Guide</span>
+              </div>
+            </button>
+          </div>
+        </div>
+      </nav>
+    </div>
+
+    <!-- Print Book (generated) -->
+    <div id="printRoot" class="print-only print-book"></div>
+
+    <style>
+      /* Tailwind-ish small custom components */
+      .tab {
+        width: 100%;
+        border-radius: 9999px;
+        color: rgba(62, 73, 74, 0.58);
+        transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      }
+      .tab:hover {
+        color: rgba(0, 83, 91, 0.95);
+      }
+      .tab[aria-selected="true"] {
+        color: var(--ink);
+        background: rgba(255, 255, 255, 0.96);
+        box-shadow: 0 6px 18px rgba(28, 28, 24, 0.1);
+      }
+      .tab__inner {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 4px;
+        padding: 10px 0 8px 0;
+        font-size: 9px;
+        font-weight: 700;
+        letter-spacing: 0.05em;
+        text-transform: uppercase;
+      }
+    </style>
+
+    <script>
+      /**
+       * Vanilla JS "component-like" structure:
+       * - state: single source of truth
+       * - render() per view
+       * - small UI helpers (card, badge, accordion, etc.)
+       */
+
+      const $ = (sel, root = document) => root.querySelector(sel);
+      const $$ = (sel, root = document) => Array.from(root.querySelectorAll(sel));
+
+      function fmtDate(iso) {
+        const d = new Date(iso + "T00:00:00");
+        return d.toLocaleDateString("ko-KR", {
+          month: "short",
+          day: "numeric",
+          weekday: "short",
+        });
+      }
+
+      function fmtRange(range) {
+        const start = new Date(range.start + "T00:00:00");
+        const end = new Date(range.end + "T00:00:00");
+        const s = start.toLocaleDateString("ko-KR", { year: "numeric", month: "short", day: "numeric" });
+        const e = end.toLocaleDateString("ko-KR", { month: "short", day: "numeric" });
+        return `${s} — ${e}`;
+      }
+
+      function escapeHtml(s) {
+        return String(s)
+          .replaceAll("&", "&amp;")
+          .replaceAll("<", "&lt;")
+          .replaceAll(">", "&gt;")
+          .replaceAll('"', "&quot;")
+          .replaceAll("'", "&#039;");
+      }
+
+      function containsQuery(hay, q) {
+        if (!q) return true;
+        return hay.toLowerCase().includes(q.toLowerCase());
+      }
+
+      const state = {
+        tab: "home", // home | itinerary | map | wiki (overview is internal)
+        tripId: TRAVEL_DATA.trips[0]?.id ?? null,
+        day: 1,
+        search: "",
+        wikiSelectedId: null,
+      };
+
+      function getTrip() {
+        return TRAVEL_DATA.trips.find((t) => t.id === state.tripId) ?? TRAVEL_DATA.trips[0];
+      }
+
+      function setTab(tab) {
+        state.tab = tab;
+        render();
+      }
+
+      function setTrip(tripId) {
+        state.tripId = tripId;
+        state.day = 1;
+        state.wikiSelectedId = null;
+        render();
+      }
+
+      function setDay(day) {
+        state.day = day;
+        render();
+      }
+
+      function setSearch(v) {
+        state.search = v;
+        render();
+      }
+
+      // --- UI atoms
+      function Badge(text) {
+        return `<span class="inline-flex items-center border-y border-ink-900/10 bg-cream/70 px-2.5 py-1 text-[10px] font-bold uppercase tracking-[0.18em] text-ink-700">${escapeHtml(
+          text
+        )}</span>`;
+      }
+
+      function Card({ title, subtitle, body, footer, className = "" }) {
+        return `
+          <div class="rounded-lg bg-white ring-1 ring-outline-soft/20 shadow-soft ${className}">
+            <div class="p-5 sm:p-6">
+              ${
+                title
+                  ? `<div class="flex items-start justify-between gap-4">
+                      <div class="min-w-0">
+                        <div class="font-serif text-xl sm:text-2xl font-semibold text-ink-900">${escapeHtml(
+                          title
+                        )}</div>
+                        ${subtitle ? `<div class="mt-1 text-sm text-slate-600">${escapeHtml(subtitle)}</div>` : ""}
+                      </div>
+                    </div>`
+                  : ""
+              }
+              ${body ? `<div class="${title ? "mt-4" : ""}">${body}</div>` : ""}
+            </div>
+            ${footer ? `<div class="border-t border-slate-200/70 px-5 sm:px-6 py-4">${footer}</div>` : ""}
+          </div>
+        `;
+      }
+
+      function HeroTripCard(trip) {
+        return `
+          <div class="relative overflow-hidden rounded-lg shadow-soft bg-black group mt-4 sm:mt-6">
+            <img src="${trip.cover.image}" alt="Cover" class="h-[60vh] sm:h-[70vh] w-full object-cover transition-transform duration-1000 group-hover:scale-105 opacity-90" referrerpolicy="no-referrer" />
+            <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent"></div>
+            
+            <div class="absolute bottom-0 left-0 right-0 p-6 sm:p-12">
+              <div class="flex flex-wrap items-center gap-3 mb-4">
+                <span class="px-3 py-1 text-[10px] sm:text-xs font-bold tracking-widest uppercase bg-white/20 backdrop-blur-md text-white rounded-full border border-white/30">
+                  ${fmtRange(trip.dateRange)}
+                </span>
+                <span class="px-3 py-1 text-[10px] sm:text-xs font-bold tracking-widest uppercase bg-gold/90 text-white rounded-full shadow-lg">
+                  ${trip.route.countries.join(" & ")}
+                </span>
+              </div>
+              <h2 class="font-serif text-4xl sm:text-6xl font-bold text-white leading-tight mb-3 drop-shadow-md">
+                ${escapeHtml(trip.title.split('—')[0].trim())}
+              </h2>
+              <p class="text-white/90 text-base sm:text-xl font-light max-w-2xl mb-8">
+                ${escapeHtml(trip.subtitle)}
+              </p>
+              
+              <div class="flex flex-col sm:flex-row gap-4">
+                <button
+                  class="tap inline-flex items-center justify-center gap-2 rounded-full px-8 py-4 text-xs sm:text-sm font-bold tracking-widest uppercase bg-white text-ink-900 shadow-xl hover:bg-cream hover:scale-105 transition-all"
+                  type="button"
+                  data-action="go-itinerary"
+                >
+                  Explore Itinerary
+                  <i data-lucide="arrow-right" class="w-4 h-4"></i>
+                </button>
+                <button
+                  class="tap inline-flex items-center justify-center gap-2 rounded-full px-8 py-4 text-xs sm:text-sm font-bold tracking-widest uppercase bg-black/40 backdrop-blur-md text-white border border-white/30 shadow-xl hover:bg-black/60 hover:scale-105 transition-all"
+                  type="button"
+                  data-action="go-overview"
+                >
+                  Destination Guide
+                </button>
+              </div>
+            </div>
+          </div>
+          
+          <div class="mt-12 mb-8 grid grid-cols-1 md:grid-cols-3 gap-8 px-2 sm:px-8 animate-in fade-in duration-700 delay-200">
+            <div class="md:col-span-1">
+              <h3 class="text-[10px] sm:text-xs font-bold tracking-widest uppercase text-slate-400 mb-3">The Route</h3>
+              <div class="font-serif text-xl sm:text-2xl text-ink-900 leading-snug">
+                ${trip.route.cities.join(" <span class='text-gold opacity-50 mx-1'>&rarr;</span> ")}
+              </div>
+            </div>
+            <div class="md:col-span-2">
+              <h3 class="text-[10px] sm:text-xs font-bold tracking-widest uppercase text-slate-400 mb-3">Editor's Note</h3>
+              <p class="text-base sm:text-lg text-slate-600 leading-relaxed font-light">
+                ${escapeHtml(trip.route.summary)}
+              </p>
+            </div>
+          </div>
+        `;
+      }
+
+      function IssueHero(trip) {
+        const issueIndex = TRAVEL_DATA.trips.findIndex((t) => t.id === trip.id);
+        const issueNo = String(issueIndex + 1).padStart(2, "0");
+        const firstDay = trip.days[0];
+        const finalDay = trip.days[trip.days.length - 1];
+        return `
+          <section class="mt-4 sm:mt-6 overflow-hidden rounded-lg mag-card print-avoid-break">
+            <div class="grid min-h-[620px] grid-cols-1 lg:grid-cols-[1.05fr_0.95fr]">
+              <div class="relative min-h-[430px] lg:min-h-[620px] image-grain">
+                <img src="${trip.cover.image}" alt="${escapeHtml(trip.title)}" class="absolute inset-0 h-full w-full object-cover" referrerpolicy="no-referrer" />
+                <div class="absolute inset-0 bg-gradient-to-t from-ink-900/80 via-ink-900/20 to-transparent"></div>
+                <div class="absolute left-5 top-5 border border-white/30 bg-black/20 px-3 py-2 text-[10px] font-bold uppercase tracking-[0.26em] text-white backdrop-blur-md">
+                  Cover ${issueNo}
+                </div>
+                <div class="absolute bottom-5 left-5 right-5 flex items-end justify-between gap-4 text-white">
+                  <div class="max-w-lg">
+                    <p class="text-[10px] font-bold uppercase tracking-[0.26em] text-white/75">${escapeHtml(trip.route.countries.join(" / "))}</p>
+                    <h2 class="mt-2 font-serif text-4xl font-bold leading-none sm:text-6xl">${escapeHtml(trip.title.split("—")[0].trim())}</h2>
+                  </div>
+                  <div class="hidden text-right text-[10px] font-bold uppercase tracking-[0.22em] text-white/70 sm:block">
+                    ${escapeHtml(trip.cover.credit || "Archive")}
+                  </div>
+                </div>
+              </div>
+
+              <div class="flex flex-col justify-between p-6 sm:p-10 lg:p-12">
+                <div>
+                  <div class="flex items-center justify-between gap-4 editorial-rule py-3">
+                    <span class="issue-kicker">Cover Story</span>
+                    <span class="text-[10px] font-bold uppercase tracking-[0.22em] text-slate-500">${fmtRange(trip.dateRange)}</span>
+                  </div>
+                  <h2 class="mt-10 font-serif text-4xl font-bold leading-[0.98] text-ink-900 sm:text-6xl lg:text-7xl">${escapeHtml(trip.title)}</h2>
+                  <p class="serif-deck mt-6 text-lg leading-relaxed sm:text-2xl">${escapeHtml(trip.subtitle)}</p>
+                  <p class="mt-8 max-w-2xl text-sm leading-7 text-slate-600 sm:text-base">${escapeHtml(trip.route.summary)}</p>
+                </div>
+
+                <div class="mt-10 grid grid-cols-1 gap-4 border-t border-ink-900/10 pt-6 sm:grid-cols-3">
+                  <div>
+                    <div class="issue-number text-4xl font-bold">${trip.days.length}</div>
+                    <div class="mt-1 text-[10px] font-bold uppercase tracking-[0.22em] text-slate-500">Days</div>
+                  </div>
+                  <div>
+                    <div class="font-serif text-xl font-bold text-ink-900">${escapeHtml(firstDay?.base ?? "")}</div>
+                    <div class="mt-1 text-[10px] font-bold uppercase tracking-[0.22em] text-slate-500">Opening Base</div>
+                  </div>
+                  <div>
+                    <div class="font-serif text-xl font-bold text-ink-900">${escapeHtml(finalDay?.base ?? "")}</div>
+                    <div class="mt-1 text-[10px] font-bold uppercase tracking-[0.22em] text-slate-500">Finale</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+        `;
+      }
+
+      function HomeFeatureTrip(trip) {
+        const title = trip.title.split("—")[0].trim();
+        const routeNote = trip.route.cities.slice(0, 9).join(", ");
+        return `
+          <section class="space-y-5">
+            <div class="flex items-center gap-4 text-primary">
+              <span class="issue-kicker">Featured Itinerary</span>
+              <div class="h-px flex-1 bg-surface-container-high"></div>
+            </div>
+            <button class="tap group block w-full text-left" type="button" data-action="open-trip" data-trip="${escapeHtml(trip.id)}">
+              <article class="grid grid-cols-1 gap-1 rounded-lg bg-surface-container-low p-1 transition duration-300 group-hover:-translate-y-1 lg:grid-cols-12">
+                <div class="relative min-h-[400px] overflow-hidden rounded-lg bg-white lg:col-span-8 lg:min-h-[520px]">
+                  <img src="${trip.cover.image}" alt="" class="absolute inset-0 h-full w-full object-cover transition duration-[1400ms] group-hover:scale-105" referrerpolicy="no-referrer" />
+                  <div class="absolute bottom-4 left-4 bg-cream/90 px-3 py-2 text-[9px] font-bold uppercase tracking-[0.22em] text-slate-600 backdrop-blur">
+                    Photo ${escapeHtml(trip.cover.credit || "Archive")}
+                  </div>
+                </div>
+
+                <div class="flex min-h-[420px] flex-col justify-between rounded-lg bg-white p-6 sm:p-8 lg:col-span-4">
+                  <div class="space-y-6">
+                    <div class="flex flex-wrap gap-2">
+                      <span class="inline-block rounded-[2px] bg-secondary-container px-3 py-1 text-xs font-bold uppercase tracking-[0.12em] text-primary">${trip.days.length} Days</span>
+                      <span class="inline-block rounded-[2px] bg-surface-container px-3 py-1 text-xs font-semibold tracking-[0.08em] text-ink-700">${fmtRange(trip.dateRange)}</span>
+                    </div>
+
+                    <h2 class="font-serif text-3xl font-bold leading-tight text-ink-900 sm:text-4xl">${escapeHtml(title)}</h2>
+
+                    <div class="space-y-5">
+                      <div>
+                        <h3 class="mb-1 text-xs font-bold uppercase tracking-[0.2em] text-gold">Countries</h3>
+                        <p class="text-sm leading-6 text-slate-600">${escapeHtml(trip.route.countries.join(" · "))}</p>
+                      </div>
+                      <div>
+                        <h3 class="mb-1 text-xs font-bold uppercase tracking-[0.2em] text-gold">Route</h3>
+                        <p class="text-sm leading-6 text-slate-600">${escapeHtml(routeNote)}.</p>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="mt-8 flex w-full items-center justify-center gap-2 rounded-full bg-primary px-6 py-3 text-sm font-bold text-white transition-colors group-hover:bg-primary-container">
+                    View Complete Itinerary
+                    <i data-lucide="arrow-right" class="h-4 w-4"></i>
+                  </div>
+                </div>
+              </article>
+            </button>
+          </section>
+        `;
+      }
+
+      function HomeArchiveTripCard(trip, index = 0) {
+        const title = trip.title.split("—")[0].trim();
+        const isActive = trip.id === state.tripId;
+        return `
+          <button class="tap group block h-full w-full text-left" type="button" data-action="open-trip" data-trip="${escapeHtml(trip.id)}">
+            <article class="h-full rounded-lg bg-surface-container-low p-1 transition duration-300 group-hover:-translate-y-1 ${isActive ? "ring-2 ring-primary/30" : ""}">
+              <div class="flex h-full flex-col justify-between rounded-lg bg-white p-6">
+                <div class="space-y-4">
+                  <div class="flex items-start justify-between gap-4">
+                    <span class="inline-block rounded-[2px] bg-surface-container px-3 py-1 text-xs font-semibold tracking-[0.08em] text-ink-700">${fmtRange(trip.dateRange)}</span>
+                    <span class="text-xs font-bold uppercase tracking-[0.18em] text-gold">${trip.days.length} Days</span>
+                  </div>
+                  <h3 class="font-serif text-2xl font-bold leading-tight text-ink-900 transition-colors group-hover:text-primary">${escapeHtml(title)}</h3>
+                  <p class="text-sm leading-6 text-slate-600">${escapeHtml(trip.route.countries.join(" · "))}</p>
+                </div>
+                <div class="mt-8 flex items-center justify-between gap-4 text-[10px] font-bold uppercase tracking-[0.2em] text-primary">
+                  <span>${escapeHtml(trip.route.cities.slice(0, 4).join(" · "))}</span>
+                  <i data-lucide="arrow-right" class="h-4 w-4 opacity-0 transition-opacity group-hover:opacity-100"></i>
+                </div>
+              </div>
+            </article>
+          </button>
+        `;
+      }
+
+      function SmallTripCard(trip, index = 0) {
+        const isActive = trip.id === state.tripId;
+        const issueNo = String(index + 1).padStart(2, "0");
+        return `
+          <button class="tap h-full text-left group" type="button" data-action="open-trip" data-trip="${escapeHtml(
+            trip.id
+          )}">
+            <article class="flex h-full flex-col overflow-hidden rounded-lg mag-card transition duration-500 group-hover:-translate-y-1 group-hover:shadow-lift ${isActive ? "ring-2 ring-primary/40" : ""}">
+              <div class="relative aspect-[4/5] overflow-hidden image-grain">
+                <img src="${trip.cover.image}" alt="" class="h-full w-full object-cover grayscale-[10%] transition duration-1000 group-hover:scale-105 group-hover:grayscale-0" referrerpolicy="no-referrer" />
+                <div class="absolute inset-0 bg-gradient-to-t from-ink-900/80 via-ink-900/10 to-transparent"></div>
+                <div class="absolute left-4 top-4 flex items-start gap-3">
+                  <div class="bg-cream px-3 py-2 text-center shadow-soft">
+                    <div class="issue-number text-3xl font-bold leading-none">${issueNo}</div>
+                    <div class="mt-1 text-[8px] font-bold uppercase tracking-[0.2em] text-slate-500">Issue</div>
+                  </div>
+                  ${isActive ? `<div class="bg-primary px-3 py-2 text-[9px] font-bold uppercase tracking-[0.22em] text-white shadow-soft">Selected</div>` : ""}
+                </div>
+                <div class="absolute bottom-4 left-4 right-4">
+                  <div class="text-[10px] font-bold uppercase tracking-[0.24em] text-white/75">${fmtRange(trip.dateRange)}</div>
+                  <div class="mt-3 font-serif text-3xl font-bold leading-[0.98] text-white sm:text-4xl">
+                    ${escapeHtml(trip.title)}
+                  </div>
+                </div>
+              </div>
+              <div class="flex flex-1 flex-col p-5 sm:p-6">
+                <div class="flex flex-wrap items-center gap-2">
+                  ${Badge(trip.route.countries.join(" · "))}
+                  ${Badge(`${trip.days.length} days`)}
+                </div>
+                <p class="mt-5 line-clamp-3 text-sm leading-6 text-slate-600">
+                  ${escapeHtml(trip.subtitle)}
+                </p>
+                <div class="mt-auto flex items-center justify-between gap-4 border-t border-ink-900/10 pt-5 text-[10px] font-bold uppercase tracking-[0.2em] text-primary">
+                  <span class="line-clamp-2">${escapeHtml(trip.route.cities.slice(0, 5).join(" · "))}</span>
+                  <i data-lucide="arrow-right" class="h-4 w-4 shrink-0"></i>
+                </div>
+              </div>
+            </article>
+          </button>
+        `;
+      }
+
+      // --- View renderers
+      function renderHome() {
+        if (!TRAVEL_DATA.trips.length) return "";
+        const latestTrip = TRAVEL_DATA.trips[TRAVEL_DATA.trips.length - 1];
+        return `
+          <div class="mx-auto max-w-5xl space-y-16 pb-16 pt-4 animate-in fade-in duration-500">
+            <section class="max-w-2xl space-y-6">
+              <div class="flex items-center gap-4 text-gold">
+                <span class="text-sm font-bold uppercase tracking-[0.2em]">Volume I</span>
+                <div class="h-px w-12 bg-surface-container-high"></div>
+              </div>
+              <h2 class="font-serif text-5xl font-bold leading-none tracking-tight text-ink-900 md:text-6xl">Travel Desk</h2>
+              <p class="text-lg leading-relaxed text-slate-600">
+                도시의 리듬, 산악 루트, 숙소 베이스와 하루의 밀도를 한 권의 여행지 특집처럼 정리한 디지털 가이드.
+              </p>
+            </section>
+
+            ${HomeFeatureTrip(latestTrip)}
+
+            <div class="flex items-center justify-center py-2">
+              <div class="h-2 w-2 rounded-full bg-gold"></div>
+            </div>
+
+            <section class="space-y-8">
+              <div class="flex items-center gap-4 text-primary">
+                <span class="issue-kicker">The Archive</span>
+                <div class="h-px flex-1 bg-surface-container-high"></div>
+              </div>
+              <div class="grid grid-cols-1 gap-6 md:grid-cols-2">
+                ${TRAVEL_DATA.trips.map((trip, index) => HomeArchiveTripCard(trip, index)).join("")}
+              </div>
+            </section>
+          </div>
+        `;
+      }
+
+      function renderItinerary() {
+        const trip = getTrip();
+        if (!trip) return "";
+        
+        let html = `<div class="space-y-16 pb-24 animate-in fade-in duration-700 ease-out">`;
+        html += IssueHero(trip);
+        
+        // --- At a Glance (Overview) Section ---
+        html += `
+          <section class="rounded-lg mag-card p-5 sm:p-8 print-avoid-break">
+            <div class="flex flex-col gap-5 border-b border-ink-900/10 pb-6 lg:flex-row lg:items-end lg:justify-between">
+              <div>
+                <p class="issue-kicker">Route Index</p>
+                <h3 class="mt-3 font-serif text-3xl font-bold leading-tight text-ink-900 sm:text-5xl">Day-by-Day Briefing</h3>
+              </div>
+              <p class="max-w-2xl text-sm leading-7 text-slate-600 sm:text-base">${escapeHtml(trip.route.cities.join(" · "))}</p>
+            </div>
+            <div class="route-scroll mt-6 overflow-x-auto pb-2">
+              <div class="grid min-w-[760px] gap-3" style="grid-template-columns: repeat(${trip.days.length}, minmax(128px, 1fr));">
+        `;
+        
+        trip.days.forEach(day => {
+          html += `
+              <button class="tap group min-h-[154px] border-l border-ink-900/10 bg-cream/70 p-3 text-left transition hover:bg-white hover:shadow-soft" type="button" onclick="document.getElementById('day-${day.day}').scrollIntoView({behavior: 'smooth', block: 'start'})">
+                <div class="issue-number text-3xl font-bold leading-none group-hover:text-primary">${String(day.day).padStart(2, "0")}</div>
+                <div class="mt-3 text-[9px] font-bold uppercase tracking-[0.2em] text-slate-500">${fmtDate(day.date)}</div>
+                <div class="mt-2 font-serif text-base font-bold leading-tight text-ink-900">${escapeHtml(day.base)}</div>
+                <div class="mt-2 line-clamp-2 text-[11px] leading-4 text-slate-500" title="${escapeHtml(day.theme)}">${escapeHtml(day.theme)}</div>
+              </button>
+          `;
+        });
+        
+        html += `
+              </div>
+            </div>
+          </section>
+        `;
+        
+        trip.days.forEach((day, dayIndex) => {
+          html += `
+            <div id="day-${day.day}" class="print-day relative scroll-mt-24">
+              <div class="sticky top-20 z-30 -mx-4 mb-10 flex flex-col justify-between gap-4 border-y border-ink-900/10 bg-cream/95 px-4 py-5 backdrop-blur-xl print-avoid-break transition-all sm:-mx-6 sm:px-6 md:flex-row md:items-end">
+                <div>
+                  <div class="issue-kicker">Chapter ${String(day.day).padStart(2, "0")}</div>
+                  <h2 class="mt-2 font-serif text-4xl font-bold tracking-tight text-ink-900 sm:text-6xl">Day ${day.day}</h2>
+                  <div class="mt-2 text-xs font-bold uppercase tracking-[0.22em] text-slate-500 sm:text-sm">${fmtDate(day.date)} <span class="mx-2 text-gold/50">|</span> ${escapeHtml(day.base)}</div>
+                </div>
+                <div class="md:text-right max-w-sm">
+                  <h3 class="font-serif text-xl italic text-ink-900">${escapeHtml(day.theme)}</h3>
+                  ${day.weatherNote ? `<p class="mt-2 text-[10px] font-semibold uppercase leading-relaxed tracking-[0.2em] text-slate-500 sm:text-[11px]">${escapeHtml(day.weatherNote)}</p>` : ''}
+                </div>
+              </div>
+              
+              <div class="relative grid grid-cols-1 gap-x-8 gap-y-12 md:grid-cols-12 md:gap-y-0">
+          `;
+          
+          day.timeline.forEach((item, i) => {
+            const isLeft = i % 2 === 0;
+            const colClass = isLeft 
+              ? "md:col-span-7 md:col-start-1" 
+              : "md:col-span-6 md:col-start-7 md:mt-32";
+              
+            html += `
+                <div class="${colClass} group relative print-avoid-break">
+                  <div class="absolute -left-4 -top-8 z-0 select-none font-serif text-7xl font-black text-gold/10 transition-transform duration-1000 group-hover:scale-105 md:-left-8 md:-top-12 md:text-9xl">${escapeHtml(item.time)}</div>
+                  
+                  <div class="relative z-10 flex flex-col rounded-lg mag-card p-6 transition-all duration-700 ease-out hover:shadow-lift md:p-10">
+                    <div class="mb-6 flex items-center gap-4">
+                      <span class="border border-gold/30 bg-cream px-3 py-1 text-xs font-bold uppercase tracking-[0.2em] text-gold sm:text-sm">${escapeHtml(item.time)}</span>
+                      <div class="flex flex-wrap gap-x-2 gap-y-1">
+                        ${item.tags.map(tag => `<span class="text-[10px] font-bold uppercase tracking-[0.18em] text-slate-500">${escapeHtml(tag)}</span>`).join('')}
+                      </div>
+                    </div>
+                    
+                    <h4 class="mb-4 font-serif text-2xl font-bold leading-tight text-ink-900 md:text-3xl">${escapeHtml(item.title)}</h4>
+                    
+                    <div class="mb-6 flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-[0.2em] text-slate-500 sm:text-xs">
+                      <i data-lucide="map-pin" class="w-3.5 h-3.5"></i> ${escapeHtml(item.place)}
+                    </div>
+                    
+                    <p class="mb-6 text-sm font-light leading-relaxed text-slate-600 sm:text-base">${escapeHtml(item.details)}</p>
+                    
+                    ${item.tips && item.tips.length ? `
+                      <div class="mb-3 border-l-2 border-gold bg-cream/80 p-4 text-xs font-light text-slate-700 sm:text-sm">
+                        <strong class="mr-2 text-[10px] font-bold uppercase tracking-[0.2em] text-ink-900">Tip</strong> ${escapeHtml(item.tips.join(' '))}
+                      </div>
+                    ` : ''}
+                    ${item.caution ? `
+                      <div class="border-l-2 border-red-300 bg-[#fff6f2] p-4 text-xs font-light text-red-900/80 sm:text-sm">
+                        <strong class="mr-2 text-[10px] font-bold uppercase tracking-[0.2em] text-red-900">Caution</strong> ${escapeHtml(item.caution)}
+                      </div>
+                    ` : ''}
+                  </div>
+                </div>
+            `;
+          });
+          
+          html += `
+              </div>
+            </div>
+          `;
+        });
+        
+        html += `</div>`;
+        return html;
+      }
+
+      function renderMap() {
+        const trip = getTrip();
+        if (!trip || !trip.route.mapEmbedUrl) return `<div class="p-8 text-center text-slate-500">Map data not available.</div>`;
+        return `
+          <div class="space-y-6 pb-20 animate-in fade-in duration-500">
+            <section class="mt-4 sm:mt-6 editorial-rule py-6 sm:py-8">
+              <p class="issue-kicker">Route Atlas</p>
+              <div class="mt-4 flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
+                <h2 class="font-serif text-4xl font-bold leading-tight text-ink-900 sm:text-6xl">${escapeHtml(trip.title)}</h2>
+                <p class="max-w-xl text-sm leading-7 text-slate-600">${escapeHtml(trip.route.summary)}</p>
+              </div>
+            </section>
+            <div class="h-[calc(100vh-16rem)] min-h-[520px] w-full overflow-hidden rounded-lg mag-card bg-white">
+              <iframe src="${trip.route.mapEmbedUrl}" width="100%" height="100%" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+            </div>
+          </div>
+        `;
+      }
+
+      function renderWiki() {
+        const trip = getTrip();
+        if (!trip || !trip.wiki || !trip.wiki.attractions) return `<div class="p-8 text-center text-slate-500">Wiki data not available.</div>`;
+        
+        let html = `
+          <div class="space-y-8 pb-20 animate-in fade-in duration-500">
+            <section class="mt-4 sm:mt-6 grid grid-cols-1 gap-6 editorial-rule py-6 sm:py-8 lg:grid-cols-[1fr_22rem] lg:items-end">
+              <div>
+                <p class="issue-kicker">Destination Dossier</p>
+                <h2 class="mt-3 font-serif text-4xl font-bold leading-tight text-ink-900 sm:text-6xl">Field Notes & Landmarks</h2>
+              </div>
+              <p class="text-sm leading-7 text-slate-600">
+                ${escapeHtml(trip.route.countries.join(" · "))}의 주요 장소를 기사형 노트로 묶었습니다. 풍경, 이동, 현장 주의점을 한 지면에서 읽습니다.
+              </p>
+            </section>
+            <div class="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
+        `;
+        trip.wiki.attractions.forEach((attr, i) => {
+          // Editorial layout: 비대칭 그리드 (첫 번째 혹은 5번째마다 큰 카드)
+          const isFeatured = i % 5 === 0;
+          const colSpan = isFeatured ? "md:col-span-2 lg:col-span-2" : "col-span-1";
+          const imgHeight = isFeatured ? "h-[400px] sm:h-[500px]" : "h-64 sm:h-80";
+          const titleSize = isFeatured ? "text-3xl sm:text-4xl" : "text-xl sm:text-2xl";
+
+          html += `
+            <article class="group flex flex-col overflow-hidden rounded-lg mag-card transition-all duration-700 ease-out hover:shadow-lift ${colSpan}">
+              <div class="${imgHeight} relative w-full overflow-hidden image-grain">
+                <img src="${attr.hero}" alt="${escapeHtml(attr.name)}" loading="lazy" referrerpolicy="no-referrer" class="w-full h-full object-cover transition-transform duration-[2s] ease-out group-hover:scale-105" />
+                <div class="absolute inset-0 bg-gradient-to-t from-ink-900/90 via-ink-900/20 to-transparent opacity-70 group-hover:opacity-90 transition-opacity duration-700"></div>
+                <div class="absolute bottom-6 left-6 right-6 transform translate-y-2 group-hover:translate-y-0 transition-transform duration-700 ease-out">
+                  <div class="mb-2 text-xs font-bold uppercase tracking-[0.24em] text-white/80 sm:text-sm">${escapeHtml(attr.city)}</div>
+                  <h3 class="text-white font-serif ${titleSize} font-bold drop-shadow-md leading-tight">${escapeHtml(attr.name)}</h3>
+                </div>
+              </div>
+              <div class="flex flex-1 flex-col gap-6 bg-white/90 p-6 sm:p-8">
+                ${attr.sections.map(sec => `
+                  <section class="border-t border-ink-900/10 pt-4 first:border-t-0 first:pt-0">
+                    <h4 class="mb-2 text-[10px] font-bold uppercase tracking-[0.22em] text-primary sm:text-xs">${escapeHtml(sec.title)}</h4>
+                    <p class="text-sm font-light leading-relaxed text-slate-600 sm:text-base">${escapeHtml(sec.body)}</p>
+                  </section>
+                `).join('')}
+              </div>
+            </article>
+          `;
+        });
+        html += `
+            </div>
+          </div>
+        `;
+        return html;
+      }
+
+      // --- Core render loop
+      function render() {
+        $('#brandTitle').innerHTML = TRAVEL_DATA.app.brand;
+        $('#brandTagline').innerHTML = TRAVEL_DATA.app.tagline;
+
+        $$('.tab').forEach(t => {
+          const isActive = t.dataset.tab === state.tab;
+          t.setAttribute('aria-selected', isActive);
+        });
+
+        $$('.view').forEach(v => {
+          v.classList.add('hidden');
+          if (v.id === `view-${state.tab}`) {
+            v.classList.remove('hidden');
+          }
+        });
+
+        const viewEl = $(`#view-${state.tab}`);
+        if (state.tab === 'home') viewEl.innerHTML = renderHome();
+        else if (state.tab === 'itinerary') viewEl.innerHTML = renderItinerary();
+        else if (state.tab === 'map') viewEl.innerHTML = renderMap();
+        else if (state.tab === 'wiki') viewEl.innerHTML = renderWiki();
+
+        // 아이콘 렌더링
+        if (window.lucide) {
+          window.lucide.createIcons();
+        }
+        
+        preparePrintBook();
+      }
+
+      // --- PDF Generation Engine ---
+      // 브라우저의 기본 Print 기능을 A4 매거진 레이아웃으로 렌더링합니다.
+      function preparePrintBook() {
+        const trip = getTrip();
+        if (!trip) return;
+        
+        const printRoot = $('#printRoot');
+        printRoot.innerHTML = `
+          <div class="text-center py-12 print-day">
+            <h1 class="text-5xl font-serif font-bold text-ink-900 mb-4">${escapeHtml(trip.title)}</h1>
+            <p class="text-xl text-slate-600 mb-8">${escapeHtml(trip.subtitle)}</p>
+            <img src="${trip.cover.image}" class="print-cover-img w-full object-cover rounded-lg mb-8 shadow-lift" referrerpolicy="no-referrer" />
+            <div class="text-lg text-slate-500 uppercase tracking-widest font-semibold">${fmtRange(trip.dateRange)}</div>
+          </div>
+          ${renderItinerary()}
+        `;
+      }
+
+      function handlePdfSave() {
+        // 설정해둔 @media print CSS에 의해 UI가 숨겨지고 잡지 레이아웃만 출력됩니다.
+        window.print();
+      }
+
+      // --- Init
+      function init() {
+        $$('.tab').forEach(t => {
+          t.addEventListener('click', () => setTab(t.dataset.tab));
+        });
+
+        document.addEventListener('click', e => {
+          const btn = e.target.closest('[data-action]');
+          if (!btn) return;
+          
+          const action = btn.dataset.action;
+          if (action === 'go-itinerary') setTab('itinerary');
+          else if (action === 'go-overview') setTab('wiki');
+          else if (action === 'open-trip') {
+            state.tripId = btn.dataset.trip;
+            state.day = 1;
+            state.wikiSelectedId = null;
+            state.tab = 'itinerary';
+            render();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+          }
+          else if (action === 'select-trip') {
+            setTrip(btn.dataset.trip);
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+          }
+        });
+
+        $('#pdfBtnTop')?.addEventListener('click', handlePdfSave);
+        $('#pdfFab')?.addEventListener('click', handlePdfSave);
+
+        render();
+      }
+
+      document.addEventListener('DOMContentLoaded', init);
+    </script>
+  </body>
+</html>

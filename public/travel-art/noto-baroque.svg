@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 760" role="img" aria-label="Noto baroque guide image">
+  <defs><linearGradient id="sky" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#8ec9c8"/><stop offset=".55" stop-color="#f0cf9e"/><stop offset="1" stop-color="#cf784b"/></linearGradient></defs>
+  <rect width="1200" height="760" fill="url(#sky)"/>
+  <rect y="585" width="1200" height="175" fill="#bd935b"/>
+  <path d="M245 610V360h710v250z" fill="#f1d7a6"/>
+  <path d="M315 610V430h92v180zm178 0V405h98v205zm184 0V405h98v205zm178 0V430h92v180z" fill="#9d7754"/>
+  <path d="M210 370l390-170 390 170z" fill="#d2a765"/>
+  <path d="M475 255c0-70 250-70 250 0v115H475z" fill="#e7c486"/>
+  <path d="M270 650h660v34H270zm80-55h500v28H350z" fill="#906f50" opacity=".72"/>
+  <circle cx="970" cy="135" r="58" fill="#ffe4a3" opacity=".88"/>
+</svg>

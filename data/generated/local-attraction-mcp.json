@@ -1,0 +1,176 @@
+{
+  "generatedAt": "2026-05-09T08:18:56.951Z",
+  "results": [
+    {
+      "attractionName": "Valletta",
+      "response": {
+        "jsonrpc": "2.0",
+        "id": "call",
+        "result": {
+          "content": [
+            {
+              "type": "text",
+              "text": "{\"source\": \"local-mcp-curated\", \"name\": \"Valletta\", \"category\": \"꼭 가봐야 할 곳\", \"detailDescription\": \"몰타의 수도이자 그랜드 하버를 내려다보는 성벽 도시입니다. 택시 하차 후 도보로 전망대, 성당, 중심 골목을 묶기 좋습니다.\", \"whyVisit\": [\"몰타 대표 도시\", \"그랜드 하버 전망\", \"도보 동선이 압축적\"], \"whatToSee\": [\"Upper Barrakka Gardens\", \"성벽 도시 골목\", \"Grand Harbour\"], \"tips\": [\"몰타 구간은 택시 이동 기준으로 잡으세요.\", \"햇빛이 강하면 그늘과 카페 휴식을 섞으세요.\"], \"duration\": \"2~3시간\"}"
+            }
+          ],
+          "structuredContent": {
+            "result": "{\"source\": \"local-mcp-curated\", \"name\": \"Valletta\", \"category\": \"꼭 가봐야 할 곳\", \"detailDescription\": \"몰타의 수도이자 그랜드 하버를 내려다보는 성벽 도시입니다. 택시 하차 후 도보로 전망대, 성당, 중심 골목을 묶기 좋습니다.\", \"whyVisit\": [\"몰타 대표 도시\", \"그랜드 하버 전망\", \"도보 동선이 압축적\"], \"whatToSee\": [\"Upper Barrakka Gardens\", \"성벽 도시 골목\", \"Grand Harbour\"], \"tips\": [\"몰타 구간은 택시 이동 기준으로 잡으세요.\", \"햇빛이 강하면 그늘과 카페 휴식을 섞으세요.\"], \"duration\": \"2~3시간\"}"
+          },
+          "isError": false
+        }
+      }
+    },
+    {
+      "attractionName": "Valley of the Temples",
+      "response": {
+        "jsonrpc": "2.0",
+        "id": "call",
+        "result": {
+          "content": [
+            {
+              "type": "text",
+              "text": "{\"source\": \"local-mcp-curated\", \"name\": \"Valley of the Temples\", \"category\": \"꼭 가봐야 할 곳\", \"detailDescription\": \"Agrigento의 대표 고대 그리스 유적지입니다. 넓은 고고학 구역에 여러 신전이 이어져 있어 Realmonte 숙소 기준 하루 동선의 중심으로 두기 좋습니다.\", \"whyVisit\": [\"시칠리아 남서부 대표 유적\", \"Realmonte 숙소와 동선 궁합이 좋음\", \"사진과 역사 관람을 함께 해결\"], \"whatToSee\": [\"Temple of Concordia\", \"고고학 산책로\", \"Agrigento 언덕 풍경\"], \"tips\": [\"오전이나 늦은 오후가 걷기 편합니다.\", \"물과 모자를 챙기고 주차 위치를 먼저 확인하세요.\"], \"duration\": \"1.5~2.5시간\"}"
+            }
+          ],
+          "structuredContent": {
+            "result": "{\"source\": \"local-mcp-curated\", \"name\": \"Valley of the Temples\", \"category\": \"꼭 가봐야 할 곳\", \"detailDescription\": \"Agrigento의 대표 고대 그리스 유적지입니다. 넓은 고고학 구역에 여러 신전이 이어져 있어 Realmonte 숙소 기준 하루 동선의 중심으로 두기 좋습니다.\", \"whyVisit\": [\"시칠리아 남서부 대표 유적\", \"Realmonte 숙소와 동선 궁합이 좋음\", \"사진과 역사 관람을 함께 해결\"], \"whatToSee\": [\"Temple of Concordia\", \"고고학 산책로\", \"Agrigento 언덕 풍경\"], \"tips\": [\"오전이나 늦은 오후가 걷기 편합니다.\", \"물과 모자를 챙기고 주차 위치를 먼저 확인하세요.\"], \"duration\": \"1.5~2.5시간\"}"
+          },
+          "isError": false
+        }
+      }
+    },
+    {
+      "attractionName": "Temple of Concordia Agrigento",
+      "response": {
+        "jsonrpc": "2.0",
+        "id": "call",
+        "result": {
+          "content": [
+            {
+              "type": "text",
+              "text": "{\"source\": \"local-mcp-curated\", \"name\": \"Temple of Concordia Agrigento\", \"category\": \"숨은 명소\", \"detailDescription\": \"신전의 계곡 안에서도 보존 상태가 뛰어난 도리스식 신전입니다. 넓은 유적지 안에서 가장 상징적인 사진 포인트로 보기 좋습니다.\", \"whyVisit\": [\"신전의 계곡 핵심 포인트\", \"보존 상태가 뛰어남\", \"짧게 봐도 인상이 강함\"], \"whatToSee\": [\"신전 정면\", \"측면 기둥열\", \"주변 산책로\"], \"tips\": [\"역광 시간을 피하면 사진이 선명합니다.\", \"신전의 계곡 전체 동선 안에서 함께 보세요.\"], \"duration\": \"30~45분\"}"
+            }
+          ],
+          "structuredContent": {
+            "result": "{\"source\": \"local-mcp-curated\", \"name\": \"Temple of Concordia Agrigento\", \"category\": \"숨은 명소\", \"detailDescription\": \"신전의 계곡 안에서도 보존 상태가 뛰어난 도리스식 신전입니다. 넓은 유적지 안에서 가장 상징적인 사진 포인트로 보기 좋습니다.\", \"whyVisit\": [\"신전의 계곡 핵심 포인트\", \"보존 상태가 뛰어남\", \"짧게 봐도 인상이 강함\"], \"whatToSee\": [\"신전 정면\", \"측면 기둥열\", \"주변 산책로\"], \"tips\": [\"역광 시간을 피하면 사진이 선명합니다.\", \"신전의 계곡 전체 동선 안에서 함께 보세요.\"], \"duration\": \"30~45분\"}"
+          },
+          "isError": false
+        }
+      }
+    },
+    {
+      "attractionName": "Erice Sicily",
+      "response": {
+        "jsonrpc": "2.0",
+        "id": "call",
+        "result": {
+          "content": [
+            {
+              "type": "text",
+              "text": "{\"source\": \"local-mcp-curated\", \"name\": \"Erice Sicily\", \"category\": \"숨은 명소\", \"detailDescription\": \"Trapani 위 산에 자리한 중세 마을입니다. 해안과 염전 방향 전망이 좋고, 돌길 골목을 따라 짧게 걸어도 서부 시칠리아의 분위기가 살아납니다.\", \"whyVisit\": [\"전망 좋은 산 위 마을\", \"Trapani와 가깝게 연결\", \"골목 산책에 적합\"], \"whatToSee\": [\"성곽 전망\", \"중세 골목\", \"마을 광장\"], \"tips\": [\"안개가 끼면 전망이 줄어듭니다.\", \"돌길이라 편한 신발이 좋습니다.\"], \"duration\": \"1~2시간\"}"
+            }
+          ],
+          "structuredContent": {
+            "result": "{\"source\": \"local-mcp-curated\", \"name\": \"Erice Sicily\", \"category\": \"숨은 명소\", \"detailDescription\": \"Trapani 위 산에 자리한 중세 마을입니다. 해안과 염전 방향 전망이 좋고, 돌길 골목을 따라 짧게 걸어도 서부 시칠리아의 분위기가 살아납니다.\", \"whyVisit\": [\"전망 좋은 산 위 마을\", \"Trapani와 가깝게 연결\", \"골목 산책에 적합\"], \"whatToSee\": [\"성곽 전망\", \"중세 골목\", \"마을 광장\"], \"tips\": [\"안개가 끼면 전망이 줄어듭니다.\", \"돌길이라 편한 신발이 좋습니다.\"], \"duration\": \"1~2시간\"}"
+          },
+          "isError": false
+        }
+      }
+    },
+    {
+      "attractionName": "Scopello Sicily",
+      "response": {
+        "jsonrpc": "2.0",
+        "id": "call",
+        "result": {
+          "content": [
+            {
+              "type": "text",
+              "text": "{\"source\": \"local-mcp-curated\", \"name\": \"Scopello Sicily\", \"category\": \"숨은 명소\", \"detailDescription\": \"서부 시칠리아의 작은 해안 마을입니다. 맑은 바다와 바위 해안 풍경이 좋아 Erice나 Segesta와 함께 반나절 루트로 묶기 좋습니다.\", \"whyVisit\": [\"해안 풍경이 좋음\", \"짧은 정차에 적합\", \"서부 시칠리아 루트의 여유를 만듦\"], \"whatToSee\": [\"마을 중심부\", \"해안 전망\", \"근처 바위 해안\"], \"tips\": [\"성수기에는 주차가 어려울 수 있습니다.\", \"해안 산책 시간을 여유 있게 잡으세요.\"], \"duration\": \"45분~1.5시간\"}"
+            }
+          ],
+          "structuredContent": {
+            "result": "{\"source\": \"local-mcp-curated\", \"name\": \"Scopello Sicily\", \"category\": \"숨은 명소\", \"detailDescription\": \"서부 시칠리아의 작은 해안 마을입니다. 맑은 바다와 바위 해안 풍경이 좋아 Erice나 Segesta와 함께 반나절 루트로 묶기 좋습니다.\", \"whyVisit\": [\"해안 풍경이 좋음\", \"짧은 정차에 적합\", \"서부 시칠리아 루트의 여유를 만듦\"], \"whatToSee\": [\"마을 중심부\", \"해안 전망\", \"근처 바위 해안\"], \"tips\": [\"성수기에는 주차가 어려울 수 있습니다.\", \"해안 산책 시간을 여유 있게 잡으세요.\"], \"duration\": \"45분~1.5시간\"}"
+          },
+          "isError": false
+        }
+      }
+    },
+    {
+      "attractionName": "Palermo Cathedral",
+      "response": {
+        "jsonrpc": "2.0",
+        "id": "call",
+        "result": {
+          "content": [
+            {
+              "type": "text",
+              "text": "{\"source\": \"local-mcp-curated\", \"name\": \"Palermo Cathedral\", \"category\": \"꼭 가봐야 할 곳\", \"detailDescription\": \"Palermo 중심부의 대표 성당입니다. 노르만, 고딕, 바로크 요소가 겹친 건축이라 도시의 복잡한 역사를 한눈에 보기 좋습니다.\", \"whyVisit\": [\"Palermo 대표 랜드마크\", \"도심 동선의 기준점\", \"건축 양식이 풍부함\"], \"whatToSee\": [\"성당 외관\", \"광장\", \"주변 구시가지\"], \"tips\": [\"도심 주차와 ZTL을 먼저 확인하세요.\", \"내부 관람 시간은 당일 확인이 좋습니다.\"], \"duration\": \"45분~1시간\"}"
+            }
+          ],
+          "structuredContent": {
+            "result": "{\"source\": \"local-mcp-curated\", \"name\": \"Palermo Cathedral\", \"category\": \"꼭 가봐야 할 곳\", \"detailDescription\": \"Palermo 중심부의 대표 성당입니다. 노르만, 고딕, 바로크 요소가 겹친 건축이라 도시의 복잡한 역사를 한눈에 보기 좋습니다.\", \"whyVisit\": [\"Palermo 대표 랜드마크\", \"도심 동선의 기준점\", \"건축 양식이 풍부함\"], \"whatToSee\": [\"성당 외관\", \"광장\", \"주변 구시가지\"], \"tips\": [\"도심 주차와 ZTL을 먼저 확인하세요.\", \"내부 관람 시간은 당일 확인이 좋습니다.\"], \"duration\": \"45분~1시간\"}"
+          },
+          "isError": false
+        }
+      }
+    },
+    {
+      "attractionName": "Quattro Canti Palermo",
+      "response": {
+        "jsonrpc": "2.0",
+        "id": "call",
+        "result": {
+          "content": [
+            {
+              "type": "text",
+              "text": "{\"source\": \"local-mcp-curated\", \"name\": \"Quattro Canti Palermo\", \"category\": \"꼭 가봐야 할 곳\", \"detailDescription\": \"Palermo 구시가지의 대표 교차 광장입니다. 네 모서리의 바로크 파사드가 도시 중심축을 보여주며 도보 동선의 방향을 잡기 좋습니다.\", \"whyVisit\": [\"도보 동선의 중심\", \"바로크 도시 풍경\", \"사진 포인트가 명확함\"], \"whatToSee\": [\"네 모서리 파사드\", \"Via Maqueda\", \"Fontana Pretoria 방향\"], \"tips\": [\"차량보다 도보 접근이 편합니다.\", \"시장과 성당 사이 동선에 넣기 좋습니다.\"], \"duration\": \"15~30분\"}"
+            }
+          ],
+          "structuredContent": {
+            "result": "{\"source\": \"local-mcp-curated\", \"name\": \"Quattro Canti Palermo\", \"category\": \"꼭 가봐야 할 곳\", \"detailDescription\": \"Palermo 구시가지의 대표 교차 광장입니다. 네 모서리의 바로크 파사드가 도시 중심축을 보여주며 도보 동선의 방향을 잡기 좋습니다.\", \"whyVisit\": [\"도보 동선의 중심\", \"바로크 도시 풍경\", \"사진 포인트가 명확함\"], \"whatToSee\": [\"네 모서리 파사드\", \"Via Maqueda\", \"Fontana Pretoria 방향\"], \"tips\": [\"차량보다 도보 접근이 편합니다.\", \"시장과 성당 사이 동선에 넣기 좋습니다.\"], \"duration\": \"15~30분\"}"
+          },
+          "isError": false
+        }
+      }
+    },
+    {
+      "attractionName": "Mercato Ballaro",
+      "response": {
+        "jsonrpc": "2.0",
+        "id": "call",
+        "result": {
+          "content": [
+            {
+              "type": "text",
+              "text": "{\"source\": \"local-mcp-curated\", \"name\": \"Mercato Ballaro\", \"category\": \"숨은 명소\", \"detailDescription\": \"Palermo의 생활감이 진하게 느껴지는 시장 골목입니다. 관광지보다 현지 리듬을 보는 장소라 짧은 식사나 간식 동선으로 좋습니다.\", \"whyVisit\": [\"현지 분위기\", \"먹거리 동선\", \"구시가지의 생활감\"], \"whatToSee\": [\"시장 골목\", \"노점\", \"주변 골목 풍경\"], \"tips\": [\"소지품에 주의하세요.\", \"붐비는 시간에는 짧게 통과하는 방식도 좋습니다.\"], \"duration\": \"30분~1시간\"}"
+            }
+          ],
+          "structuredContent": {
+            "result": "{\"source\": \"local-mcp-curated\", \"name\": \"Mercato Ballaro\", \"category\": \"숨은 명소\", \"detailDescription\": \"Palermo의 생활감이 진하게 느껴지는 시장 골목입니다. 관광지보다 현지 리듬을 보는 장소라 짧은 식사나 간식 동선으로 좋습니다.\", \"whyVisit\": [\"현지 분위기\", \"먹거리 동선\", \"구시가지의 생활감\"], \"whatToSee\": [\"시장 골목\", \"노점\", \"주변 골목 풍경\"], \"tips\": [\"소지품에 주의하세요.\", \"붐비는 시간에는 짧게 통과하는 방식도 좋습니다.\"], \"duration\": \"30분~1시간\"}"
+          },
+          "isError": false
+        }
+      }
+    },
+    {
+      "attractionName": "Cattedrale di Monreale",
+      "response": {
+        "jsonrpc": "2.0",
+        "id": "call",
+        "result": {
+          "content": [
+            {
+              "type": "text",
+              "text": "{\"source\": \"local-mcp-curated\", \"name\": \"Cattedrale di Monreale\", \"category\": \"꼭 가봐야 할 곳\", \"detailDescription\": \"황금 모자이크로 유명한 Monreale 대성당입니다. Palermo와 가까워 반나절 루트로 묶기 좋고, 내부 장식의 밀도가 높아 짧아도 만족도가 큽니다.\", \"whyVisit\": [\"황금 모자이크\", \"Palermo 근교 핵심 명소\", \"짧지만 밀도 높은 관람\"], \"whatToSee\": [\"대성당 내부\", \"모자이크\", \"수도원 회랑\"], \"tips\": [\"입장 시간과 복장 규정을 확인하세요.\", \"Palermo 도심 주차와 별도로 동선을 잡는 편이 좋습니다.\"], \"duration\": \"1~1.5시간\"}"
+            }
+          ],
+          "structuredContent": {
+            "result": "{\"source\": \"local-mcp-curated\", \"name\": \"Cattedrale di Monreale\", \"category\": \"꼭 가봐야 할 곳\", \"detailDescription\": \"황금 모자이크로 유명한 Monreale 대성당입니다. Palermo와 가까워 반나절 루트로 묶기 좋고, 내부 장식의 밀도가 높아 짧아도 만족도가 큽니다.\", \"whyVisit\": [\"황금 모자이크\", \"Palermo 근교 핵심 명소\", \"짧지만 밀도 높은 관람\"], \"whatToSee\": [\"대성당 내부\", \"모자이크\", \"수도원 회랑\"], \"tips\": [\"입장 시간과 복장 규정을 확인하세요.\", \"Palermo 도심 주차와 별도로 동선을 잡는 편이 좋습니다.\"], \"duration\": \"1~1.5시간\"}"
+          },
+          "isError": false
+        }
+      }
+    }
+  ]
+}

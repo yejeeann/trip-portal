@@ -1,0 +1,39 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 760" role="img" aria-labelledby="title desc">
+  <title id="title">Southeast Sicily baroque town</title>
+  <desc id="desc">Layered honey-stone Sicilian baroque town with church dome, steps, and hill streets.</desc>
+  <defs>
+    <linearGradient id="sky" x1="0" x2="0" y1="0" y2="1">
+      <stop offset="0" stop-color="#91c7dd"/>
+      <stop offset="1" stop-color="#f6d7a8"/>
+    </linearGradient>
+    <linearGradient id="stone" x1="0" x2="1" y1="0" y2="1">
+      <stop offset="0" stop-color="#e7c27a"/>
+      <stop offset="1" stop-color="#b98143"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="760" fill="url(#sky)"/>
+  <path d="M0 530 C210 430 380 455 555 370 C770 265 960 355 1200 240 L1200 760 L0 760 Z" fill="#8c9568"/>
+  <path d="M0 610 C210 500 420 535 650 455 C850 385 1030 410 1200 335 L1200 760 L0 760 Z" fill="#606f58"/>
+  <g fill="url(#stone)" stroke="#6f4f31" stroke-width="6" stroke-linejoin="round">
+    <path d="M130 455 h170 v205 H130 Z"/>
+    <path d="M330 405 h210 v255 H330 Z"/>
+    <path d="M565 345 h250 v315 H565 Z"/>
+    <path d="M845 430 h215 v230 H845 Z"/>
+    <path d="M630 300 h120 v360 H630 Z"/>
+    <path d="M605 300 q85 -80 170 0 Z"/>
+    <path d="M650 210 h85 v90 h-85 Z"/>
+    <path d="M365 350 q70 -65 140 0 Z"/>
+  </g>
+  <g fill="#5f3f2a">
+    <rect x="175" y="505" width="28" height="58" rx="14"/>
+    <rect x="225" y="505" width="28" height="58" rx="14"/>
+    <rect x="390" y="465" width="34" height="70" rx="17"/>
+    <rect x="455" y="465" width="34" height="70" rx="17"/>
+    <rect x="665" y="430" width="36" height="82" rx="18"/>
+    <rect x="740" y="430" width="36" height="82" rx="18"/>
+    <rect x="920" y="500" width="34" height="66" rx="17"/>
+    <rect x="985" y="500" width="34" height="66" rx="17"/>
+  </g>
+  <path d="M150 670 h900" stroke="#3e4d49" stroke-width="18" stroke-linecap="round"/>
+  <path d="M260 705 h650" stroke="#efcf91" stroke-width="20" stroke-linecap="round"/>
+</svg>

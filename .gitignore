@@ -1,0 +1,27 @@
+# Dependencies
+node_modules/
+
+# Next.js
+.next/
+out/
+
+# Environment files
+.env*.local
+
+# TypeScript cache
+tsconfig.tsbuildinfo
+*.tsbuildinfo
+
+# Logs
+*.log
+next-dev*.err.log
+next-dev*.out.log
+dev-server*.log
+
+# Temporary browser/test artifacts
+.tmp-*/
+.chrome-*/
+
+# Generated root screenshots
+/*.png
+

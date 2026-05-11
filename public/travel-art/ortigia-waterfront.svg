@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 760" role="img" aria-label="Ortigia waterfront guide image">
+  <defs><linearGradient id="sky" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#7fc0c4"/><stop offset=".52" stop-color="#f4d4ad"/><stop offset="1" stop-color="#bf6c4d"/></linearGradient></defs>
+  <rect width="1200" height="760" fill="url(#sky)"/>
+  <path d="M0 560c160-32 316-18 470 22 198 52 382 40 730-58v236H0z" fill="#477f89"/>
+  <path d="M0 640c180-35 390-28 575 18 174 44 340 38 625-40v142H0z" fill="#2f6471"/>
+  <path d="M230 590V365h320v225z" fill="#e9d8b7"/>
+  <path d="M270 365h240l-42-88H312z" fill="#b2895e"/>
+  <path d="M650 600V330h250v270z" fill="#f0dfbd"/>
+  <path d="M620 330h310l-68-78H688z" fill="#b7895a"/>
+  <circle cx="968" cy="140" r="62" fill="#ffe3a1" opacity=".88"/>
+</svg>

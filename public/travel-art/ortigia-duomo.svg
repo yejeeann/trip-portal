@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 760" role="img" aria-label="Ortigia duomo square guide image">
+  <defs><linearGradient id="sky" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#9bcfd0"/><stop offset=".55" stop-color="#f5d6ad"/><stop offset="1" stop-color="#c7754d"/></linearGradient></defs>
+  <rect width="1200" height="760" fill="url(#sky)"/>
+  <rect y="590" width="1200" height="170" fill="#c49b61"/>
+  <path d="M260 610V280h680v330z" fill="#efdcb9"/>
+  <path d="M330 610V360h110v250zm215 0V330h110v280zm215 0V360h110v250z" fill="#9c7b5d"/>
+  <path d="M220 295l380-160 380 160z" fill="#d7b580"/>
+  <path d="M600 120l52 58H548z" fill="#f8edd6"/>
+  <circle cx="960" cy="132" r="58" fill="#ffe7a9" opacity=".88"/>
+</svg>
