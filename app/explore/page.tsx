@@ -1,10 +1,9 @@
-import { fetchTravelPayloadFromStitch } from "@/lib/stitch-mcp";
 import { fallbackTravelPayload } from "@/lib/fallback-travel";
 import { AppNavigation } from "@/components/app-navigation";
 import { MultiOsmMap } from "@/components/multi-osm-map";
 
-export default async function ExplorePage() {
-  const payload = (await fetchTravelPayloadFromStitch()) ?? fallbackTravelPayload;
+export default function ExplorePage() {
+  const payload = fallbackTravelPayload;
   const { trips, uiConfig, appStructure } = payload;
 
   const isDark = uiConfig?.colorScheme === "dark";
