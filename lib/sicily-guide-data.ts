@@ -147,9 +147,9 @@ const day3To6DetailedPlaceDetails: Record<string, string> = {
   "caltagirone":
     "Caltagirone는 시칠리아 내륙의 도자기 도시로, 장식 타일과 계단, 바로크 도시 구조가 함께 기억되는 곳입니다. 1693년 지진 이후 재건된 Val di Noto 문화권에 속하며, 특히 Scalinata di Santa Maria del Monte처럼 세라믹 타일로 장식된 계단이 도시 정체성을 잘 보여줍니다. 다만 Catania 거점에서 Ragusa, Modica, Marzamemi와 같은 날 함께 넣으면 운전 시간이 과도해집니다. 그래서 앱에서는 Day 6의 대안 내륙 루프 카드로 남기는 것이 맞습니다. 실제로 방문한다면 Villa Romana del Casale나 Piazza Armerina와 묶어 남동부 해안 대신 선택하는 방식이 안전합니다.",
   "piazza armerina":
-    "Piazza Armerina는 Villa Romana del Casale 접근의 기준 도시입니다. 도시 자체도 중세와 바로크 분위기가 있지만, 여행 일정에서 가장 중요한 역할은 로마 후기 모자이크 유적을 보러 가는 관문이라는 점입니다. Catania에서 내륙으로 들어가는 루트는 남동부 해안 루프와 방향이 달라, Day 6에 둘 다 실행하려 하면 체류시간보다 이동시간이 지나치게 커집니다. 따라서 이 카드는 KML/docx의 내륙 유산 축을 보존하되 실제 실행안에서는 대안으로 분리해 둔 것입니다. Villa Romana del Casale를 제대로 보려면 Piazza Armerina 주변에 충분한 관람 시간을 확보하는 별도 내륙일이 훨씬 좋습니다.",
+    "Piazza Armerina는 Villa Romana del Casale 접근의 기준 도시입니다. 도시 자체도 중세와 바로크 분위기가 있지만, 여행 일정에서 가장 중요한 역할은 로마 후기 모자이크 유적을 보러 가는 관문이라는 점입니다. Catania에서 남동부 해안 루프로 들어가는 Day 6과는 방향이 맞지 않아, 실제 일정에서는 Day 10의 Costa Saracena -> Realmonte 이동 중간 정차로 배치했습니다. 이렇게 넣으면 Ragusa, Modica, Marzamemi 루프를 과밀하게 만들지 않으면서 Villa Romana del Casale 관람 시간을 확보할 수 있습니다.",
   "카살레의 빌라 로마나":
-    "카살레의 빌라 로마나는 Piazza Armerina 근처의 로마 후기 귀족 저택 유적으로, 정교한 바닥 모자이크로 세계적으로 유명합니다. 사냥, 신화, 일상, 체육 장면이 넓은 공간에 남아 있어 로마 제국 말기 시칠리아의 부와 문화적 연결망을 보여줍니다. docx의 헤라클레스 12과업과 욕장 모자이크 메모처럼, 이곳은 짧은 사진 정차가 아니라 내부를 천천히 걸으며 바닥 장면을 읽어야 가치가 살아납니다. 그래서 Ragusa·Modica·Marzamemi 루프와 같은 날에 끼워 넣기에는 무리가 있습니다. 앱에는 정적 데이터로 보존하되, 실제 방문은 Day 6 전체를 내륙 루프로 바꾸는 경우에 권장합니다.",
+    "카살레의 빌라 로마나는 Piazza Armerina 근처의 로마 후기 귀족 저택 유적으로, 정교한 바닥 모자이크로 세계적으로 유명합니다. 사냥, 신화, 일상, 체육 장면이 넓은 공간에 남아 있어 로마 제국 말기 시칠리아의 부와 문화적 연결망을 보여줍니다. docx의 헤라클레스 12과업과 욕장 모자이크 메모처럼, 이곳은 짧은 사진 정차가 아니라 내부를 천천히 걸으며 바닥 장면을 읽어야 가치가 살아납니다. Ragusa·Modica·Marzamemi 루프와 같은 날에 끼워 넣기에는 무리가 있어, 실제 일정에서는 Day 10 오전의 내륙 정차로 넣고 오후 Agrigento 신전의 계곡과 연결했습니다.",
   "enna":
     "Enna는 시칠리아 중앙 고지대의 도시로, 섬의 배꼽이라는 표현이 어울릴 만큼 내륙 전망과 고대 신화의 기억이 강합니다. Demeter와 Persephone 신화, Rocca di Cerere, 고대와 중세의 방어 지형이 함께 언급되는 지역이며, docx의 Eunus 메모와도 연결됩니다. 다만 Catania 거점에서 남동부 해안 루프를 실행하는 Day 6에 Enna까지 실제로 넣으면 동선이 지나치게 분산됩니다. 그래서 이 카드는 빠진 장소가 아니라 내륙 유산 대안 루프의 배경 정보로 두는 것이 맞습니다. 별도 내륙일이 있다면 Piazza Armerina, Villa Romana del Casale와 함께 묶어 볼 수 있습니다.",
   "eunus statue":
@@ -493,9 +493,9 @@ function getSicilyPlaceDetail(name: string, category: string, fallback: string) 
 
   const day10To12DetailedPlaceDetails: Record<string, string> = {
     "신전의 계곡":
-      "신전의 계곡은 고대 그리스 도시 아크라가스의 성벽 남쪽 능선을 따라 남은 거대한 성역입니다. 오늘의 Agrigento가 중세 이후 언덕 위 도시로 옮겨간 반면, 이곳에는 기원전 6~5세기 지중해 서부에서 번영했던 그리스 식민 도시의 흔적이 넓게 펼쳐져 있습니다. 이름은 계곡이지만 실제로는 바다를 향한 완만한 능선이라, 걸을수록 신전과 올리브나무, 붉은 흙, 지중해 하늘이 층층이 겹칩니다. Day 10에서는 전날 밤 Catania 복귀와 San Calogero 숙소 이동 피로를 고려해 오후 늦게 들어가도록 설계했습니다. 한낮의 열기를 피하면 Temple of Concordia와 Heracles 구역의 돌 색이 부드러워지고, 고대 도시의 방어선과 의례 공간이 왜 이 위치에 놓였는지 더 잘 보입니다. 단순히 유적을 많이 찍는 곳이 아니라, 시칠리아가 그리스 세계와 북아프리카·로마 세계 사이에서 어떤 문화적 무게를 가졌는지 이해하는 핵심 장면입니다.",
+      "신전의 계곡은 고대 그리스 도시 아크라가스의 성벽 남쪽 능선을 따라 남은 거대한 성역입니다. 오늘의 Agrigento가 중세 이후 언덕 위 도시로 옮겨간 반면, 이곳에는 기원전 6~5세기 지중해 서부에서 번영했던 그리스 식민 도시의 흔적이 넓게 펼쳐져 있습니다. 이름은 계곡이지만 실제로는 바다를 향한 완만한 능선이라, 걸을수록 신전과 올리브나무, 붉은 흙, 지중해 하늘이 층층이 겹칩니다. Day 10에서는 전날 밤 Catania 복귀와 Costa Saracena 숙소권역에서 Realmonte로 넘어오는 이동 피로를 고려해 오후 늦게 들어가도록 설계했습니다. 한낮의 열기를 피하면 Temple of Concordia와 Heracles 구역의 돌 색이 부드러워지고, 고대 도시의 방어선과 의례 공간이 왜 이 위치에 놓였는지 더 잘 보입니다. 단순히 유적을 많이 찍는 곳이 아니라, 시칠리아가 그리스 세계와 북아프리카·로마 세계 사이에서 어떤 문화적 무게를 가졌는지 이해하는 핵심 장면입니다.",
     "valley of the temples":
-      "Valley of the Temples는 고대 그리스 도시 아크라가스의 성벽 남쪽 능선을 따라 남은 거대한 성역입니다. 오늘의 Agrigento가 중세 이후 언덕 위 도시로 옮겨간 반면, 이곳에는 기원전 6~5세기 지중해 서부에서 번영했던 그리스 식민 도시의 흔적이 넓게 펼쳐져 있습니다. 이름은 계곡이지만 실제로는 바다를 향한 완만한 능선이라, 걸을수록 신전과 올리브나무, 붉은 흙, 지중해 하늘이 층층이 겹칩니다. Day 10에서는 전날 밤 Catania 복귀와 San Calogero 숙소 이동 피로를 고려해 오후 늦게 들어가도록 설계했습니다. 한낮의 열기를 피하면 Temple of Concordia와 Heracles 구역의 돌 색이 부드러워지고, 고대 도시의 방어선과 의례 공간이 왜 이 위치에 놓였는지 더 잘 보입니다. 단순히 유적을 많이 찍는 곳이 아니라, 시칠리아가 그리스 세계와 북아프리카·로마 세계 사이에서 어떤 문화적 무게를 가졌는지 이해하는 핵심 장면입니다.",
+      "Valley of the Temples는 고대 그리스 도시 아크라가스의 성벽 남쪽 능선을 따라 남은 거대한 성역입니다. 오늘의 Agrigento가 중세 이후 언덕 위 도시로 옮겨간 반면, 이곳에는 기원전 6~5세기 지중해 서부에서 번영했던 그리스 식민 도시의 흔적이 넓게 펼쳐져 있습니다. 이름은 계곡이지만 실제로는 바다를 향한 완만한 능선이라, 걸을수록 신전과 올리브나무, 붉은 흙, 지중해 하늘이 층층이 겹칩니다. Day 10에서는 전날 밤 Catania 복귀와 Costa Saracena 숙소권역에서 Realmonte로 넘어오는 이동 피로를 고려해 오후 늦게 들어가도록 설계했습니다. 한낮의 열기를 피하면 Temple of Concordia와 Heracles 구역의 돌 색이 부드러워지고, 고대 도시의 방어선과 의례 공간이 왜 이 위치에 놓였는지 더 잘 보입니다. 단순히 유적을 많이 찍는 곳이 아니라, 시칠리아가 그리스 세계와 북아프리카·로마 세계 사이에서 어떤 문화적 무게를 가졌는지 이해하는 핵심 장면입니다.",
     "temple of concordia agrigento":
       "Temple of Concordia는 신전의 계곡에서 가장 완성도 있게 남은 도리스식 신전으로, Agrigento를 상징하는 장면입니다. 기원전 5세기 중반에 세워진 것으로 보이며, 신전 이름은 후대 라틴어 비문에서 온 관습적 명칭이라 실제 봉헌 대상은 확정되지 않았습니다. 보존 상태가 뛰어난 이유는 고대 말기 이후 기독교 성당으로 전용되며 구조가 계속 사용되었기 때문입니다. 그래서 이 건물은 그리스 신전 하나가 아니라, 이교 성역에서 기독교 공간으로 바뀌고 다시 고고학 유산으로 복원된 시칠리아의 긴 변화를 품고 있습니다. 정면에서 기둥의 비례를 보고, 옆면으로 돌아가 엔타시스와 처마선의 균형을 보면 사진보다 건축 자체의 힘이 잘 느껴집니다. Day 10 오후 늦은 빛에는 석회암이 금빛으로 바뀌어 유적이 능선과 더 자연스럽게 이어지므로, 신전의 계곡 루프에서 가장 오래 시간을 배정할 만합니다.",
     "temple of heracles agrigento":
@@ -546,7 +546,7 @@ function getSicilyPlaceDetail(name: string, category: string, fallback: string) 
     "faraglioni di scopello":
       "Faraglioni di Scopello는 Scopello 앞바다에 솟은 바위 기둥들로, 서부 시칠리아 해안 풍경을 대표하는 장면입니다. 같은 바위 해안이라도 Aci Trezza가 동부의 화산·신화적 분위기를 준다면, Scopello의 Faraglioni는 맑은 물빛과 석회암 절벽, 오래된 tonnara 유산이 함께 놓인 해안 풍경입니다. Day 13에서는 Segesta의 내륙 유적 이후 오후 빛이 좋아지는 시간에 배치해, 여행의 장면을 고대 유적에서 바다로 자연스럽게 전환합니다. 이 장소는 오래 걸어 다니기보다 지정 전망 지점, 해안 접근 가능 구역, Tonnara 주변 시야를 조합해 보는 것이 현실적입니다. 성수기에는 주차와 입장 대기가 길어질 수 있으므로, Faraglioni 자체를 목표로 무리하게 오래 머물기보다 Scopello 마을, Tonnara, Zingaro 방향과 함께 1~2시간 안에서 조절하는 편이 좋습니다.",
     "zingaro nature reserve":
-      "Zingaro Nature Reserve는 Scopello 북쪽에서 San Vito Lo Capo 방향으로 이어지는 해안 자연보호구역입니다. 절벽, 작은 만, 투명한 바다, 지중해 관목 지대가 이어져 서부 시칠리아 해안의 자연성을 가장 잘 보여줍니다. 다만 전체 트레일을 걷기에는 시간이 많이 필요하고, 6월 초에도 햇빛과 더위가 강할 수 있어 Day 13에서는 남쪽 입구 주변의 짧은 전망과 산책 카드로 잡았습니다. 이렇게 넣으면 KML/DOCX의 서부 해안 후보를 보존하면서도 Segesta와 Scopello를 모두 포함하는 하루가 과밀해지지 않습니다. 이곳의 의미는 해변 하나가 아니라, 참치잡이 해안과 관광지화된 Scopello 너머에 아직 자연보호구역으로 남아 있는 해안의 원형을 보는 데 있습니다. 물, 모자, 편한 신발을 준비하고, 바람이나 입장 조건이 좋지 않으면 Faraglioni 전망으로 대체해도 일정의 균형은 유지됩니다.",
+      "Zingaro Nature Reserve는 Scopello 북쪽으로 이어지는 해안 자연보호구역입니다. 절벽, 작은 만, 투명한 바다, 지중해 관목 지대가 이어져 서부 시칠리아 해안의 자연성을 가장 잘 보여줍니다. 다만 전체 트레일을 걷기에는 시간이 많이 필요하고, 6월 초에도 햇빛과 더위가 강할 수 있어 Day 13에서는 남쪽 입구 주변의 짧은 전망과 산책 카드로 잡았습니다. 이렇게 넣으면 Segesta와 Scopello를 모두 포함하는 하루가 과밀해지지 않습니다. 이곳의 의미는 해변 하나가 아니라, 참치잡이 해안과 관광지화된 Scopello 너머에 아직 자연보호구역으로 남아 있는 해안의 원형을 보는 데 있습니다. 물, 모자, 편한 신발을 준비하고, 바람이나 입장 조건이 좋지 않으면 Faraglioni 전망으로 대체해도 일정의 균형은 유지됩니다.",
     "palermo cathedral":
       "Palermo Cathedral은 시칠리아의 수도 Palermo가 여러 문명권의 교차점이었음을 가장 압축적으로 보여주는 건축입니다. 이 자리는 초기 기독교, 이슬람 지배기, 노르만 왕국, 스페인 지배와 바로크 개조가 겹쳐 온 도시의 중심부이며, 외관에는 노르만, 고딕, 카탈루냐, 신고전주의 요소가 함께 보입니다. 단일 양식의 순수함보다 시대가 겹친 복합성이 매력인 성당입니다. Day 14에서는 Balestrate에서 Palermo로 들어와 구시가지 도보 루프의 기준점으로 두었습니다. Quattro Canti, Fontana Pretoria, Ballaro 시장, Cappella Palatina와 가까워 하루 안에서 도시의 종교, 권력, 생활을 함께 읽을 수 있습니다. 내부와 지붕 관람을 모두 넣으면 시간이 늘어나므로, Monreale까지 가는 날에는 외관과 핵심 내부 관람 위주로 조절하는 편이 좋습니다.",
     "quattro canti":
@@ -897,7 +897,7 @@ function getSicilyTips(name: string, category: string) {
     "fountain of diana": ["Piazza Archimede는 골목 사이에 있어 지도 방향을 한 번 확인하세요.", "사진 후 Arethusa Spring 방향으로 이어가면 신화 테마가 자연스럽습니다.", "혼잡하면 오래 머물지 말고 광장 분위기만 보고 이동해도 됩니다."],
     "arethusa spring": ["바다 산책 중 짧게 들르는 정도가 좋습니다.", "Castello Maniace 방향으로 이어가면 도보 흐름이 좋습니다."],
     "castello maniace": ["성채 내부 관람 가능 여부를 당일 확인하세요.", "해가 강하면 남쪽 끝까지 걷는 시간이 부담될 수 있어 물을 챙기세요."],
-    "cattedrale di san nicolo": ["Noto는 늦은 오후 빛이 좋아 Syracuse 후반 일정에 잘 맞습니다.", "시간이 부족하면 대성당과 Palazzo Ducezio만 우선 보세요.", "계단 앞 광장은 사진을 찍는 사람이 많아 주변 흐름을 보고 이동하세요."],
+    "cattedrale di san nicolo": ["Noto는 Day 6 오전 Ragusa 방향 이동 중 짧게 넣는 구성이 동선상 깔끔합니다.", "시간이 부족하면 대성당과 Palazzo Ducezio만 우선 보세요.", "계단 앞 광장은 사진을 찍는 사람이 많아 주변 흐름을 보고 이동하세요."],
     "palazzo ducezio comune di noto": ["대성당 계단에서 마주 보는 방향으로 전체 구도를 먼저 보세요.", "내부 관람보다 외관과 광장 관계를 보는 쪽이 효율적입니다.", "Noto 시간이 짧으면 대성당과 함께 20분 안에 묶을 수 있습니다."],
     "chiesa di montevergine": ["Via Nicolaci를 따라 걸으며 발코니 장식과 함께 보세요.", "Noto 체류가 짧으면 이 지점부터 되돌아와도 동선이 깔끔합니다.", "해질 무렵 골목 그림자가 길어지므로 사진 위치를 천천히 잡으세요."],
     "chiesa di san francesco d assisi all immacolata": ["대성당 주변만 보고 끝내기 아쉬울 때 넣기 좋은 마무리 지점입니다.", "계단이 있어 편한 신발이 좋습니다.", "늦은 시간에는 내부보다 외관 중심으로 보는 구성이 안정적입니다."],
@@ -1182,14 +1182,14 @@ const sicilyAccommodations = {
     imageAlt: "Airbnb representative image for 81 Triq Luqa Briffa"
   },
   sanCalogero: {
-    name: "Contrada San Calogero",
+    name: "Costa Saracena accommodation",
     address: "Contrada San Calogero, Costa Saracena - Castelluccio, Sicilia 96011",
     checkIn: "5/29",
     checkOut: "5/30",
     googleMapsUrl: "https://www.google.com/maps/search/?api=1&query=37.3029223,15.1204173",
     airbnbUrl: "https://www.airbnb.co.kr/rooms/22480501",
     image: "https://a0.muscache.com/im/pictures/76118a85-7a7c-4697-8787-bbc16bac9e12.jpg",
-    imageAlt: "Airbnb representative image for Contrada San Calogero"
+    imageAlt: "Airbnb representative image for Costa Saracena accommodation"
   },
   realmonte: {
     name: "Realmonte",
@@ -1452,9 +1452,9 @@ export const sicilyGuideData: SwissGuideData = {
       dateLabel: "5/21",
       weekday: "Thu",
       primaryRoute: "Seoul to Rome via Helsinki",
-      cities: ["Seoul", "Incheon", "Helsinki", "Rome"],
+      cities: ["Seoul", "Incheon"],
       transportMode: "flight",
-      note: "Finnair AY042/AY1761. 21:50 ICN 출발, 05:30 HEL 도착 후 07:20 HEL에서 FCO행 연결."
+      note: "Finnair AY042. 21:50 ICN 출발 전 인천국제공항에서 출국과 환승 준비를 정리합니다."
     },
     {
       id: "sicily-day-02",
@@ -1462,10 +1462,10 @@ export const sicilyGuideData: SwissGuideData = {
       date: "2026-05-22",
       dateLabel: "5/22",
       weekday: "Fri",
-      primaryRoute: "Rome / Catania",
-      cities: ["Rome", "Fiumicino", "Catania"],
+      primaryRoute: "Rome Arrival and Night Train",
+      cities: ["Rome", "Fiumicino"],
       transportMode: "train",
-      note: "07:20 HEL 출발, 09:45 FCO 도착. 로마 시내에서 짧게 핵심 산책 후 20:16 Roma Termini에서 InterCityNotte 1955 탑승."
+      note: "05:30 HEL 도착 후 07:20 로마행 환승, 09:45 FCO 도착. 로마 시내 핵심 산책 후 20:16 Roma Termini에서 InterCityNotte 1955 탑승."
     },
     {
       id: "sicily-day-03",
@@ -1473,11 +1473,11 @@ export const sicilyGuideData: SwissGuideData = {
       date: "2026-05-23",
       dateLabel: "5/23",
       weekday: "Sat",
-      primaryRoute: "Catania / Aci Trezza / Adrano",
-      cities: ["Catania", "Aci Trezza", "Adrano"],
+      primaryRoute: "Catania / Aci Trezza / Etna",
+      cities: ["Catania", "Aci Trezza"],
       transportMode: "rental-car",
       accommodation: sicilyAccommodations.eastSicily,
-      note: "07:40 Catania 도착 후 짐, 차량, 숙소 동선을 정리하고 Catania 동쪽 해안과 내륙 방향을 가볍게 연결합니다."
+      note: "07:40 Catania Centrale 도착 후 카타니아 도심과 Aci Trezza를 보고, Mount Etna와 Adrano는 컨디션에 따라 선택합니다."
     },
     {
       id: "sicily-day-04",
@@ -1497,11 +1497,11 @@ export const sicilyGuideData: SwissGuideData = {
       date: "2026-05-25",
       dateLabel: "5/25",
       weekday: "Mon",
-      primaryRoute: "Syracuse / Noto",
-      cities: ["Syracuse", "Noto"],
+      primaryRoute: "Syracuse / Ortigia",
+      cities: ["Syracuse", "Ortigia"],
       transportMode: "rental-car",
       accommodation: sicilyAccommodations.eastSicily,
-      note: "Syracuse를 중심으로 남동부 해안 도시 흐름을 잡고, 늦은 오후에 Noto까지 짧게 더하는 현실적인 루프입니다."
+      note: "Syracuse와 Ortigia를 집중해서 보고, 주차는 Talete Parking을 기준으로 잡습니다. Noto는 Day 6 오전으로 옮깁니다."
     },
     {
       id: "sicily-day-06",
@@ -1509,11 +1509,11 @@ export const sicilyGuideData: SwissGuideData = {
       date: "2026-05-26",
       dateLabel: "5/26",
       weekday: "Tue",
-      primaryRoute: "Ragusa / Modica / Pozzallo / Marzamemi / Piazza Armerina",
-      cities: ["Ragusa", "Modica", "Pozzallo", "Marzamemi", "Caltagirone", "Piazza Armerina", "Enna", "Catania"],
+      primaryRoute: "Noto / Ragusa / Modica / Pozzallo / Marzamemi",
+      cities: ["Noto", "Ragusa", "Modica", "Pozzallo", "Marzamemi"],
       transportMode: "rental-car",
       accommodation: sicilyAccommodations.eastSicily,
-      note: "Catania 거점에서 Ragusa, Modica, Pozzallo, Marzamemi를 도는 날입니다. 내륙 대안은 Caltagirone, Piazza Armerina, Enna 축으로 둡니다."
+      note: "Noto를 오전에 짧게 보고 Ragusa와 Modica로 이어갑니다. Modica에서는 Bonajuto 초콜릿 시식을 넣고, Marzamemi에서 하루를 마무리합니다."
     },
     {
       id: "sicily-day-07",
@@ -1525,7 +1525,7 @@ export const sicilyGuideData: SwissGuideData = {
       cities: ["Catania", "Luqa", "Gzira", "Valletta", "Birgu", "Cospicua", "Senglea"],
       transportMode: "flight",
       accommodation: sicilyAccommodations.malta,
-      note: "FR2930으로 Catania에서 Luqa로 이동한 뒤 Gzira 숙소를 기준으로 Valletta와 Three Cities를 연결합니다."
+      note: "FR2930으로 Catania에서 Luqa로 이동한 뒤 Gzira 숙소를 기준으로 Sliema-Valletta Ferry, Valletta, Three Cities를 연결합니다."
     },
     {
       id: "sicily-day-08",
@@ -1533,11 +1533,11 @@ export const sicilyGuideData: SwissGuideData = {
       date: "2026-05-28",
       dateLabel: "5/28",
       weekday: "Thu",
-      primaryRoute: "Gzira / Mellieha / Comino / Victoria / Xaghra",
-      cities: ["Gzira", "Mellieha", "Comino", "Mgarr", "Victoria", "Xaghra"],
+      primaryRoute: "Gzira / Cirkewwa / Comino / Gozo",
+      cities: ["Gzira", "Cirkewwa", "Comino", "Mgarr", "Victoria", "Xaghra"],
       transportMode: "ferry",
       accommodation: sicilyAccommodations.malta,
-      note: "Gzira에서 Mellieha 방향으로 이동해 Comino를 거쳐 Gozo의 Victoria와 Xaghra까지 이어가는 섬 루프입니다."
+      note: "Gzira에서 Cirkewwa Ferry Terminal로 이동해 Comino Blue Lagoon을 먼저 보고, Gozo의 Mgarr, Victoria, Xaghra 유산 루프로 이어갑니다."
     },
     {
       id: "sicily-day-09",
@@ -1545,11 +1545,11 @@ export const sicilyGuideData: SwissGuideData = {
       date: "2026-05-29",
       dateLabel: "5/29",
       weekday: "Fri",
-      primaryRoute: "Qrendi / Marsaxlokk / Mdina / Mosta / Catania",
-      cities: ["Gzira", "Qrendi", "Marsaxlokk", "Mdina", "Mosta", "Luqa", "Catania", "Augusta"],
+      primaryRoute: "Blue Grotto / Marsaxlokk / Mdina / Mosta / Catania",
+      cities: ["Blue Grotto", "Marsaxlokk", "Mdina", "Mosta", "Luqa", "Catania"],
       transportMode: "flight",
       accommodation: sicilyAccommodations.sanCalogero,
-      note: "몰타 마지막 날은 Qrendi, Marsaxlokk, Mdina, Mosta를 압축해 보고 Luqa에서 Catania로 돌아와 Augusta 방향 숙소로 이동합니다."
+      note: "Blue Grotto, Marsaxlokk 해산물 점심, Mdina, Mosta를 본 뒤 20:45 MLA 출발 FR395로 21:30 Catania에 돌아옵니다."
     },
     {
       id: "sicily-day-10",
@@ -1557,11 +1557,11 @@ export const sicilyGuideData: SwissGuideData = {
       date: "2026-05-30",
       dateLabel: "5/30",
       weekday: "Sat",
-      primaryRoute: "Augusta / Realmonte / Agrigento",
-      cities: ["Augusta", "Realmonte", "Agrigento"],
+      primaryRoute: "Costa Saracena / Villa Romana del Casale / Realmonte / Agrigento",
+      cities: ["Costa Saracena", "Piazza Armerina", "Realmonte", "Agrigento"],
       transportMode: "rental-car",
       accommodation: sicilyAccommodations.realmonte,
-      note: "Augusta 쪽 숙소를 떠나 남부 시칠리아로 이동하고 Realmonte와 Agrigento를 새 거점으로 잡습니다."
+      note: "Costa Saracena 숙소권역을 떠나 Villa Romana del Casale를 먼저 보고, Realmonte 체크인 후 오후에는 Agrigento 신전의 계곡과 Kolymbethra Garden을 봅니다."
     },
     {
       id: "sicily-day-11",
@@ -1581,11 +1581,11 @@ export const sicilyGuideData: SwissGuideData = {
       date: "2026-06-01",
       dateLabel: "6/1",
       weekday: "Mon",
-      primaryRoute: "Realmonte / Trapani / Erice / Balestrate",
-      cities: ["Realmonte", "Trapani", "Erice", "Balestrate"],
+      primaryRoute: "Realmonte / Saline di Trapani / Trapani / Erice / Balestrate",
+      cities: ["Realmonte", "Saline di Trapani e Paceco", "Trapani", "Erice", "Balestrate"],
       transportMode: "rental-car",
       accommodation: sicilyAccommodations.pianoMilano,
-      note: "Realmonte에서 서부 시칠리아로 넘어가 Trapani, Erice, Balestrate 축으로 베이스를 전환합니다."
+      note: "Realmonte에서 서부 시칠리아로 넘어가 Saline di Trapani e Paceco 염전과 풍차, Trapani, Erice, Maria Grammatico, Balestrate 축으로 베이스를 전환합니다."
     },
     {
       id: "sicily-day-13",
@@ -1593,11 +1593,11 @@ export const sicilyGuideData: SwissGuideData = {
       date: "2026-06-02",
       dateLabel: "6/2",
       weekday: "Tue",
-      primaryRoute: "Balestrate / Calatafimi-Segesta / Scopello / San Vito Lo Capo",
-      cities: ["Balestrate", "Calatafimi-Segesta", "Scopello", "San Vito Lo Capo"],
+      primaryRoute: "Balestrate / Segesta / Scopello",
+      cities: ["Balestrate", "Segesta", "Scopello"],
       transportMode: "rental-car",
       accommodation: sicilyAccommodations.pianoMilano,
-      note: "Balestrate 숙소 기준으로 Calatafimi-Segesta, Scopello, San Vito Lo Capo 방향을 무리 없이 묶습니다."
+      note: "Balestrate 숙소 기준으로 Segesta 신전과 극장, Scopello와 Tonnara, Faraglioni, Zingaro 남쪽 입구를 묶습니다."
     },
     {
       id: "sicily-day-14",
@@ -1605,11 +1605,11 @@ export const sicilyGuideData: SwissGuideData = {
       date: "2026-06-03",
       dateLabel: "6/3",
       weekday: "Wed",
-      primaryRoute: "Palermo / Monreale",
-      cities: ["Palermo", "Monreale"],
+      primaryRoute: "Balestrate / Palermo / Monreale",
+      cities: ["Balestrate", "Palermo", "Monreale"],
       transportMode: "rental-car",
       accommodation: sicilyAccommodations.pianoMilano,
-      note: "서부 시칠리아 숙소 마지막 날. Palermo와 Monreale을 숙소 기준으로 왕복합니다."
+      note: "서부 시칠리아 숙소 마지막 날. Palermo의 Santa Caterina와 시장, Monreale 대성당과 옥상 전망을 숙소 기준으로 왕복합니다."
     },
     {
       id: "sicily-day-15",
@@ -1621,7 +1621,7 @@ export const sicilyGuideData: SwissGuideData = {
       cities: ["Balestrate", "Cefalu", "Messina", "Villa San Giovanni", "Scilla", "Gioia Tauro"],
       transportMode: "rental-car",
       accommodation: sicilyAccommodations.viaMetauro,
-      note: "Balestrate 체크아웃 후 Cefalu와 Messina를 지나 본토로 넘어가 Villa San Giovanni, Scilla, Gioia Tauro까지 이동합니다."
+      note: "Balestrate 체크아웃 후 Cefalu와 Messina를 지나 본토로 넘어가 Villa San Giovanni, Scilla, Chianalea 저녁, Gioia Tauro까지 이동합니다."
     },
     {
       id: "sicily-day-16",
@@ -1633,7 +1633,7 @@ export const sicilyGuideData: SwissGuideData = {
       cities: ["Gioia Tauro", "Tropea", "Pizzo", "Calvanico"],
       transportMode: "rental-car",
       accommodation: sicilyAccommodations.provinciale24b,
-      note: "Gioia Tauro에서 출발해 Tropea와 Pizzo를 거쳐 Calvanico 숙소로 북상하는 본토 이동일입니다."
+      note: "Gioia Tauro에서 출발해 Tropea의 Affaccio del Gazzo와 Pizzo의 Piedigrotta, Castello Murat, Tartufo di Pizzo 디저트 정차를 거쳐 Calvanico 숙소로 북상하는 본토 이동일입니다."
     },
     {
       id: "sicily-day-17",
@@ -1641,11 +1641,11 @@ export const sicilyGuideData: SwissGuideData = {
       date: "2026-06-06",
       dateLabel: "6/6",
       weekday: "Sat",
-      primaryRoute: "Calvanico / Amalfi / Pompeii / Rome",
-      cities: ["Calvanico", "Amalfi", "Pompeii", "Rome", "Fiumicino"],
+      primaryRoute: "Calvanico / Salerno / Amalfi / Pompeii / Rome",
+      cities: ["Calvanico", "Salerno", "Amalfi", "Pompeii", "Rome", "Fiumicino"],
       transportMode: "rental-car",
       accommodation: sicilyAccommodations.romeFinal,
-      note: "Calvanico에서 Amalfi 해안을 짧게 보고 Pompeii를 거쳐 Rome 최종 숙소로 이동한 뒤, 다음날 Fiumicino 출국을 준비합니다."
+      note: "Calvanico에서 Salerno로 이동해 페리로 Amalfi를 짧게 보고, 오후에는 Pompeii 3시간 집중 투어 후 Rome 최종 숙소로 이동해 다음날 Fiumicino 출국을 준비합니다."
     },
     {
       id: "sicily-day-18",
@@ -1676,15 +1676,14 @@ export const sicilyGuideData: SwissGuideData = {
       day: 1,
       date: "2026-05-21",
       title: "Seoul to Rome via Helsinki",
-      region: "Seoul / Helsinki / Rome",
-      deck: "Finnair AY042와 AY1761을 이어 타고 인천에서 헬싱키를 거쳐 로마 피우미치노까지 들어가는 출국 항공권 중심의 이동일입니다.",
-      mapLabel: "Seoul departure, Helsinki connection and Rome arrival",
+      region: "Seoul / Incheon",
+      deck: "인천국제공항에서 Finnair AY042 야간편으로 출국하는 날입니다. 실제 여행 일정은 공항 도착, 체크인, 보안검색, 환승 준비에 집중합니다.",
+      mapLabel: "Seoul and Incheon departure",
       transportMode: "flight",
       editorial: [
-        "확정 교통편: 5/21 ICN 21:50 AY042 -> 5/22 HEL 05:30, 환승 1시간 50분 후 07:20 AY1761 -> FCO 09:45. 예약번호는 ELV9IT입니다.",
-        "MCP route artifact: data/generated/sicily-day1-3-mcp.json 기준 Incheon International Airport -> Helsinki Airport -> Rome Fiumicino 순서로 지도 링크를 생성했습니다.",
-        "체류/이동 기준: 인천공항은 출발 3시간 전 도착, Helsinki 환승은 05:30~07:20 사이 게이트·보안검색·세면·충전만 처리하는 짧은 환승으로 설계했습니다.",
-        "수하물, 여권, 충전 케이블, 기내에서 꺼낼 물품을 탑승 전 분리해두세요. 환승 시간이 길지 않으므로 면세 쇼핑보다 다음 게이트 확인을 우선합니다."
+        "확정 교통편: 5/21 ICN 21:50 Finnair AY042 출발. Helsinki 환승과 Rome 도착은 날짜상 Day 2에서 이어서 관리합니다.",
+        "체류/이동 기준: 인천공항은 출발 3시간 전 도착을 기준으로 체크인, 수하물 위탁, 보안검색, 탑승구 확인을 여유 있게 처리합니다.",
+        "수하물, 여권, 충전 케이블, 기내에서 꺼낼 물품을 탑승 전 분리해두세요. 다음날 환승 시간이 길지 않으므로 탑승 전 항공사 앱과 연결편 정보를 확인합니다."
       ],
       cityVisits: [
         {
@@ -1702,44 +1701,10 @@ export const sicilyGuideData: SwissGuideData = {
             "헬싱키 환승 시간이 길지 않으니 수하물 연결 여부와 다음 항공편 정보를 미리 확인해두세요.",
             "탑승 전 물과 간단한 간식, 도착 후 바로 쓸 유심/eSIM 상태를 확인하면 다음날 이동이 편합니다."
           ]
-        },
-        {
-          id: "day-01-helsinki-transfer",
-          city: "Helsinki",
-          stayDuration: "05:30~07:20 새벽 환승",
-          routeMode: "transit",
-          entryPoint: "Helsinki Airport",
-          coordinates: { lat: 60.3172, lng: 24.9633 },
-          spots: [
-            place("helsinki-airport-arrival", "Helsinki Airport", "공항", "다음날 05:30 도착 후 로마행 07:20 연결편을 준비하는 환승 기준점입니다.", 60.3172, 24.9633, helsinkiAirportImage, "5/22 05:30")
-          ],
-          practicalNotes: [
-            "도착 후에는 화장실, 세면, 게이트 위치, 보안 검색 여부를 먼저 확인하세요.",
-            "07:20 로마행 출발까지 여유가 크지 않으므로 공항 안에서 먼 이동이나 쇼핑은 최소화하는 편이 좋습니다.",
-            "다음 비행 탑승권과 게이트 변경 알림을 바로 확인할 수 있게 항공사 앱을 열어두세요."
-          ]
-        },
-        {
-          id: "day-01-rome-arrival",
-          city: "Rome",
-          stayDuration: "09:45 FCO 도착",
-          routeMode: "transit",
-          entryPoint: "Rome Fiumicino Airport",
-          coordinates: { lat: 41.8003, lng: 12.2389 },
-          spots: [
-            place("fiumicino-arrival-day1", "Rome Fiumicino Airport", "공항", "Finnair AY1761편으로 09:45 도착하는 로마 입국 기준점입니다. Day 2의 실제 관광은 이 도착 이후 시작됩니다.", 41.8003, 12.2389, fiumicinoAirportImage, "5/22 09:45")
-          ],
-          practicalNotes: [
-            "FCO 터미널 1 도착 후 입국 심사, 수하물, 데이터 연결, 시내 이동 수단을 차례로 정리하세요.",
-            "로마 시내 이동은 대기 상황에 따라 달라지므로 Day 2 도심 일정은 12시 전후 시작을 기준으로 잡습니다.",
-            "이 도착 지점은 Day 1 항공권에는 포함되지만, 도시 관광 일정은 Day 2에서 이어서 관리합니다."
-          ]
         }
       ],
       places: [
-        place("incheon-airport-sicily", "Incheon International Airport", "공항", "21:50 출발편의 기준 공항입니다. 장거리 야간 비행 전 체크인과 보안 검색을 여유 있게 잡습니다.", 37.4602, 126.4407, incheonAirportImage, "21:50"),
-        place("helsinki-airport-arrival", "Helsinki Airport", "공항", "다음날 05:30 도착 후 로마행 07:20 연결편을 준비하는 환승 기준점입니다.", 60.3172, 24.9633, helsinkiAirportImage, "5/22 05:30"),
-        place("fiumicino-arrival-day1", "Rome Fiumicino Airport", "공항", "Finnair AY1761편으로 09:45 도착하는 로마 입국 기준점입니다. Day 2의 실제 관광은 이 도착 이후 시작됩니다.", 41.8003, 12.2389, fiumicinoAirportImage, "5/22 09:45")
+        place("incheon-airport-sicily", "Incheon International Airport", "공항", "21:50 출발편의 기준 공항입니다. 장거리 야간 비행 전 체크인과 보안 검색을 여유 있게 잡습니다.", 37.4602, 126.4407, incheonAirportImage, "21:50")
       ]
     },
     {
@@ -1747,12 +1712,12 @@ export const sicilyGuideData: SwissGuideData = {
       day: 2,
       date: "2026-05-22",
       title: "Rome Arrival and Night Train",
-      region: "Rome / Catania",
+      region: "Rome",
       deck: "헬싱키에서 로마로 들어와 Termini에 짐을 맡긴 뒤, 로마 핵심부를 압축적으로 걷고 20:16 InterCityNotte 1955 4인 쿠셋 야간열차로 시칠리아에 진입합니다. Catania는 이 날 관광지가 아니라 다음날 07:40 도착 지점으로만 관리합니다.",
       mapLabel: "Rome transfer and city window",
       transportMode: "train",
       editorial: [
-        "확정 교통편: HEL 07:20 -> FCO 09:45, InterCityNotte 1955 of 22/05/2026 Roma Termini 20:16 -> Catania Centrale 07:40. 총 승차 시간은 11시간 24분입니다.",
+        "확정 교통편: HEL 05:30 도착 후 07:20 -> FCO 09:45, InterCityNotte 1955 of 22/05/2026 Roma Termini 20:16 -> Catania Centrale 07:40. 총 승차 시간은 11시간 24분입니다.",
         "MCP route artifact: data/generated/sicily-day1-3-mcp.json 기준 FCO -> Roma Termini -> Colosseum -> Roman Forum -> Piazza Venezia -> Pantheon -> Piazza Navona -> Trevi Fountain -> Spanish Steps -> Monti -> Roma Termini 순서로 지도 링크를 생성했습니다.",
         "MCP train route check: Roma Termini -> Catania Centrale 구간 지도 링크는 https://www.google.com/maps/dir/Roma+Termini/Catania+Centrale 입니다.",
         "체류/이동 기준: FCO 입국·수하물·Termini 이동에 1.5~2시간, 로마 중심 도보 루프에 약 5.5~6시간, Termini 복귀·야간열차 준비에 최소 60분을 배정했습니다.",
@@ -2041,14 +2006,16 @@ export const sicilyGuideData: SwissGuideData = {
       day: 5,
       date: "2026-05-25",
       title: "Syracuse and Ortigia",
-      region: "Syracuse / Ortigia / Val di Noto",
-      deck: "동부 숙소에서 시라쿠사로 내려가 오전에는 Neapolis 고고학 지구를 보고, 오후에는 오르티지아 섬 안에서 광장과 수변을 도보로 연결합니다. 늦은 오후에는 Noto만 짧게 더하고 숙소로 돌아오는 구성으로, Ragusa·Modica·Marzamemi는 같은 날 넣지 않습니다.",
+      region: "Syracuse / Ortigia",
+      deck: "동부 숙소에서 시라쿠사로 내려가 오전에는 Neapolis 고고학 지구를 보고, 오후에는 Talete Parking을 기준으로 오르티지아 섬 안의 광장과 수변을 도보로 연결합니다. Noto는 Day 6 오전 Ragusa 방향 이동 중 들르는 방식으로 옮겨 동선을 단순화합니다.",
       mapLabel: "Syracuse map",
       transportMode: "rental-car",
       accommodation: sicilyAccommodations.eastSicily,
       editorial: [
-        "거리/시간 기준: 동부 숙소 -> Neapolis Archaeological Park 약 1시간 10분~1시간 30분, Syracuse -> Ortigia 차량 10~20분, Ortigia -> Noto 약 35~45분, Noto -> 숙소 약 1시간 20분~1시간 40분입니다.",
-        "KML/docx 후보 중 Day 5 실제 방문지는 Altar of Hieron II, Basilica Santuario Madonna delle Lacrime, Syracuse Cathedral, Santa Lucia alla Badia, Fountain of Diana, Noto Cathedral, Palazzo Ducezio, Montevergine까지로 압축했습니다.",
+        "거리/시간 기준: 동부 숙소 -> Neapolis Archaeological Park 약 1시간 10분~1시간 30분, Syracuse -> Ortigia 차량 10~20분, Ortigia -> 숙소 약 1시간 10분~1시간 30분입니다.",
+        "KML/docx 후보 중 Day 5 실제 방문지는 Altar of Hieron II, Basilica Santuario Madonna delle Lacrime, Syracuse Cathedral, Santa Lucia alla Badia, Fountain of Diana, Arethusa Spring, Castello Maniace까지로 압축했습니다.",
+        "오르티지아는 4인 일행과 짐이 있으면 섬 안쪽 주차가 어렵기 때문에 Talete Parking을 MyMap 기준점으로 찍고 도보 루프를 시작합니다.",
+        "Mercato di Ortigia는 오전~이른 오후 시장이므로 Neapolis 후 Talete Parking에 세우고 Caseificio Borderi 샌드위치 점심을 먼저 넣으면 시장과 오르티지아 도보 루프가 자연스럽게 이어집니다.",
         "Ragusa, Modica, Marzamemi까지 같은 날 넣으면 총 운전 시간이 4시간을 넘고 체류시간이 조각납니다. 세 도시는 별도 남동부 하루 또는 Day 6 이후 선택 후보로 빼는 것이 현실적입니다."
       ],
       cityVisits: [
@@ -2079,39 +2046,20 @@ export const sicilyGuideData: SwissGuideData = {
           entryPoint: "Piazza Duomo",
           coordinates: { lat: 37.0593903, lng: 15.2931439 },
           spots: [
+            place("talete-parking", "Talete Parking", "주차 기준점", "오르티지아 섬 입구의 대형 주차 기준점입니다. 4인 일행과 짐이 있는 날에는 섬 안쪽으로 차를 밀어 넣기보다 이곳을 기준으로 도보 루프를 시작하는 편이 현실적입니다.", 37.0655, 15.2936, piazzaDuomoOrtigiaImage, "13:20"),
+            place("mercato-di-ortigia-borderi", "Mercato di Ortigia / Caseificio Borderi", "시장/점심", "오르티지아 섬 입구 쪽 아침 시장입니다. 치즈, 살루미, 해산물, 채소가 빽빽하게 모이는 생활감 있는 장소이며, Caseificio Borderi 샌드위치를 사서 바다 쪽에서 먹으면 4인 일행 점심으로 만족도가 높습니다.", 37.0648, 15.2938, piazzaDuomoOrtigiaImage, "13:05"),
             place("piazza-duomo-ortigia", "Piazza Duomo", "광장", "오르티지아 중심 광장입니다. 점심 후 산책을 시작하기 좋은 기준점이며 성당, Santa Lucia alla Badia가 바로 이어집니다.", 37.0593903, 15.2931439, piazzaDuomoOrtigiaImage, "13:30"),
             place("siracusa-cathedral", "시라쿠사 대성당", "성당", "아테나 신전이 성당으로 바뀐 오르티지아의 핵심 건축입니다. 고대 신전과 기독교 성당이 한 건물에 겹친다는 점이 중요합니다.", 37.0596724, 15.2933593, siracusaCathedralImage, "13:50"),
             place("santa-lucia-alla-badia", "산타 루치아 알라 바디아 성당", "성당/예술", "Piazza Duomo 옆의 바로크 성당으로, 광장 동선에서 짧게 넣기 좋은 장소입니다.", 37.0586795, 15.2932969, santaLuciaBadiaImage, "14:25"),
             place("diana-fountain", "Fountain of Diana", "분수/광장", "Piazza Archimede의 디아나 분수입니다. Archimedes와 신화 메모를 오르티지아 산책에 연결하는 짧은 포인트입니다.", 37.0612486, 15.2938566, dianaFountainImage, "14:55"),
-            place("archimedes-ortigia-note", "Archimedes Ortigia Note", "역사 메모", "docx의 Archimedes 동상과 무덤 메모를 보존하는 선택 카드입니다. 실제 동선에서는 Piazza Archimede와 Neapolis의 Archimedes 관련 표지를 함께 읽는 정도로 처리합니다.", 37.063066, 15.2924, piazzaDuomoOrtigiaImage, "선택"),
-            place("ortigia-jewish-quarter-note", "Ortigia Jewish Quarter / Synagogue Note", "역사 메모", "docx의 오르티지아 유대인 회당 메모를 보존하는 선택 카드입니다. Giudecca 권역의 골목과 유대인 공동체 흔적을 깊게 보려면 별도 관람 시간이 필요합니다.", 37.0613, 15.2942, piazzaDuomoOrtigiaImage, "선택"),
             place("arethusa-spring", "Arethusa Spring", "전설/수변", "오르티지아 수변의 대표 산책 지점입니다. 광장 밀집 구간에서 바다 쪽으로 숨을 트는 20~30분 포인트입니다.", 37.0572976, 15.2929282, arethusaSpringImage, "15:25"),
             place("castello-maniace", "Castello Maniace", "성채", "오르티지아 남쪽 끝의 성채입니다. 내부 관람까지 깊게 들어가기보다 외관과 수변 산책 중심으로 30~45분 배정합니다.", 37.0538429, 15.2949605, castelloManiaceImage, "15:55")
           ],
           practicalNotes: [
-            "오르티지아 안쪽은 차량보다 도보가 편합니다.",
+            "오르티지아 안쪽은 차량보다 도보가 편하므로 Talete Parking을 기준으로 움직입니다.",
+            "Mercato di Ortigia와 Caseificio Borderi는 오전~이른 오후 중심이라 늦게 도착하면 시장 대신 Piazza Duomo 주변 카페/간식으로 대체하세요.",
             "Piazza Duomo, Cathedral, Diana Fountain, Arethusa Spring, Castello Maniace를 순서대로 보면 광장과 수변이 자연스럽게 연결됩니다.",
-            "Archimedes, Jewish Quarter/Synagogue, Apostle Paul 메모는 같은 도보권의 역사 맥락 카드로 보존하되, 시간이 부족하면 실제 방문 대신 상세 설명에서 확인하세요.",
             "더운 시간에는 카페 휴식과 그늘 구간을 중간에 섞어주세요."
-          ]
-        },
-        {
-          id: "day-05-noto-baroque",
-          city: "Noto",
-          stayDuration: "17:15~19:15 바로크 중심축",
-          routeMode: "walk",
-          entryPoint: "Corso Vittorio Emanuele",
-          coordinates: { lat: 36.8924433, lng: 15.0651945 },
-          spots: [
-            place("noto-cathedral", "Cattedrale di San Nicolo", "바로크 성당", "Val di Noto 바로크를 대표하는 대성당입니다. 1693년 대지진 이후 재건된 도시의 상징으로, 광장과 계단 구도를 함께 봅니다.", 36.8914537, 15.0706713, notoImage, "17:20"),
-            place("palazzo-ducezio", "Palazzo Ducezio (Comune di Noto)", "시청/궁전", "Noto 대성당 맞은편의 시청 건물입니다. 넓은 계단과 광장 구도 속에서 Noto의 도시 계획을 읽기 좋습니다.", 36.8907324, 15.0705653, palazzoDucezioImage, "17:50"),
-            place("chiesa-montevergine", "Chiesa di Montevergine", "바로크 교회", "Via Nicolaci 축 끝의 교회로, Noto 바로크 골목과 발코니 장식을 함께 보기 좋은 지점입니다.", 36.8923304, 15.0701652, montevergineImage, "18:20"),
-            place("san-francesco-noto", "Chiesa di San Francesco d'Assisi all'Immacolata", "바로크 교회", "Noto 중심 산책의 동쪽 끝을 잡아주는 계단식 교회입니다. 황금빛 석회암 도시의 색을 보기 좋습니다.", 36.8906796, 15.072575, sanFrancescoNotoImage, "18:50")
-          ],
-          practicalNotes: [
-            "Noto는 석양 시간의 색이 좋아 늦은 오후에 짧게 넣기 좋습니다.",
-            "Syracuse 체류가 길어지면 Noto는 대성당과 Palazzo Ducezio만 보고 줄이세요.",
-            "Noto에서 숙소까지 1시간 20분 이상을 잡아야 하므로 19:30 전후 출발을 기준으로 저녁 식사 여부를 결정하세요."
           ]
         }
       ],
@@ -2120,19 +2068,14 @@ export const sicilyGuideData: SwissGuideData = {
         place("ear-of-dionysius", "Ear of Dionysius", "고고학 지형", "높은 석회암 동굴과 울림이 인상적인 고고학 지구의 짧은 포인트입니다. Greek Theatre와 같은 권역이라 20~30분 체류로 충분합니다.", 37.0763319, 15.2755765, earDionysiusImage, "11:00"),
         place("altar-of-hieron-ii", "Altar of Hieron II", "고대 제단", "Zeus에게 바치는 대형 제단의 흔적으로, docx 메모의 '450마리의 소를 동시에 바치던 제단' 맥락을 확인하는 Neapolis 보조 포인트입니다.", 37.0741741, 15.276963, altarHieronImage, "11:35"),
         place("madonna-delle-lacrime", "Basilica Santuario Madonna delle Lacrime", "현대 성당", "고대 유적과 대비되는 시라쿠사의 현대 신앙 건축입니다. Neapolis에서 Ortigia로 이동하기 전 외관 중심으로 15~25분만 확인합니다.", 37.0747537, 15.2855387, madonnaLacrimeImage, "12:05"),
+        place("talete-parking", "Talete Parking", "주차 기준점", "오르티지아 섬 입구의 대형 주차 기준점입니다. 4인 일행과 짐이 있는 날에는 섬 안쪽으로 차를 밀어 넣기보다 이곳을 기준으로 도보 루프를 시작하는 편이 현실적입니다.", 37.0655, 15.2936, piazzaDuomoOrtigiaImage, "13:20"),
+        place("mercato-di-ortigia-borderi", "Mercato di Ortigia / Caseificio Borderi", "시장/점심", "오르티지아 섬 입구 쪽 아침 시장입니다. 치즈, 살루미, 해산물, 채소가 빽빽하게 모이는 생활감 있는 장소이며, Caseificio Borderi 샌드위치를 사서 바다 쪽에서 먹으면 4인 일행 점심으로 만족도가 높습니다.", 37.0648, 15.2938, piazzaDuomoOrtigiaImage, "13:05"),
         place("piazza-duomo-ortigia", "Piazza Duomo", "광장", "오르티지아 중심 광장입니다. 점심 후 산책을 시작하기 좋은 기준점이며 성당, Santa Lucia alla Badia가 바로 이어집니다.", 37.0593903, 15.2931439, piazzaDuomoOrtigiaImage, "13:30"),
         place("siracusa-cathedral", "시라쿠사 대성당", "성당", "아테나 신전이 성당으로 바뀐 오르티지아의 핵심 건축입니다. 고대 신전과 기독교 성당이 한 건물에 겹친다는 점이 중요합니다.", 37.0596724, 15.2933593, siracusaCathedralImage, "13:50"),
         place("santa-lucia-alla-badia", "산타 루치아 알라 바디아 성당", "성당/예술", "Piazza Duomo 옆의 바로크 성당으로, 광장 동선에서 짧게 넣기 좋은 장소입니다.", 37.0586795, 15.2932969, santaLuciaBadiaImage, "14:25"),
         place("diana-fountain", "Fountain of Diana", "분수/광장", "Piazza Archimede의 디아나 분수입니다. Archimedes와 신화 메모를 오르티지아 산책에 연결하는 짧은 포인트입니다.", 37.0612486, 15.2938566, dianaFountainImage, "14:55"),
-        place("archimedes-ortigia-note", "Archimedes Ortigia Note", "역사 메모", "docx의 Archimedes 동상과 무덤 메모를 보존하는 선택 카드입니다. 실제 동선에서는 Piazza Archimede와 Neapolis의 Archimedes 관련 표지를 함께 읽는 정도로 처리합니다.", 37.063066, 15.2924, piazzaDuomoOrtigiaImage, "선택"),
-        place("ortigia-jewish-quarter-note", "Ortigia Jewish Quarter / Synagogue Note", "역사 메모", "docx의 오르티지아 유대인 회당 메모를 보존하는 선택 카드입니다. Giudecca 권역의 골목과 유대인 공동체 흔적을 깊게 보려면 별도 관람 시간이 필요합니다.", 37.0613, 15.2942, piazzaDuomoOrtigiaImage, "선택"),
-        place("apostle-paul-syracuse-note", "Apostle Paul Syracuse Note", "역사 메모", "docx의 사도바울 메모를 보존하는 선택 카드입니다. Syracuse가 고대 항구도시이자 초기 기독교 이동 경로의 한 지점이었다는 맥락을 오르티지아 산책 중 함께 확인합니다.", 37.0621, 15.2929, piazzaDuomoOrtigiaImage, "선택"),
         place("arethusa-spring", "Arethusa Spring", "전설/수변", "오르티지아 수변의 대표 산책 지점입니다. 광장 밀집 구간에서 바다 쪽으로 숨을 트는 20~30분 포인트입니다.", 37.0572976, 15.2929282, arethusaSpringImage, "15:25"),
-        place("castello-maniace", "Castello Maniace", "성채", "오르티지아 남쪽 끝의 성채입니다. 내부 관람까지 깊게 들어가기보다 외관과 수변 산책 중심으로 30~45분 배정합니다.", 37.0538429, 15.2949605, castelloManiaceImage, "15:55"),
-        place("noto-cathedral", "Cattedrale di San Nicolo", "바로크 성당", "Val di Noto 바로크를 대표하는 대성당입니다. 1693년 대지진 이후 재건된 도시의 상징으로, 광장과 계단 구도를 함께 봅니다.", 36.8914537, 15.0706713, notoImage, "17:20"),
-        place("palazzo-ducezio", "Palazzo Ducezio (Comune di Noto)", "시청/궁전", "Noto 대성당 맞은편의 시청 건물입니다. 넓은 계단과 광장 구도 속에서 Noto의 도시 계획을 읽기 좋습니다.", 36.8907324, 15.0705653, palazzoDucezioImage, "17:50"),
-        place("chiesa-montevergine", "Chiesa di Montevergine", "바로크 교회", "Via Nicolaci 축 끝의 교회로, Noto 바로크 골목과 발코니 장식을 함께 보기 좋은 지점입니다.", 36.8923304, 15.0701652, montevergineImage, "18:20"),
-        place("san-francesco-noto", "Chiesa di San Francesco d'Assisi all'Immacolata", "바로크 교회", "Noto 중심 산책의 동쪽 끝을 잡아주는 계단식 교회입니다. 황금빛 석회암 도시의 색을 보기 좋습니다.", 36.8906796, 15.072575, sanFrancescoNotoImage, "18:50")
+        place("castello-maniace", "Castello Maniace", "성채", "오르티지아 남쪽 끝의 성채입니다. 내부 관람까지 깊게 들어가기보다 외관과 수변 산책 중심으로 30~45분 배정합니다.", 37.0538429, 15.2949605, castelloManiaceImage, "15:55")
       ]
     },
     {
@@ -2140,22 +2083,39 @@ export const sicilyGuideData: SwissGuideData = {
       day: 6,
       date: "2026-05-26",
       title: "Southeast Baroque and Fishing Villages",
-      region: "Ragusa / Modica / Marzamemi",
-      deck: "Catania 거점에서 남동부 바로크 도시와 해안 마을을 하루로 묶습니다. Ragusa와 Modica를 핵심으로 보고, Pozzallo는 이동 기준점, Marzamemi는 짧은 해안 산책으로 마무리한 뒤 다음날 09:30 Malta 항공편 준비를 위해 숙소로 복귀합니다.",
+      region: "Noto / Ragusa / Modica / Marzamemi",
+      deck: "Catania 거점에서 Noto 오전 바로크 산책을 먼저 넣고, 이어 Ragusa와 Modica, 남동부 해안 마을을 하루로 묶습니다. Modica에서는 Antica Dolceria Bonajuto를 짧은 초콜릿 시식 이벤트로 넣고, 다음날 09:30 Malta 항공편 준비를 위해 숙소로 복귀합니다.",
       mapLabel: "Southeast Sicily map",
       transportMode: "rental-car",
       accommodation: sicilyAccommodations.eastSicily,
       editorial: [
-        "거리/시간 기준: 숙소 -> Ragusa 약 2시간~2시간 20분, Ragusa -> Modica 약 20~30분, Modica -> Pozzallo 약 30~40분, Pozzallo -> Marzamemi 약 40~50분, Marzamemi -> 숙소 약 2시간 20분~2시간 40분입니다.",
-        "KML/docx 후보 중 Day 6 실제 방문지는 Ragusa, Cattedrale di San Giovanni Battista, Modica, Duomo di San Giorgio, Pozzallo, Marzamemi입니다.",
-        "Caltagirone, Piazza Armerina, Villa Romana del Casale, Enna/Eunus는 같은 날 함께 넣으면 운전만 6시간권으로 늘어납니다. 앱에는 내륙 유산 대안 루프로 보존하되, 실제 Day 6 실행안은 남동부 바로크/해안 루프로 확정합니다.",
+        "거리/시간 기준: 숙소 -> Noto 약 1시간 20분~1시간 40분, Noto -> Ragusa 약 1시간 10분~1시간 30분, Ragusa -> Modica 약 20~30분, Modica -> Pozzallo 약 30~40분, Pozzallo -> Marzamemi 약 40~50분, Marzamemi -> 숙소 약 2시간 20분~2시간 40분입니다.",
+        "KML/docx 후보 중 Day 6 실제 방문지는 Noto 핵심 광장, Ragusa, Cattedrale di San Giovanni Battista, Modica, Duomo di San Giorgio, Antica Dolceria Bonajuto, Pozzallo, Marzamemi입니다.",
         "다음날 09:30 Catania -> Malta 항공편이 있으므로 19:30~20:00 숙소 복귀, 주유/짐 정리/공항 이동 확인을 목표로 잡습니다."
       ],
       cityVisits: [
         {
+          id: "day-06-noto-baroque",
+          city: "Noto",
+          stayDuration: "09:00~10:20 바로크 중심축",
+          routeMode: "walk",
+          entryPoint: "Corso Vittorio Emanuele",
+          coordinates: { lat: 36.8924433, lng: 15.0651945 },
+          spots: [
+            place("noto-cathedral", "Cattedrale di San Nicolo", "바로크 성당", "Val di Noto 바로크를 대표하는 대성당입니다. Day 6 오전 Ragusa 방향 이동 중 들러 광장과 계단 구도를 짧게 봅니다.", 36.8914537, 15.0706713, notoImage, "09:05"),
+            place("palazzo-ducezio", "Palazzo Ducezio (Comune di Noto)", "시청/궁전", "Noto 대성당 맞은편의 시청 건물입니다. 성당과 마주 보는 광장 구도 속에서 Noto의 도시 계획을 읽기 좋습니다.", 36.8907324, 15.0705653, palazzoDucezioImage, "09:35"),
+            place("chiesa-montevergine", "Chiesa di Montevergine", "바로크 교회", "Via Nicolaci 축 끝의 교회로, Noto 바로크 골목과 발코니 장식을 함께 보기 좋은 지점입니다.", 36.8923304, 15.0701652, montevergineImage, "10:00")
+          ],
+          practicalNotes: [
+            "Noto는 Day 5와 Day 6 사이의 중복을 없애기 위해 Day 6 오전으로 옮깁니다.",
+            "이 날 이동량이 크므로 San Francesco까지 깊게 늘리기보다 대성당, Palazzo Ducezio, Via Nicolaci 축만 압축합니다.",
+            "10:30 전후에는 Ragusa 방향으로 출발해야 Modica와 해안 시간이 살아납니다."
+          ]
+        },
+        {
           id: "day-06-ragusa-modica",
           city: "Ragusa / Modica",
-          stayDuration: "09:30~14:30 바로크 도시 2곳",
+          stayDuration: "11:45~15:10 바로크 도시와 초콜릿",
           routeMode: "drive",
           entryPoint: "East Sicily accommodation",
           coordinates: { lat: 36.9239306, lng: 14.7198951 },
@@ -2163,12 +2123,13 @@ export const sicilyGuideData: SwissGuideData = {
             place("ragusa", "Ragusa", "바로크 도시", "KML/docx의 '절벽 위의 입체 도시' 메모를 반영한 남동부 바로크 핵심 도시입니다. 이동 시간이 길어 Ragusa Ibla 전체를 깊게 보기보다 전망과 중심부 산책으로 압축합니다.", 36.9239306, 14.7198951, ragusaImage, "09:30"),
             place("ragusa-cathedral-san-giovanni", "Cattedrale di San Giovanni Battista", "바로크 성당", "KML에 포함된 Ragusa의 대표 성당입니다. Ragusa를 실제 방문지로 넣을 때 도시 중심의 바로크 건축을 확인하는 기준점으로 둡니다.", 36.9256291, 14.7287397, ragusaCathedralImage, "10:25"),
             place("modica", "Modica", "바로크 도시/초콜릿", "docx의 '초콜릿과 계단식 바로크' 메모를 반영한 도시입니다. Ragusa에서 가까워 남동부 루프 안에 넣기 좋고, 계단식 도시 풍경과 카페 휴식이 핵심입니다.", 36.8589716, 14.7608405, modicaImage, "12:15"),
-            place("duomo-san-giorgio-modica", "Duomo di San Giorgio Modica", "바로크 성당", "Modica의 대표 성당으로, 계단 위에서 도시가 겹쳐 보이는 장면이 좋습니다. 긴 내부 관람보다 외관과 계단, 주변 골목을 중심으로 봅니다.", 36.8591, 14.7604, modicaDuomoImage, "13:00")
+            place("duomo-san-giorgio-modica", "Duomo di San Giorgio Modica", "바로크 성당", "Modica의 대표 성당으로, 계단 위에서 도시가 겹쳐 보이는 장면이 좋습니다. 긴 내부 관람보다 외관과 계단, 주변 골목을 중심으로 봅니다.", 36.8591, 14.7604, modicaDuomoImage, "13:00"),
+            place("antica-dolceria-bonajuto", "Antica Dolceria Bonajuto", "초콜릿", "Modica의 오래된 초콜릿 가게입니다. 아즈텍 방식으로 만든 거친 식감의 초콜릿을 4인 일행이 짧게 시식하기 좋은 휴식 이벤트입니다.", 36.8589, 14.7606, modicaImage, "13:45")
           ],
           practicalNotes: [
             "숙소에서 Ragusa까지는 긴 이동이므로 07:15~07:30 출발을 기준으로 잡습니다.",
             "Ragusa와 Modica 모두 깊게 보려 하면 오후 해안 시간이 사라지므로 각 도시 1.5~2시간 안에서 압축하세요.",
-            "점심은 Modica에서 짧게 잡으면 동선이 가장 안정적입니다."
+            "점심은 Modica에서 짧게 잡고, Bonajuto 초콜릿 시식은 20~30분 안에서 관리하면 동선이 안정적입니다."
           ]
         },
         {
@@ -2187,75 +2148,19 @@ export const sicilyGuideData: SwissGuideData = {
             "Marzamemi에서 숙소까지 복귀가 길기 때문에 17:45 전후 출발을 권장합니다.",
             "Marzamemi를 길게 보면 저녁 복귀와 다음날 공항 준비가 밀립니다."
           ]
-        },
-        {
-          id: "day-06-inland-heritage-bank",
-          city: "Caltagirone / Piazza Armerina / Enna",
-          stayDuration: "대안 루프: 남동부 해안 대신 선택",
-          routeMode: "drive",
-          entryPoint: "Catania or East Sicily accommodation",
-          coordinates: { lat: 37.2371653, lng: 14.5133945 },
-          spots: [
-            place("caltagirone", "Caltagirone", "도자기 도시", "KML의 Caltagirone 좌표를 반영한 내륙 후보입니다. 도자기 장식 계단과 바로크 도시 구조를 함께 보는 곳으로, 동부 시칠리아에서 내륙으로 들어갈 때 의미가 있습니다.", 37.2371653, 14.5133945, caltagironeImage, "선택"),
-            place("piazza-armerina", "Piazza Armerina", "내륙 도시", "Villa Romana del Casale 접근 기준 도시입니다. docx의 로마 모자이크 메모를 보려면 이 도시를 내륙 루프의 기준점으로 잡습니다.", 37.3856182, 14.3705567, piazzaArmerinaImage, "선택"),
-            place("villa-romana-del-casale", "카살레의 빌라 로마나", "로마 모자이크", "로마 후기 귀족 빌라 유적으로, docx에 적힌 헤라클레스의 12과업과 욕장 모자이크 맥락을 보는 장소입니다. 실내 모자이크 관람 시간이 필요해 단독 목적지처럼 다루는 편이 좋습니다.", 37.3647239, 14.3345523, villaRomanaImage, "선택"),
-            place("enna", "Enna", "내륙 전망 도시", "시칠리아 중앙 고지대의 도시입니다. docx의 Demeter, Locca di Cerere, Eunus 메모와 연결되는 신화/고대사 보조 후보입니다.", 37.5676891, 14.2877167, ennaImage, "선택"),
-            place("eunus-statue", "Eunus Statue", "역사 메모", "Enna 권역의 Eunus 메모를 지도에 남기는 기준점입니다. 실제 일정에서는 Enna를 깊게 볼 때만 짧게 확인하세요.", 37.5676891, 14.2877167, eunusStatueImage, "선택")
-          ],
-          practicalNotes: [
-            "이 내륙 루프는 Ragusa/Modica/Marzamemi 루프와 같은 날 동시에 실행하지 않습니다.",
-            "Villa Romana del Casale를 실제로 보려면 Day 6 전체를 내륙 유산 루프로 바꾸는 편이 안전합니다.",
-            "Enna/Eunus는 docx 메모 보존용 후보로 두고, 실제 방문은 별도 내륙일이 있을 때 선택하세요."
-          ]
-        },
-        {
-          id: "day-06-catania-low-energy-fallback",
-          city: "Catania fallback",
-          stayDuration: "대안: 장거리 운전 취소 시",
-          routeMode: "walk",
-          entryPoint: "Catania center",
-          coordinates: { lat: 37.5078836, lng: 15.0830032 },
-          spots: [
-            place("monastero-dei-benedettini", "Monastero dei Benedettini", "역사 건축", "카타니아의 역사적 깊이를 더해주는 대형 수도원 복합 건물입니다. 남동부 장거리 루프를 취소할 경우 도심 대안으로 봅니다.", 37.503012, 15.080405, monasteroBenedettiniImage, "대안"),
-            place("villa-bellini", "Villa Bellini", "공원", "Via Etnea와 연결되는 카타니아 도심의 대표 휴식 공원입니다. 다음날 항공편 전 체력을 아끼는 대안 코스입니다.", 37.511667, 15.085556, villaBelliniImage, "대안")
-          ],
-          practicalNotes: [
-            "Ragusa/Modica 루프가 너무 부담스러우면 Catania 도심 대안으로 바꿉니다.",
-            "Monastero와 Villa Bellini만 보면 공항 준비와 짐 정리에 가장 여유가 생깁니다."
-          ]
-        },
-        {
-          id: "day-06-catania-airport-prep",
-          city: "Catania Airport",
-          stayDuration: "19:45 이후 다음날 출발 준비",
-          routeMode: "drive",
-          entryPoint: "East Sicily accommodation",
-          coordinates: { lat: 37.4668, lng: 15.0664 },
-          spots: [
-            place("catania-airport", "Catania Fontanarossa Airport", "공항", "다음 날 09:30 Malta행 출발 공항입니다.", 37.4668, 15.0664, cataniaAirportImage, "5/27 09:30")
-          ],
-          practicalNotes: [
-            "숙소에서 공항까지 아침 이동 시간을 전날 저녁 기준으로 다시 확인하세요.",
-            "몰타 입국에 필요한 여권, 항공권, 숙소 주소, 택시 이동 정보를 오프라인 저장하세요.",
-            "이른 출발이므로 주유, 반납, 택시 예약 같은 변수를 전날 처리하는 편이 안전합니다."
-          ]
         }
       ],
       places: [
+        place("noto-cathedral", "Cattedrale di San Nicolo", "바로크 성당", "Val di Noto 바로크를 대표하는 대성당입니다. Day 6 오전 Ragusa 방향 이동 중 들러 광장과 계단 구도를 짧게 봅니다.", 36.8914537, 15.0706713, notoImage, "09:05"),
+        place("palazzo-ducezio", "Palazzo Ducezio (Comune di Noto)", "시청/궁전", "Noto 대성당 맞은편의 시청 건물입니다. 성당과 마주 보는 광장 구도 속에서 Noto의 도시 계획을 읽기 좋습니다.", 36.8907324, 15.0705653, palazzoDucezioImage, "09:35"),
+        place("chiesa-montevergine", "Chiesa di Montevergine", "바로크 교회", "Via Nicolaci 축 끝의 교회로, Noto 바로크 골목과 발코니 장식을 함께 보기 좋은 지점입니다.", 36.8923304, 15.0701652, montevergineImage, "10:00"),
         place("ragusa", "Ragusa", "바로크 도시", "KML/docx의 '절벽 위의 입체 도시' 메모를 반영한 남동부 바로크 핵심 도시입니다. 이동 시간이 길어 Ragusa Ibla 전체를 깊게 보기보다 전망과 중심부 산책으로 압축합니다.", 36.9239306, 14.7198951, ragusaImage, "09:30"),
         place("ragusa-cathedral-san-giovanni", "Cattedrale di San Giovanni Battista", "바로크 성당", "KML에 포함된 Ragusa의 대표 성당입니다. Ragusa를 실제 방문지로 넣을 때 도시 중심의 바로크 건축을 확인하는 기준점으로 둡니다.", 36.9256291, 14.7287397, ragusaCathedralImage, "10:25"),
         place("modica", "Modica", "바로크 도시/초콜릿", "docx의 '초콜릿과 계단식 바로크' 메모를 반영한 도시입니다. Ragusa에서 가까워 남동부 루프 안에 넣기 좋고, 계단식 도시 풍경과 카페 휴식이 핵심입니다.", 36.8589716, 14.7608405, modicaImage, "12:15"),
         place("duomo-san-giorgio-modica", "Duomo di San Giorgio Modica", "바로크 성당", "Modica의 대표 성당으로, 계단 위에서 도시가 겹쳐 보이는 장면이 좋습니다. 긴 내부 관람보다 외관과 계단, 주변 골목을 중심으로 봅니다.", 36.8591, 14.7604, modicaDuomoImage, "13:00"),
+        place("antica-dolceria-bonajuto", "Antica Dolceria Bonajuto", "초콜릿", "Modica의 오래된 초콜릿 가게입니다. 아즈텍 방식으로 만든 거친 식감의 초콜릿을 4인 일행이 짧게 시식하기 좋은 휴식 이벤트입니다.", 36.8589, 14.7606, modicaImage, "13:45"),
         place("pozzallo", "Pozzallo", "해안 이동 기준점", "KML에 포함된 남동부 해안 도시입니다. 이 일정에서는 깊은 관광지라기보다 Modica에서 Marzamemi로 넘어가는 해안 기준점으로 짧게 표시합니다.", 36.7299146, 14.849099, pozzalloImage, "15:10"),
-        place("marzamemi", "Marzamemi", "어촌 마을", "KML의 Marzamemi 좌표를 반영한 남동부 해안 마을입니다. 작은 광장과 어촌 분위기를 짧게 보고, 장거리 복귀 전 바다 산책으로 하루를 닫습니다.", 36.7420487, 15.1175207, marzamemiImage, "16:10"),
-        place("monastero-dei-benedettini", "Monastero dei Benedettini", "역사 건축", "카타니아의 역사적 깊이를 더해주는 대형 수도원 복합 건물입니다. 남동부 장거리 루프를 취소할 경우 도심 대안으로 봅니다.", 37.503012, 15.080405, monasteroBenedettiniImage, "대안"),
-        place("villa-bellini", "Villa Bellini", "공원", "Via Etnea와 연결되는 카타니아 도심의 대표 휴식 공원입니다. 다음날 항공편 전 체력을 아끼는 대안 코스입니다.", 37.511667, 15.085556, villaBelliniImage, "대안"),
-        place("caltagirone", "Caltagirone", "도자기 도시", "KML의 Caltagirone 좌표를 반영한 내륙 후보입니다. 도자기 장식 계단과 바로크 도시 구조를 함께 보는 곳으로, 동부 시칠리아에서 내륙으로 들어갈 때 의미가 있습니다.", 37.2371653, 14.5133945, caltagironeImage, "선택"),
-        place("piazza-armerina", "Piazza Armerina", "내륙 도시", "Villa Romana del Casale 접근 기준 도시입니다. docx의 로마 모자이크 메모를 보려면 이 도시를 내륙 루프의 기준점으로 잡습니다.", 37.3856182, 14.3705567, piazzaArmerinaImage, "선택"),
-        place("villa-romana-del-casale", "카살레의 빌라 로마나", "로마 모자이크", "로마 후기 귀족 빌라 유적으로, docx에 적힌 헤라클레스의 12과업과 욕장 모자이크 맥락을 보는 장소입니다. 실내 모자이크 관람 시간이 필요해 단독 목적지처럼 다루는 편이 좋습니다.", 37.3647239, 14.3345523, villaRomanaImage, "선택"),
-        place("enna", "Enna", "내륙 전망 도시", "시칠리아 중앙 고지대의 도시입니다. docx의 Demeter, Locca di Cerere, Eunus 메모와 연결되는 신화/고대사 보조 후보입니다.", 37.5676891, 14.2877167, ennaImage, "선택"),
-        place("eunus-statue", "Eunus Statue", "역사 메모", "Enna 권역의 Eunus 메모를 지도에 남기는 기준점입니다. 실제 일정에서는 Enna를 깊게 볼 때만 짧게 확인하세요.", 37.5676891, 14.2877167, eunusStatueImage, "선택"),
-        place("catania-airport", "Catania Fontanarossa Airport", "공항", "다음 날 09:30 Malta행 출발 공항입니다.", 37.4668, 15.0664, cataniaAirportImage, "5/27 09:30")
+        place("marzamemi", "Marzamemi", "어촌 마을", "KML의 Marzamemi 좌표를 반영한 남동부 해안 마을입니다. 작은 광장과 어촌 분위기를 짧게 보고, 장거리 복귀 전 바다 산책으로 하루를 닫습니다.", 36.7420487, 15.1175207, marzamemiImage, "16:10")
       ]
     },
     {
@@ -2272,6 +2177,7 @@ export const sicilyGuideData: SwissGuideData = {
         "확정 항공편: Ryanair FR2930, 5/27 Catania Fontanarossa 09:30 -> Malta International 10:20. 비행 시간은 50분입니다.",
         "동선 기준: East Sicily 숙소 -> Catania Fontanarossa 약 45~60분, Malta International -> Gzira 숙소 약 20~30분, Gzira -> Valletta 약 10~20분입니다.",
         "MCP route artifact: data/generated/sicily-day7-9-mcp.json 기준 Catania Fontanarossa Airport -> Malta International Airport -> Gzira -> Valletta -> Upper Barrakka Gardens -> St John's Co-Cathedral -> Birgu -> Senglea 순서의 지도 링크를 생성했고, KML 검수에서 빠진 Bormla/Cospicua를 Three Cities 보강 카드로 추가했습니다.",
+        "Gzira 숙소 기준으로 발레타 진입은 버스보다 Sliema-Valletta Ferry를 우선 검토합니다. Marsamxett Harbour에서 발레타 성곽선을 바다 쪽에서 보는 장면이 좋습니다.",
         "체류 기준: 도착·짐 보관 60~90분, Valletta 3~4시간, Three Cities 2~2.5시간으로 잡으면 첫날 컨디션을 무리하지 않으면서 몰타 핵심 장면을 볼 수 있습니다.",
         "Valletta는 Upper Barrakka Gardens에서 항구 구조를 먼저 보고, St. John's Co-Cathedral과 중심 골목을 본 뒤 저녁에 Birgu/Senglea로 넘어가는 흐름이 가장 이해하기 쉽습니다."
       ],
@@ -2291,6 +2197,7 @@ export const sicilyGuideData: SwissGuideData = {
           entryPoint: "City Gate / Valletta",
           coordinates: { lat: 35.8992375, lng: 14.5140996 },
           spots: [
+            place("sliema-valletta-ferry", "Sliema-Valletta Ferry", "페리", "Gzira 숙소권에서 발레타로 들어갈 때 쓰기 좋은 항구 페리입니다. 버스보다 이동 자체가 여행 장면이 되고, 발레타 성곽선을 바다에서 볼 수 있습니다.", 35.9089, 14.5069, vallettaImage, "12:10"),
             place("valletta", "Valletta", "성벽 수도", "성 요한 기사단이 세운 몰타의 수도입니다. 그랜드 하버와 바로크 도시 구조를 한 번에 이해하는 Day 7 핵심 도시입니다.", 35.8992375, 14.5140996, vallettaImage, "12:30"),
             place("upper-barrakka-gardens", "Upper Barrakka Gardens", "전망 정원", "발레타 성벽 위에서 그랜드 하버와 Three Cities를 내려다보는 전망 포인트입니다. 이후 Birgu와 Senglea 위치를 이해하는 데 좋습니다.", 35.8951, 14.5125, upperBarrakkaImage, "13:15"),
             place("st-johns-co-cathedral", "St. John's Co-Cathedral", "바로크 성당", "성 요한 기사단의 종교·정치적 위상을 보여주는 발레타 핵심 성당입니다. 내부 장식과 예배당을 중심으로 봅니다.", 35.8977, 14.5128, stJohnsCoCathedralImage, "14:30")
@@ -2324,6 +2231,7 @@ export const sicilyGuideData: SwissGuideData = {
         place("day7-catania-airport-departure", "Catania Fontanarossa Airport", "공항", "FR2930 09:30 Malta행 출발 공항입니다. East Sicily 숙소에서 이른 이동 후 체크인과 보안검색을 여유 있게 처리합니다.", 37.4668, 15.0664, cataniaAirportImage, "09:30"),
         place("malta-airport-arrival", "Malta International Airport", "공항", "FR2930편으로 10:20 도착하는 몰타 입국 기준점입니다. 수하물, 데이터 연결, 택시 승차 위치를 정리하고 Gzira 숙소로 이동합니다.", 35.8575, 14.4775, maltaAirportImage, "10:20"),
         place("gzira-accommodation-day7", "Gżira", "숙소 거점", "5/27~5/29 숙소가 있는 몰타 체류 베이스입니다. 짐을 두고 발레타와 Three Cities로 이동하기 좋습니다.", 35.9023915, 14.4906557, vallettaImage, "11:20"),
+        place("sliema-valletta-ferry", "Sliema-Valletta Ferry", "페리", "Gzira 숙소권에서 발레타로 들어갈 때 쓰기 좋은 항구 페리입니다. 버스보다 이동 자체가 여행 장면이 되고, 발레타 성곽선을 바다에서 볼 수 있습니다.", 35.9089, 14.5069, vallettaImage, "12:10"),
         place("valletta", "Valletta", "성벽 수도", "성 요한 기사단이 세운 몰타의 수도입니다. 그랜드 하버와 바로크 도시 구조를 한 번에 이해하는 Day 7 핵심 도시입니다.", 35.8992375, 14.5140996, vallettaImage, "12:30"),
         place("upper-barrakka-gardens", "Upper Barrakka Gardens", "전망 정원", "발레타 성벽 위에서 그랜드 하버와 Three Cities를 내려다보는 전망 포인트입니다. 이후 Birgu와 Senglea 위치를 이해하는 데 좋습니다.", 35.8951, 14.5125, upperBarrakkaImage, "13:15"),
         place("st-johns-co-cathedral", "St. John's Co-Cathedral", "바로크 성당", "성 요한 기사단의 종교·정치적 위상을 보여주는 발레타 핵심 성당입니다. 내부 장식과 예배당을 중심으로 봅니다.", 35.8977, 14.5128, stJohnsCoCathedralImage, "14:30"),
@@ -2409,14 +2317,14 @@ export const sicilyGuideData: SwissGuideData = {
       day: 9,
       date: "2026-05-29",
       title: "Mdina, Mosta and Catania Return",
-      region: "Mdina / Mosta / Catania",
-      deck: "몰타 마지막 날은 숙소 체크아웃 후 KML에 포함된 Blue Grotto와 Marsaxlokk을 남부 해안 루프로 먼저 보고, 오후에는 내륙의 옛 수도 Mdina와 Mosta Rotunda만 압축적으로 봅니다. 저녁 FR395편으로 Catania에 돌아와 Contrada San Calogero 숙소로 이동하므로 공항 복귀 여유를 반드시 남깁니다.",
+      region: "Blue Grotto / Marsaxlokk / Mdina / Mosta",
+      deck: "몰타 마지막 날은 숙소 체크아웃 후 Blue Grotto와 Marsaxlokk을 남부 해안 루프로 먼저 보고, 오후에는 내륙의 옛 수도 Mdina와 Mosta Rotunda만 압축적으로 봅니다. 저녁 FR395편으로 Catania에 돌아와 Costa Saracena 숙소권역으로 이동하므로 공항 복귀 여유를 반드시 남깁니다.",
       mapLabel: "Malta to Catania map",
       transportMode: "flight",
       accommodation: sicilyAccommodations.sanCalogero,
       editorial: [
         "확정 항공편: Ryanair FR395, 5/29 Malta International 20:45 -> Catania Fontanarossa 21:30. 비행 시간은 45분입니다.",
-        "MCP route artifact: data/generated/sicily-day7-9-mcp.json 기준 Gzira -> Mdina -> Mosta Rotunda -> Malta International Airport -> Catania Fontanarossa Airport -> Contrada San Calogero Costa Saracena Castelluccio 순서로 경로와 지도 링크를 생성했고, KML 검수에서 빠진 Blue Grotto와 Marsaxlokk을 남부 해안 보강 루프로 추가했습니다.",
+        "MCP route artifact: data/generated/sicily-day7-9-mcp.json 기준 Gzira -> Blue Grotto -> Marsaxlokk -> Mdina -> Mosta Rotunda -> Malta International Airport -> Catania Fontanarossa Airport -> Costa Saracena 숙소권역 순서로 경로와 지도 링크를 생성했습니다.",
         "거리/시간 기준: Gzira -> Blue Grotto 약 25~35분, Blue Grotto -> Marsaxlokk 약 20~30분, Marsaxlokk -> Mdina 약 35~45분, Mdina -> Mosta 약 15~20분, Mosta -> Malta International Airport 약 20~30분입니다.",
         "20:45 국제선 출발이므로 18:45 전후 공항 도착을 목표로 하고, Mdina/Mosta 관람 뒤에는 공항 근처 여유 시간을 남겨둡니다. 남부 해안에서 시간이 밀리면 Mosta를 짧게 줄이는 편이 안전합니다.",
         "Catania 21:30 도착 후 숙소까지 이동해야 하므로, Day 9의 시칠리아 구간은 관광이 아니라 늦은 체크인과 다음날 Realmonte 이동 준비로 봅니다."
@@ -2427,7 +2335,7 @@ export const sicilyGuideData: SwissGuideData = {
         routePoint("day9-route-mdina-mosta", "Mdina / Mosta", "내륙 성벽 도시와 돔 성당", 35.8864, 14.4023, "rental-car"),
         routePoint("day9-route-malta-airport", "Malta Airport", "FR395 출발", 35.8575, 14.4775, "flight"),
         routePoint("day9-route-catania-airport", "Catania Airport", "FR395 도착", 37.4668, 15.0664, "flight"),
-        routePoint("day9-route-san-calogero", "San Calogero", "숙소 체크인", 37.3029223, 15.1204173, "rental-car")
+        routePoint("day9-route-costa-saracena", "Costa Saracena", "숙소 체크인", 37.3029223, 15.1204173, "rental-car")
       ],
       cityVisits: [
         {
@@ -2440,12 +2348,13 @@ export const sicilyGuideData: SwissGuideData = {
           spots: [
             place("gzira-checkout-day9", "Gżira", "숙소 거점", "5/29 체크아웃 후 짐을 정리하고 남부 해안 루프와 Mdina/Mosta로 이동하는 출발 기준점입니다.", 35.9023915, 14.4906557, vallettaImage, "09:30"),
             place("blue-grotto-malta", "Blue Grotto Malta", "해안 절벽/보트", "KML의 블루 그로토 지점을 보존하는 남서 해안 자연 카드입니다. 보트 운항이 가능하면 짧게 체험하고, 어렵다면 전망 중심으로 봅니다.", 35.8208561, 14.4574093, blueGrottoImage, "10:10"),
-            place("marsaxlokk", "Marsaxlokk", "어촌 항구", "KML의 마르사실로크 지점을 보존하는 남동부 어항입니다. luzzu 보트와 항구 풍경, 점심 휴식을 함께 넣기 좋습니다.", 35.8422063, 14.5427735, marsaxlokkImage, "11:40")
+            place("marsaxlokk", "Marsaxlokk", "어촌 항구", "KML의 마르사실로크 지점을 보존하는 남동부 어항입니다. luzzu 보트와 항구 풍경, 점심 휴식을 함께 넣기 좋습니다.", 35.8422063, 14.5427735, marsaxlokkImage, "11:40"),
+            place("ta-kalbi-marsaxlokk", "Ta' Kalbi / Marsaxlokk Local Market", "해산물 점심", "일요일 시장이 아니어도 Marsaxlokk의 알록달록한 luzzu 보트를 배경으로 해산물 점심을 넣기 좋은 후보입니다. Ta' Kalbi 또는 항구 로컬 마켓 주변 식당을 당일 운영 상황에 맞춰 고릅니다.", 35.8426, 14.543, marsaxlokkImage, "12:15")
           ],
           practicalNotes: [
             "Gzira 체크아웃 후 짐을 차량이나 보관 장소에 정리하고 남부 해안으로 이동하세요.",
             "Blue Grotto 보트는 파도와 바람 영향을 받으므로, 운항이 어려우면 전망만 보고 Marsaxlokk 점심 시간을 확보합니다.",
-            "Marsaxlokk 점심이 길어지면 Mdina 체류가 줄어드니 13:15 전후 출발 기준을 먼저 정하세요."
+            "Ta' Kalbi 또는 항구 식당 점심이 길어지면 Mdina 체류가 줄어드니 13:15 전후 출발 기준을 먼저 정하세요."
           ]
         },
         {
@@ -2470,49 +2379,68 @@ export const sicilyGuideData: SwissGuideData = {
         place("gzira-checkout-day9", "Gżira", "숙소 거점", "5/29 체크아웃 후 짐을 정리하고 Mdina와 Mosta로 이동하는 출발 기준점입니다.", 35.9023915, 14.4906557, vallettaImage, "10:00"),
         place("blue-grotto-malta", "Blue Grotto Malta", "해안 절벽/보트", "KML의 블루 그로토 지점을 보존하는 남서 해안 자연 카드입니다. 보트 운항이 가능하면 짧게 체험하고, 어렵다면 전망 중심으로 봅니다.", 35.8208561, 14.4574093, blueGrottoImage, "10:10"),
         place("marsaxlokk", "Marsaxlokk", "어촌 항구", "KML의 마르사실로크 지점을 보존하는 남동부 어항입니다. luzzu 보트와 항구 풍경, 점심 휴식을 함께 넣기 좋습니다.", 35.8422063, 14.5427735, marsaxlokkImage, "11:40"),
+        place("ta-kalbi-marsaxlokk", "Ta' Kalbi / Marsaxlokk Local Market", "해산물 점심", "일요일 시장이 아니어도 Marsaxlokk의 알록달록한 luzzu 보트를 배경으로 해산물 점심을 넣기 좋은 후보입니다. Ta' Kalbi 또는 항구 로컬 마켓 주변 식당을 당일 운영 상황에 맞춰 고릅니다.", 35.8426, 14.543, marsaxlokkImage, "12:15"),
         place("mdina", "Mdina", "옛 수도/성벽 도시", "몰타의 옛 수도이자 조용한 성벽 도시입니다. 발레타와 다른 중세·내륙 도시 분위기를 보는 Day 9 핵심 장소입니다.", 35.8864, 14.4023, mdinaImage, "14:00"),
         place("mosta-rotunda", "Mosta Rotunda", "돔 성당", "거대한 돔과 전쟁 시기 불발탄 이야기로 유명한 몰타 중부의 성당입니다. Mdina와 공항 사이에 짧게 넣기 좋습니다.", 35.9092, 14.4256, mostaRotundaImage, "16:10"),
         place("malta-airport-departure", "Malta International Airport", "공항", "FR395 20:45 Catania행 출발 공항입니다. 출발 2시간 전 도착을 기준으로 체크인과 보안검색을 처리합니다.", 35.8575, 14.4775, maltaAirportImage, "20:45"),
         place("catania-airport-return", "Catania Fontanarossa Airport", "공항", "FR395편으로 21:30 도착하는 시칠리아 복귀 공항입니다. 도착 후 숙소 이동만 처리합니다.", 37.4668, 15.0664, cataniaAirportImage, "21:30"),
-        place("san-calogero-arrival", "Contrada San Calogero", "숙소 도착", "5/29~5/30 숙소가 있는 Costa Saracena - Castelluccio 권역입니다. 늦은 도착일이라 관광보다 체크인과 다음날 Realmonte 이동 준비에 집중합니다.", 37.3029223, 15.1204173, cataniaAirportImage, "22:15")
+        place("costa-saracena-arrival", "Costa Saracena accommodation", "숙소 도착", "5/29~5/30 숙소가 있는 Costa Saracena - Castelluccio 권역입니다. 늦은 도착일이라 관광보다 체크인과 다음날 Realmonte 이동 준비에 집중합니다.", 37.3029223, 15.1204173, cataniaAirportImage, "22:15")
       ]
     },
     {
       id: "sicily-day-10-guide",
       day: 10,
       date: "2026-05-30",
-      title: "Realmonte Arrival and Valley of the Temples",
-      region: "Realmonte / Agrigento",
-      deck: "전날 밤 Catania 복귀 후 San Calogero에서 출발하는 날입니다. 오전에는 Realmonte 숙소권역으로 이동해 체크인과 휴식을 먼저 처리하고, 오후 늦게 Agrigento 신전의 계곡을 골든아워 중심으로 봅니다.",
-      mapLabel: "San Calogero to Agrigento map",
+      title: "Villa Romana del Casale and Valley of the Temples",
+      region: "Piazza Armerina / Realmonte / Agrigento",
+      deck: "전날 밤 Catania 복귀 후 Costa Saracena 숙소권역에서 출발하는 날입니다. 오전에는 Piazza Armerina 인근의 Villa Romana del Casale를 보고, Realmonte 숙소권역에서 체크인과 휴식을 처리한 뒤 오후 늦게 Agrigento 신전의 계곡을 골든아워 중심으로 봅니다.",
+      mapLabel: "Costa Saracena to Villa Romana and Agrigento map",
       transportMode: "rental-car",
       accommodation: sicilyAccommodations.realmonte,
       editorial: [
-        "숙소 기준: Contrada San Calogero 5/29~5/30 체크아웃 후 Realmonte 5/30~6/1 체크인입니다.",
-        "거리/시간 기준: San Calogero -> Realmonte 약 2시간 30분~3시간, Realmonte -> 신전의 계곡 약 20~30분, 신전의 계곡 -> Realmonte 약 20~30분으로 잡습니다.",
-        "MCP route artifact: data/generated/sicily-day10-12-mcp.json 기준 San Calogero -> Realmonte -> Valley of the Temples -> Realmonte 흐름으로 지도 링크와 관광지 정보를 남깁니다.",
-        "전날 FR395 Catania 도착과 늦은 숙소 체크인을 고려해 오전 관광을 넣지 않고, 점심·체크인·휴식 뒤 15:45 전후 유적지에 들어가는 구성이 현실적입니다.",
-        "DOCX의 Agrigento, 신전들의 계곡, Theron 묘소 메모를 반영해 Temple of Concordia, Temple of Heracles, Tomb of Theron을 같은 고고학 루프 안에 포함했습니다."
+        "숙소 기준: Costa Saracena - Castelluccio 권역 5/29~5/30 체크아웃 후 Realmonte 5/30~6/1 체크인입니다.",
+        "거리/시간 기준: Costa Saracena -> Villa Romana del Casale 약 1시간 30분~2시간, Villa Romana del Casale -> Realmonte 약 1시간 50분~2시간 20분, Realmonte -> 신전의 계곡 약 20~30분으로 잡습니다.",
+        "MCP route artifact: data/generated/sicily-day10-12-mcp.json 기준 Costa Saracena -> Villa Romana del Casale -> Realmonte 숙소권역 -> Valley of the Temples 흐름으로 지도 링크와 관광지 정보를 남깁니다. 저녁 Realmonte 복귀는 숙소 이동으로만 관리해 지도에서 같은 숙소 마커가 중복 표시되지 않게 했습니다.",
+        "Villa Romana del Casale는 Day 6 남동부 해안 루프에 넣기에는 방향이 맞지 않으므로, 실제로 포함하려면 Day 10 이동 중간 정차가 가장 자연스럽습니다.",
+        "오전 Villa Romana del Casale 관람 후 Realmonte 체크인과 짧은 휴식을 확보하고, 16:00 전후 신전의 계곡에 들어가는 구성이 현실적입니다.",
+        "DOCX의 Villa Romana del Casale, Agrigento, 신전들의 계곡, Theron 묘소 메모를 반영해 로마 모자이크와 그리스 신전군을 같은 날의 두 축으로 배치했습니다."
       ],
       routeOverview: [
-        routePoint("day10-route-san-calogero", "San Calogero", "전날 밤 숙소 체크아웃", 37.3029223, 15.1204173, "rental-car"),
+        routePoint("day10-route-costa-saracena", "Costa Saracena", "전날 밤 숙소 체크아웃", 37.3029223, 15.1204173, "rental-car"),
+        routePoint("day10-route-villa-romana", "Villa Romana del Casale", "Piazza Armerina 인근 로마 모자이크 유적", 37.3647239, 14.3345523, "rental-car"),
         routePoint("day10-route-realmonte", "Realmonte", "점심, 체크인, 휴식", 37.3087064, 13.462396, "rental-car"),
-        routePoint("day10-route-agrigento", "Agrigento", "신전의 계곡 오후 관람", 37.2898, 13.5902, "rental-car"),
-        routePoint("day10-route-realmonte-return", "Realmonte", "저녁 숙소 복귀", 37.3087064, 13.462396, "rental-car")
+        routePoint("day10-route-valley-of-temples", "Valley of the Temples", "Agrigento 고고학 공원 오후 관람", 37.2898, 13.5902, "rental-car")
       ],
       cityVisits: [
         {
+          id: "day-10-villa-romana-casale",
+          city: "Villa Romana del Casale",
+          stayDuration: "10:00~11:30 로마 모자이크 유적",
+          routeMode: "walk",
+          entryPoint: "Villa Romana del Casale entrance",
+          coordinates: { lat: 37.3647239, lng: 14.3345523 },
+          spots: [
+            place("day10-villa-romana-del-casale", "Villa Romana del Casale", "로마 모자이크", "Piazza Armerina 인근의 로마 후기 빌라 유적입니다. Day 10 이동 중간에 넣으면 남동부 해안 루프를 깨지 않으면서도 정교한 바닥 모자이크와 로마 귀족 주거 문화를 볼 수 있습니다.", 37.3647239, 14.3345523, villaRomanaImage, "10:00")
+          ],
+          practicalNotes: [
+            "Costa Saracena 숙소권역에서 이른 출발을 해야 오후 Agrigento 일정이 살아납니다.",
+            "Villa Romana del Casale는 내부 모자이크를 천천히 보는 장소라 최소 75~90분은 잡는 편이 좋습니다.",
+            "관람이 길어지면 Realmonte 휴식 시간이 줄어드므로, 신전의 계곡 입장 마감 시간을 당일 오전에 확인하세요."
+          ]
+        },
+        {
           id: "day-10-agrigento-archaeological-park",
           city: "Agrigento Archaeological Park",
-          stayDuration: "15:45~18:45 신전의 계곡 골든아워",
+          stayDuration: "16:00~18:45 신전의 계곡 골든아워",
           routeMode: "walk",
           entryPoint: "Valley of the Temples parking / ticket office",
           coordinates: { lat: 37.2898, lng: 13.5902 },
           spots: [
-            place("day10-valley-of-the-temples", "Valley of the Temples", "고대 유적", "고대 그리스 도시 Akragas의 성역과 신전군을 따라 걷는 Agrigento 핵심 유적입니다.", 37.2898, 13.5902, valleyOfTemplesImage, "15:45"),
-            place("day10-temple-of-concordia", "Temple of Concordia, Agrigento", "고대 신전", "신전의 계곡에서 가장 보존 상태가 뛰어난 도리스식 신전입니다.", 37.2896915, 13.5921636, templeConcordiaImage, "16:35"),
-            place("day10-temple-of-heracles", "Temple of Heracles, Agrigento", "고대 신전", "Concordia와 다른 파편적 유적의 시간감을 보여주는 오래된 신전 구역입니다.", 37.2881592, 13.5861882, templeHeraclesImage, "17:35"),
-            place("day10-tomb-of-theron", "Tomb of Theron", "고대 묘역", "DOCX의 Theron 메모를 반영한 신전의 계곡 안 장례 기념물입니다.", 37.2876732, 13.5853076, tombTheronImage, "18:05")
+            place("day10-valley-of-the-temples", "Valley of the Temples", "고대 유적", "고대 그리스 도시 Akragas의 성역과 신전군을 따라 걷는 Agrigento 핵심 유적입니다.", 37.2898, 13.5902, valleyOfTemplesImage, "16:00"),
+            place("day10-temple-of-concordia", "Temple of Concordia, Agrigento", "고대 신전", "신전의 계곡에서 가장 보존 상태가 뛰어난 도리스식 신전입니다.", 37.2896915, 13.5921636, templeConcordiaImage, "16:45"),
+            place("day10-kolymbethra-garden", "Giardino della Kolymbethra", "고대 정원", "신전의 계곡 안 고대 저수지 터에 조성된 정원입니다. 오렌지와 레몬 나무가 있는 그늘진 휴식 지점으로, 신전 산책 중 숨을 고르기 좋습니다.", 37.2905, 13.5869, valleyOfTemplesImage, "17:20"),
+            place("day10-temple-of-heracles", "Temple of Heracles, Agrigento", "고대 신전", "Concordia와 다른 파편적 유적의 시간감을 보여주는 오래된 신전 구역입니다.", 37.2881592, 13.5861882, templeHeraclesImage, "17:45"),
+            place("day10-tomb-of-theron", "Tomb of Theron", "고대 묘역", "DOCX의 Theron 메모를 반영한 신전의 계곡 안 장례 기념물입니다.", 37.2876732, 13.5853076, tombTheronImage, "18:15")
           ],
           practicalNotes: [
             "Realmonte 숙소 도착 후 바로 유적지로 들어가기보다 체크인, 점심, 60~90분 휴식을 먼저 잡습니다.",
@@ -2522,10 +2450,12 @@ export const sicilyGuideData: SwissGuideData = {
         }
       ],
       places: [
-        place("day10-valley-of-the-temples", "Valley of the Temples", "고대 유적", "고대 그리스 도시 Akragas의 성역과 신전군을 따라 걷는 Agrigento 핵심 유적입니다.", 37.2898, 13.5902, valleyOfTemplesImage, "15:45"),
-        place("day10-temple-of-concordia", "Temple of Concordia, Agrigento", "고대 신전", "신전의 계곡에서 가장 보존 상태가 뛰어난 도리스식 신전입니다.", 37.2896915, 13.5921636, templeConcordiaImage, "16:35"),
-        place("day10-temple-of-heracles", "Temple of Heracles, Agrigento", "고대 신전", "Concordia와 다른 파편적 유적의 시간감을 보여주는 오래된 신전 구역입니다.", 37.2881592, 13.5861882, templeHeraclesImage, "17:35"),
-        place("day10-tomb-of-theron", "Tomb of Theron", "고대 묘역", "DOCX의 Theron 메모를 반영한 신전의 계곡 안 장례 기념물입니다.", 37.2876732, 13.5853076, tombTheronImage, "18:05")
+        place("day10-villa-romana-del-casale", "Villa Romana del Casale", "로마 모자이크", "Piazza Armerina 인근의 로마 후기 빌라 유적입니다. Day 10 이동 중간에 넣으면 남동부 해안 루프를 깨지 않으면서도 정교한 바닥 모자이크와 로마 귀족 주거 문화를 볼 수 있습니다.", 37.3647239, 14.3345523, villaRomanaImage, "10:00"),
+        place("day10-valley-of-the-temples", "Valley of the Temples", "고대 유적", "고대 그리스 도시 Akragas의 성역과 신전군을 따라 걷는 Agrigento 핵심 유적입니다.", 37.2898, 13.5902, valleyOfTemplesImage, "16:00"),
+        place("day10-temple-of-concordia", "Temple of Concordia, Agrigento", "고대 신전", "신전의 계곡에서 가장 보존 상태가 뛰어난 도리스식 신전입니다.", 37.2896915, 13.5921636, templeConcordiaImage, "16:45"),
+        place("day10-kolymbethra-garden", "Giardino della Kolymbethra", "고대 정원", "신전의 계곡 안 고대 저수지 터에 조성된 정원입니다. 오렌지와 레몬 나무가 있는 그늘진 휴식 지점으로, 신전 산책 중 숨을 고르기 좋습니다.", 37.2905, 13.5869, valleyOfTemplesImage, "17:20"),
+        place("day10-temple-of-heracles", "Temple of Heracles, Agrigento", "고대 신전", "Concordia와 다른 파편적 유적의 시간감을 보여주는 오래된 신전 구역입니다.", 37.2881592, 13.5861882, templeHeraclesImage, "17:45"),
+        place("day10-tomb-of-theron", "Tomb of Theron", "고대 묘역", "DOCX의 Theron 메모를 반영한 신전의 계곡 안 장례 기념물입니다.", 37.2876732, 13.5853076, tombTheronImage, "18:15")
       ]
     },
     {
@@ -2540,7 +2470,7 @@ export const sicilyGuideData: SwissGuideData = {
       accommodation: sicilyAccommodations.realmonte,
       editorial: [
         "거리/시간 기준: Realmonte 숙소 -> Scala dei Turchi 약 10~20분, Scala dei Turchi -> Agrigento 구시가지 약 25~35분, Agrigento -> Realmonte 약 20~30분입니다.",
-        "MCP route artifact: data/generated/sicily-day10-12-mcp.json 기준 Realmonte -> Scala dei Turchi -> Via Atenea -> Santa Maria dei Greci -> Realmonte 흐름으로 설계합니다.",
+        "MCP route artifact: data/generated/sicily-day10-12-mcp.json 기준 Realmonte -> Scala dei Turchi -> Agrigento Old Town 흐름으로 설계합니다. 저녁 Realmonte 복귀는 숙소 이동으로만 관리해 같은 숙소 마커가 중복 표시되지 않게 했습니다.",
         "Day10에 신전의 계곡을 본 뒤라 Day11은 고대 유적을 반복하지 않고 자연 해안, 구시가지, 작은 종교 건축으로 균형을 맞춥니다.",
         "Scala dei Turchi는 접근 통제나 안전 제한이 달라질 수 있으므로 절벽 위를 무리하게 걷기보다 공식 전망 지점과 해안 감상 중심으로 잡습니다.",
         "Agrigento 구시가지는 늦은 오후에 배치해 더위를 피하고, Via Atenea 산책과 Santa Maria dei Greci를 함께 보며 도시의 고대·중세 연속성을 읽습니다."
@@ -2548,8 +2478,7 @@ export const sicilyGuideData: SwissGuideData = {
       routeOverview: [
         routePoint("day11-route-realmonte-start", "Realmonte", "숙소 출발", 37.3087064, 13.462396, "rental-car"),
         routePoint("day11-route-scala", "Scala dei Turchi", "오전 해안 전망", 37.2908565, 13.4765073, "rental-car"),
-        routePoint("day11-route-agrigento", "Agrigento", "구시가지 오후 산책", 37.310563, 13.576547, "rental-car"),
-        routePoint("day11-route-realmonte-return", "Realmonte", "저녁 숙소 복귀", 37.3087064, 13.462396, "rental-car")
+        routePoint("day11-route-agrigento-old-town", "Agrigento Old Town", "Via Atenea와 Santa Maria dei Greci 산책", 37.310563, 13.576547, "rental-car")
       ],
       cityVisits: [
         {
@@ -2597,20 +2526,21 @@ export const sicilyGuideData: SwissGuideData = {
       day: 12,
       date: "2026-06-01",
       title: "Western Sicily Transfer",
-      region: "Realmonte / Trapani / Erice / Balestrate",
-      deck: "Realmonte 숙소를 체크아웃해 서쪽으로 길게 이동하는 날입니다. Trapani 항구와 구시가지를 점심 정차로 보고, 오후에는 산 위 마을 Erice를 압축 관람한 뒤 Balestrate 숙소로 들어갑니다.",
+      region: "Realmonte / Saline di Trapani / Trapani / Erice / Balestrate",
+      deck: "Realmonte 숙소를 체크아웃해 서쪽으로 길게 이동하는 날입니다. Trapani 염전과 풍차로 서부 시칠리아의 소금 풍경을 먼저 열고, 항구 구시가지와 산 위 마을 Erice를 압축 관람한 뒤 Balestrate 숙소로 들어갑니다.",
       mapLabel: "Realmonte to Western Sicily map",
       transportMode: "rental-car",
       accommodation: sicilyAccommodations.pianoMilano,
       editorial: [
         "숙소 기준: Realmonte 6/1 체크아웃 후 Contrada Piano Milano, Balestrate 6/1~6/4 체크인입니다.",
-        "거리/시간 기준: Realmonte -> Trapani 약 2시간 30분~3시간, Trapani -> Erice 약 35~50분, Erice -> Balestrate 약 1시간 20분~1시간 40분으로 잡습니다.",
-        "MCP route artifact: data/generated/sicily-day10-12-mcp.json 기준 Realmonte -> Trapani Old Town -> Torre di Ligny -> Erice -> San Giuliano -> Balestrate 흐름으로 지도 링크를 남깁니다.",
-        "Day13에 Scopello와 Segesta가 이어지므로 Day12는 Trapani와 Erice에 집중하고, 서부 숙소 이동일로 과밀하게 만들지 않습니다.",
+        "거리/시간 기준: Realmonte -> Saline di Trapani e Paceco 약 2시간 20분~2시간 50분, 염전 -> Trapani 약 15~25분, Trapani -> Erice 약 35~50분, Erice -> Balestrate 약 1시간 20분~1시간 40분으로 잡습니다.",
+        "MCP route artifact: data/generated/sicily-day10-12-mcp.json 기준 Realmonte -> Saline di Trapani e Paceco -> Trapani Old Town -> Torre di Ligny -> Erice -> San Giuliano -> Balestrate 흐름으로 지도 링크를 남깁니다.",
+        "Day13에 Scopello와 Segesta가 이어지므로 Day12는 Saline, Trapani, Erice 중심으로 압축하고, 염전은 풍차와 핑크빛 소금 풍경을 짧게 보는 하이라이트로 둡니다.",
         "Erice는 구름과 안개에 따라 전망 만족도가 달라지므로, Trapani 점심 후 날씨가 좋으면 Erice를 우선하고 흐리면 구시가지 산책을 조금 더 길게 둡니다."
       ],
       routeOverview: [
         routePoint("day12-route-realmonte", "Realmonte", "숙소 체크아웃", 37.3087064, 13.462396, "rental-car"),
+        routePoint("day12-route-saline-trapani", "Saline di Trapani e Paceco", "염전과 풍차 정차", 37.9812, 12.4962, "rental-car"),
         routePoint("day12-route-trapani", "Trapani", "항구 도시 점심 산책", 38.0174282, 12.5364464, "rental-car"),
         routePoint("day12-route-erice", "Erice", "산 위 중세 마을", 38.03778, 12.5879274, "rental-car"),
         routePoint("day12-route-balestrate", "Balestrate", "Contrada Piano Milano 체크인", 38.0374729, 13.0252165, "rental-car")
@@ -2624,11 +2554,13 @@ export const sicilyGuideData: SwissGuideData = {
           entryPoint: "Trapani port / old town",
           coordinates: { lat: 38.0174282, lng: 12.5364464 },
           spots: [
+            place("day12-saline-trapani-paceco", "Saline di Trapani e Paceco", "염전/풍차", "Trapani 외곽의 염전과 옛 풍차가 이어지는 서부 시칠리아 대표 풍경입니다. 날씨가 좋으면 물빛과 소금밭이 분홍빛으로 변하고, Erice에서 내려다보는 서부 해안 지형과도 자연스럽게 연결됩니다.", 37.9812, 12.4962, trapaniPortImage, "11:55"),
             place("day12-trapani-old-town", "Trapani Old Town", "항구 도시", "서부 시칠리아의 항구와 구시가지 리듬을 짧게 잡는 점심 정차지입니다.", 38.0174282, 12.5364464, trapaniPortImage, "12:30"),
             place("day12-torre-di-ligny", "Torre di Ligny, Trapani", "해안 방어탑", "Trapani 서쪽 끝에서 바다와 항구 지형을 이해하기 좋은 방어탑입니다.", 38.0161379, 12.5009071, torreLignyImage, "14:00")
           ],
           practicalNotes: [
             "Realmonte에서 긴 운전을 한 뒤라 Trapani는 점심, 항구 산책, Torre di Ligny 짧은 정차 정도로 끊습니다.",
+            "Saline di Trapani e Paceco는 해질녘이 가장 좋지만 Day12 이동량이 크므로, 날씨와 체력에 따라 점심 전 짧은 정차 또는 Erice 후 석양 정차 중 하나로 조정하세요.",
             "구시가지 중심에 깊게 들어가기보다 주차 가능한 가장자리에서 도보로 움직이면 Erice 이동 시간이 안정적입니다.",
             "Erice 날씨가 좋으면 Trapani 체류를 2시간 안팎으로 제한하고 산 위 전망 시간을 확보하세요."
           ]
@@ -2642,6 +2574,7 @@ export const sicilyGuideData: SwissGuideData = {
           coordinates: { lat: 38.03778, lng: 12.5879274 },
           spots: [
             place("day12-erice", "Erice", "중세 산악 마을", "Trapani 위 Monte Erice 정상부의 돌길과 전망을 보는 서부 시칠리아 핵심 마을입니다.", 38.03778, 12.5879274, ericePanoramaImage, "15:35"),
+            place("day12-maria-grammatico", "Maria Grammatico", "제과점", "Erice의 대표 과자 정차지입니다. Genovesi를 하나씩 들고 Balio Gardens로 이어가면 산 위 마을 산책의 만족도가 확 올라갑니다.", 38.0382, 12.5865, ericePanoramaImage, "16:10"),
             place("day12-church-san-giuliano", "Church of San Giuliano, Erice", "역사 교회", "Erice 골목 안쪽에서 마을의 종교적 깊이를 보여주는 작은 교회입니다.", 38.0368841, 12.5890647, churchSanGiulianoImage, "16:35"),
             place("day12-giardini-del-balio", "Giardini del Balio, Erice", "전망 정원", "Trapani 해안과 서부 시칠리아 지형을 위에서 정리하기 좋은 Erice의 전망 정원입니다.", 38.036493, 12.589991, giardiniBalioImage, "17:25")
           ],
@@ -2653,9 +2586,11 @@ export const sicilyGuideData: SwissGuideData = {
         }
       ],
       places: [
+        place("day12-saline-trapani-paceco", "Saline di Trapani e Paceco", "염전/풍차", "Trapani 외곽의 염전과 옛 풍차가 이어지는 서부 시칠리아 대표 풍경입니다. 날씨가 좋으면 물빛과 소금밭이 분홍빛으로 변하고, Erice에서 내려다보는 서부 해안 지형과도 자연스럽게 연결됩니다.", 37.9812, 12.4962, trapaniPortImage, "11:55"),
         place("day12-trapani-old-town", "Trapani Old Town", "항구 도시", "서부 시칠리아의 항구와 구시가지 리듬을 짧게 잡는 점심 정차지입니다.", 38.0174282, 12.5364464, trapaniPortImage, "12:30"),
         place("day12-torre-di-ligny", "Torre di Ligny, Trapani", "해안 방어탑", "Trapani 서쪽 끝에서 바다와 항구 지형을 이해하기 좋은 방어탑입니다.", 38.0161379, 12.5009071, torreLignyImage, "14:00"),
         place("day12-erice", "Erice", "중세 산악 마을", "Trapani 위 Monte Erice 정상부의 돌길과 전망을 보는 서부 시칠리아 핵심 마을입니다.", 38.03778, 12.5879274, ericePanoramaImage, "15:35"),
+        place("day12-maria-grammatico", "Maria Grammatico", "제과점", "Erice의 대표 과자 정차지입니다. Genovesi를 하나씩 들고 Balio Gardens로 이어가면 산 위 마을 산책의 만족도가 확 올라갑니다.", 38.0382, 12.5865, ericePanoramaImage, "16:10"),
         place("day12-church-san-giuliano", "Church of San Giuliano, Erice", "역사 교회", "Erice 골목 안쪽에서 마을의 종교적 깊이를 보여주는 작은 교회입니다.", 38.0368841, 12.5890647, churchSanGiulianoImage, "16:35"),
         place("day12-giardini-del-balio", "Giardini del Balio, Erice", "전망 정원", "Trapani 해안과 서부 시칠리아 지형을 위에서 정리하기 좋은 Erice의 전망 정원입니다.", 38.036493, 12.589991, giardiniBalioImage, "17:25")
       ]
@@ -2673,7 +2608,8 @@ export const sicilyGuideData: SwissGuideData = {
       editorial: [
         "Day12에 Trapani와 Erice를 이미 봤기 때문에 Day13은 같은 권역을 반복하지 않고 Segesta와 Scopello 해안으로 분산합니다.",
         "MCP route artifact: data/generated/sicily-day13-15-mcp.json 기준 Balestrate -> Segesta -> Scopello -> Balestrate 흐름으로 지도 링크를 남깁니다.",
-        "Segesta는 신전과 극장을 분리해 체류 시간을 잡고, Scopello는 Tonnara/Faraglioni/Zingaro를 오후 해안 루프로 압축합니다."
+        "Segesta는 신전과 극장을 분리해 체류 시간을 잡고, Scopello는 Tonnara/Faraglioni/Zingaro를 오후 해안 루프로 압축합니다.",
+        "Zingaro 남쪽 입구에서는 걷기 좋은 신발, 수영복, 수건, 물을 준비하고, 첫 번째 해변인 Cala Punta Meno까지 짧게 들어가는 선택지를 둡니다."
       ],
       routeOverview: [
         routePoint("day13-route-balestrate-start", "Balestrate", "Contrada Piano Milano 출발", 38.0374729, 13.0252165, "rental-car"),
@@ -2710,11 +2646,13 @@ export const sicilyGuideData: SwissGuideData = {
             place("day13-scopello", "Scopello", "해안 마을", "Tonnara와 Zingaro 해안으로 이어지는 작은 서부 시칠리아 마을입니다.", 38.0702839, 12.8179128, scopelloVillageImage, "13:10"),
             place("day13-tonnara-di-scopello", "Tonnara di Scopello", "해안 유산", "참치잡이 어장과 Faraglioni 풍경이 함께 남은 Scopello의 대표 해안 유산입니다.", 38.069131, 12.825169, tonnaraScopelloImage, "14:05"),
             place("day13-faraglioni-di-scopello", "Faraglioni di Scopello", "해안 절경", "Scopello 앞바다의 바위 기둥과 맑은 물빛을 보는 서부 해안 핵심 장면입니다.", 38.070251, 12.825695, faraglioniScopelloImage, "15:00"),
-            place("day13-zingaro-nature-reserve", "Zingaro Nature Reserve", "자연보호구역", "Scopello 북쪽으로 이어지는 보호 해안의 남쪽 입구 전망을 짧게 보는 자연 카드입니다.", 38.093339, 12.806474, zingaroReserveImage, "15:45")
+            place("day13-zingaro-nature-reserve", "Zingaro Nature Reserve", "자연보호구역", "Scopello 북쪽으로 이어지는 보호 해안의 남쪽 입구 전망을 짧게 보는 자연 카드입니다.", 38.093339, 12.806474, zingaroReserveImage, "15:45"),
+            place("day13-cala-punta-meno", "Cala Punta Meno", "해변", "Zingaro 남쪽 입구에서 짧게 걸어 들어가 만날 수 있는 투명한 물빛의 작은 해변 후보입니다. 시간과 체력이 허락하면 수영복과 수건을 준비해 짧은 물놀이 또는 발 담그기 정차로 넣습니다.", 38.0995, 12.8035, zingaroReserveImage, "16:10")
           ],
           practicalNotes: [
             "Scopello와 Tonnara 주변은 주차와 입장 조건이 변할 수 있어 도착 직후 현장 상황을 확인하세요.",
-            "Zingaro는 전체 트레일이 아니라 남쪽 입구와 짧은 전망 중심으로 잡아 하루를 과밀하게 만들지 않습니다.",
+            "Zingaro는 전체 트레일이 아니라 남쪽 입구, Cala Punta Meno 방향의 짧은 산책, 첫 해변 물빛 확인 중심으로 잡아 하루를 과밀하게 만들지 않습니다.",
+            "걷기 좋은 신발, 수영복, 수건, 물을 차에서 바로 꺼낼 수 있게 준비하세요.",
             "17:15 전후 Scopello를 출발하면 Balestrate 숙소 복귀와 저녁 시간이 안정적입니다."
           ]
         }
@@ -2725,7 +2663,8 @@ export const sicilyGuideData: SwissGuideData = {
         place("day13-scopello", "Scopello", "해안 마을", "Tonnara와 Zingaro 해안으로 이어지는 작은 서부 시칠리아 마을입니다.", 38.0702839, 12.8179128, scopelloVillageImage, "13:10"),
         place("day13-tonnara-di-scopello", "Tonnara di Scopello", "해안 유산", "참치잡이 어장과 Faraglioni 풍경이 함께 남은 Scopello의 대표 해안 유산입니다.", 38.069131, 12.825169, tonnaraScopelloImage, "14:05"),
         place("day13-faraglioni-di-scopello", "Faraglioni di Scopello", "해안 절경", "Scopello 앞바다의 바위 기둥과 맑은 물빛을 보는 서부 해안 핵심 장면입니다.", 38.070251, 12.825695, faraglioniScopelloImage, "15:00"),
-        place("day13-zingaro-nature-reserve", "Zingaro Nature Reserve", "자연보호구역", "Scopello 북쪽으로 이어지는 보호 해안의 남쪽 입구 전망을 짧게 보는 자연 카드입니다.", 38.093339, 12.806474, zingaroReserveImage, "15:45")
+        place("day13-zingaro-nature-reserve", "Zingaro Nature Reserve", "자연보호구역", "Scopello 북쪽으로 이어지는 보호 해안의 남쪽 입구 전망을 짧게 보는 자연 카드입니다.", 38.093339, 12.806474, zingaroReserveImage, "15:45"),
+        place("day13-cala-punta-meno", "Cala Punta Meno", "해변", "Zingaro 남쪽 입구에서 짧게 걸어 들어가 만날 수 있는 투명한 물빛의 작은 해변 후보입니다. 시간과 체력이 허락하면 수영복과 수건을 준비해 짧은 물놀이 또는 발 담그기 정차로 넣습니다.", 38.0995, 12.8035, zingaroReserveImage, "16:10")
       ]
     },
     {
@@ -2761,12 +2700,13 @@ export const sicilyGuideData: SwissGuideData = {
             place("day14-palermo-cathedral", "Palermo Cathedral", "성당", "Palermo의 다층적인 지배사와 건축 양식이 겹친 대표 성당입니다.", 38.1143321, 13.3560504, palermoCathedralImage, "10:15"),
             place("day14-quattro-canti", "Quattro Canti", "광장", "Palermo 구시가지의 두 중심축이 만나는 바로크 교차점입니다.", 38.1156779, 13.3614681, quattroCantiImage, "11:15"),
             place("day14-fontana-pretoria", "Fontana Pretoria", "분수", "르네상스 조각과 Palermo 중심 광장의 격식을 보여주는 대표 분수입니다.", 38.115569, 13.362073, fontanaPretoriaImage, "11:35"),
+            place("day14-monastero-santa-caterina", "Monastero di Santa Caterina", "성당/디저트", "Fontana Pretoria 근처의 성당과 수도원 베이커리 정차지입니다. 전통 방식 디저트와 카놀리 휴식을 짧게 넣기 좋습니다.", 38.1152, 13.3624, fontanaPretoriaImage, "12:00"),
             place("day14-mercato-ballaro", "Mercato Ballaro", "시장", "Palermo의 생활감과 길거리 음식 문화가 가장 생생하게 드러나는 시장 골목입니다.", 38.1106144, 13.3636751, ballaroMarketImage, "12:10"),
             place("day14-cappella-palatina", "Cappella Palatina", "궁전 예배당", "비잔틴 모자이크와 노르만 왕권, 이슬람 장식 감각이 결합된 Palermo의 핵심 공간입니다.", 38.111169, 13.353078, cappellaPalatinaImage, "13:15")
           ],
           practicalNotes: [
             "Balestrate에서 Palermo까지 약 50분~1시간 10분으로 잡고, 도심 ZTL 진입을 피하는 주차장을 먼저 정하세요.",
-            "Palermo Cathedral, Quattro Canti, Fontana Pretoria, Ballaro, Cappella Palatina는 도보권으로 묶되 대기 시간이 길면 시장 체류를 줄입니다.",
+            "Palermo Cathedral, Quattro Canti, Fontana Pretoria, Santa Caterina, Ballaro, Cappella Palatina는 도보권으로 묶되 대기 시간이 길면 시장 체류를 줄입니다.",
             "Monreale 이동이 남아 있으므로 14:45 전후에는 Palermo 도심을 빠져나오는 기준을 둡니다."
           ]
         },
@@ -2782,7 +2722,7 @@ export const sicilyGuideData: SwissGuideData = {
           ],
           practicalNotes: [
             "Palermo에서 Monreale까지는 교통 상황에 따라 30~45분 이상 걸릴 수 있어 오후 출발 시간을 고정하세요.",
-            "내부 모자이크를 최우선으로 보고, 시간이 남으면 회랑이나 전망을 선택합니다.",
+            "내부 모자이크를 최우선으로 보고, 시간이 남으면 옥상 테라스에서 Palermo 시내와 Conca d'Oro 전망을 선택합니다.",
             "Balestrate 복귀가 남아 있으니 폐장 시간과 주차장 위치를 먼저 확인하세요."
           ]
         }
@@ -2791,6 +2731,7 @@ export const sicilyGuideData: SwissGuideData = {
         place("day14-palermo-cathedral", "Palermo Cathedral", "성당", "Palermo의 다층적인 지배사와 건축 양식이 겹친 대표 성당입니다.", 38.1143321, 13.3560504, palermoCathedralImage, "10:15"),
         place("day14-quattro-canti", "Quattro Canti", "광장", "Palermo 구시가지의 두 중심축이 만나는 바로크 교차점입니다.", 38.1156779, 13.3614681, quattroCantiImage, "11:15"),
         place("day14-fontana-pretoria", "Fontana Pretoria", "분수", "르네상스 조각과 Palermo 중심 광장의 격식을 보여주는 대표 분수입니다.", 38.115569, 13.362073, fontanaPretoriaImage, "11:35"),
+        place("day14-monastero-santa-caterina", "Monastero di Santa Caterina", "성당/디저트", "Fontana Pretoria 근처의 성당과 수도원 베이커리 정차지입니다. 전통 방식 디저트와 카놀리 휴식을 짧게 넣기 좋습니다.", 38.1152, 13.3624, fontanaPretoriaImage, "12:00"),
         place("day14-mercato-ballaro", "Mercato Ballaro", "시장", "Palermo의 생활감과 길거리 음식 문화가 가장 생생하게 드러나는 시장 골목입니다.", 38.1106144, 13.3636751, ballaroMarketImage, "12:10"),
         place("day14-cappella-palatina", "Cappella Palatina", "궁전 예배당", "비잔틴 모자이크와 노르만 왕권, 이슬람 장식 감각이 결합된 Palermo의 핵심 공간입니다.", 38.111169, 13.353078, cappellaPalatinaImage, "13:15"),
         place("day14-cattedrale-di-monreale", "Cattedrale di Monreale", "성당", "황금 모자이크로 노르만 시칠리아 왕국의 문화적 규모를 보여주는 대성당입니다.", 38.0820509, 13.29207, monrealeCathedralImage, "15:35")
@@ -2809,7 +2750,8 @@ export const sicilyGuideData: SwissGuideData = {
       editorial: [
         "장거리 이동일이므로 관광지는 Cefalu와 Scilla처럼 동선상 의미가 큰 짧은 정차지로 제한합니다.",
         "MCP route artifact: data/generated/sicily-day13-15-mcp.json 기준 Balestrate -> Cefalu -> Messina ferry -> Villa San Giovanni -> Scilla -> Gioia Tauro 흐름으로 지도 링크를 남깁니다.",
-        "Messina 해협 페리 대기와 운항 변수를 고려해, Cefalu와 Scilla 체류는 각각 1~2시간 안쪽으로 관리합니다."
+        "Messina 해협 페리 대기와 운항 변수를 고려해, Cefalu와 Scilla 체류는 각각 1~2시간 안쪽으로 관리합니다.",
+        "Scilla 시간이 맞으면 Chianalea 바다 위 테라스 식당에서 이른 저녁을 먹고, 지연되면 산책만 남긴 뒤 Gioia Tauro 체크인을 우선합니다."
       ],
       routeOverview: [
         routePoint("day15-route-balestrate-start", "Balestrate", "Contrada Piano Milano 체크아웃", 38.0374729, 13.0252165, "rental-car"),
@@ -2850,7 +2792,7 @@ export const sicilyGuideData: SwissGuideData = {
           ],
           practicalNotes: [
             "Messina 해협 페리 대기 시간이 길어지면 Scilla는 Chianalea 짧은 산책만 남기고 성채를 선택으로 줄입니다.",
-            "Scilla에서 Gioia Tauro Via Metauro 숙소까지 약 40~55분으로 잡아 해지기 전 이동을 우선합니다.",
+            "Scilla에서 Gioia Tauro Via Metauro 숙소까지 약 40~55분으로 잡습니다. 시간이 맞으면 Chianalea의 바다 위 테라스 식당에서 이른 저녁을 넣기 좋습니다.",
             "이 날은 관광보다 안전한 장거리 이동과 체크인이 우선이므로 피로하면 Scilla 정차를 과감히 줄여도 됩니다."
           ]
         }
@@ -2875,7 +2817,8 @@ export const sicilyGuideData: SwissGuideData = {
       editorial: [
         "확정 숙소 기준: Via Metauro, Gioia Tauro 6/5 체크아웃 -> Strada Provinciale 24b, Calvanico 6/5 체크인입니다.",
         "MCP route artifact: data/generated/sicily-day16-19-mcp.json 기준 Gioia Tauro -> Tropea -> Pizzo -> Calvanico 순서로 설계했습니다. Day16 MCP route call은 장거리 다중 정차 요청에서 timeout이 발생해 결과 JSON에 오류를 보관했고, 동선은 LLM 보강으로 체류 시간을 보수적으로 조정했습니다.",
-        "장거리 북상일이므로 Paestum, Naples, Amalfi 같은 추가 대형 명소는 넣지 않고 Calabria 해안의 Tropea/Pizzo만 압축해 봅니다."
+        "장거리 북상일이므로 Paestum, Naples, Amalfi 같은 추가 대형 명소는 넣지 않고 Calabria 해안의 Tropea/Pizzo만 압축해 봅니다.",
+        "Pizzo에서는 Piazza della Repubblica 주변 카페에서 Tartufo di Pizzo를 짧은 디저트 정차로 넣어 Calabria의 대표 맛을 일정에 남깁니다."
       ],
       routeOverview: [
         routePoint("day16-route-gioia-tauro", "Gioia Tauro", "Via Metauro 숙소 체크아웃", 38.4296851, 15.8826302, "rental-car"),
@@ -2893,10 +2836,11 @@ export const sicilyGuideData: SwissGuideData = {
           coordinates: { lat: 38.6786, lng: 15.8972 },
           spots: [
             place("day16-tropea-old-town", "Tropea Old Town", "해안 마을", "절벽 위 구시가지와 티레니아해 전망을 짧게 보는 Calabria 대표 해안 정차지입니다.", 38.6786, 15.8972, tropeaOldTownImage, "09:45"),
+            place("day16-affaccio-del-gazzo", "Affaccio del Gazzo", "전망대", "Santa Maria dell'Isola를 정면에 가깝게 바라볼 수 있는 Tropea의 핵심 포토 스팟입니다.", 38.6789, 15.8992, tropeaOldTownImage, "10:15"),
             place("day16-santa-maria-isola", "Sanctuary of Santa Maria dell'Isola, Tropea", "전망 성지", "Tropea 해안의 상징처럼 바위 위에 놓인 성지와 전망 포인트입니다.", 38.6792, 15.8986, santaMariaIsolaTropeaImage, "10:35")
           ],
           practicalNotes: [
-            "Gioia Tauro에서 Tropea까지 약 1시간~1시간 20분으로 잡고, 주차 후 구시가지와 전망 성지만 압축해 봅니다.",
+            "Gioia Tauro에서 Tropea까지 약 1시간~1시간 20분으로 잡고, 주차 후 구시가지, Affaccio del Gazzo, 전망 성지만 압축해 봅니다.",
             "해변 체류를 길게 잡으면 Calvanico 도착이 늦어지므로 오전 정차는 1.5시간 안팎으로 끊습니다.",
             "계단과 경사가 있어 큰 짐은 차에 보이지 않게 정리하고 가볍게 움직이세요."
           ]
@@ -2910,10 +2854,12 @@ export const sicilyGuideData: SwissGuideData = {
           coordinates: { lat: 38.7359, lng: 16.1607 },
           spots: [
             place("day16-chiesa-piedigrotta", "Chiesa di Piedigrotta, Pizzo", "해안 성소", "바위와 해안 지형 속에 조성된 Pizzo의 독특한 성소입니다.", 38.7435, 16.1742, piedigrottaPizzoImage, "12:35"),
-            place("day16-castello-murat", "Castello Murat, Pizzo", "해안 성채", "나폴레옹 시대와 남부 이탈리아 해안 방어의 기억을 함께 보여주는 성채입니다.", 38.7347, 16.1622, castelloMuratPizzoImage, "13:30")
+            place("day16-castello-murat", "Castello Murat, Pizzo", "해안 성채", "나폴레옹 시대와 남부 이탈리아 해안 방어의 기억을 함께 보여주는 성채입니다.", 38.7347, 16.1622, castelloMuratPizzoImage, "13:30"),
+            place("day16-tartufo-di-pizzo", "Tartufo di Pizzo / Piazza della Repubblica", "디저트", "Pizzo 중심 광장 주변 카페에서 맛보는 Calabria 대표 디저트입니다. 초콜릿과 헤이즐넛 젤라토 안에 초코 시럽이 들어간 타르투포를 짧은 점심 후 디저트로 넣으면 Pizzo 정차의 기억이 선명해집니다.", 38.7357, 16.1616, castelloMuratPizzoImage, "14:00")
           ],
           practicalNotes: [
             "Tropea에서 Pizzo까지 약 1시간 전후로 보고, 점심은 Pizzo 중심부에서 짧게 해결하는 구성이 안전합니다.",
+            "Piazza della Repubblica 주변 카페에서 Tartufo di Pizzo를 먹되, 디저트 때문에 Calvanico 출발 시간이 늦어지지 않게 20~30분 안에서 끊습니다.",
             "Piedigrotta와 Castello Murat을 모두 보더라도 각 장소를 30~45분 안에서 관리해야 Calvanico 이동 시간이 안정적입니다.",
             "Pizzo에서 Calvanico까지는 장거리 고속도로 이동이 남아 있으므로 늦어도 14:30 전후 출발을 권장합니다."
           ]
@@ -2921,76 +2867,82 @@ export const sicilyGuideData: SwissGuideData = {
       ],
       places: [
         place("day16-tropea-old-town", "Tropea Old Town", "해안 마을", "절벽 위 구시가지와 티레니아해 전망을 짧게 보는 Calabria 대표 해안 정차지입니다.", 38.6786, 15.8972, tropeaOldTownImage, "09:45"),
+        place("day16-affaccio-del-gazzo", "Affaccio del Gazzo", "전망대", "Santa Maria dell'Isola를 정면에 가깝게 바라볼 수 있는 Tropea의 핵심 포토 스팟입니다.", 38.6789, 15.8992, tropeaOldTownImage, "10:15"),
         place("day16-santa-maria-isola", "Sanctuary of Santa Maria dell'Isola, Tropea", "전망 성지", "Tropea 해안의 상징처럼 바위 위에 놓인 성지와 전망 포인트입니다.", 38.6792, 15.8986, santaMariaIsolaTropeaImage, "10:35"),
         place("day16-chiesa-piedigrotta", "Chiesa di Piedigrotta, Pizzo", "해안 성소", "바위와 해안 지형 속에 조성된 Pizzo의 독특한 성소입니다.", 38.7435, 16.1742, piedigrottaPizzoImage, "12:35"),
-        place("day16-castello-murat", "Castello Murat, Pizzo", "해안 성채", "나폴레옹 시대와 남부 이탈리아 해안 방어의 기억을 함께 보여주는 성채입니다.", 38.7347, 16.1622, castelloMuratPizzoImage, "13:30")
+        place("day16-castello-murat", "Castello Murat, Pizzo", "해안 성채", "나폴레옹 시대와 남부 이탈리아 해안 방어의 기억을 함께 보여주는 성채입니다.", 38.7347, 16.1622, castelloMuratPizzoImage, "13:30"),
+        place("day16-tartufo-di-pizzo", "Tartufo di Pizzo / Piazza della Repubblica", "디저트", "Pizzo 중심 광장 주변 카페에서 맛보는 Calabria 대표 디저트입니다. 초콜릿과 헤이즐넛 젤라토 안에 초코 시럽이 들어간 타르투포를 짧은 점심 후 디저트로 넣으면 Pizzo 정차의 기억이 선명해집니다.", 38.7357, 16.1616, castelloMuratPizzoImage, "14:00")
       ]
     },
     {
       id: "sicily-day-17-guide",
       day: 17,
       date: "2026-06-06",
-      title: "Amalfi, Pompeii and Rome Final Night",
-      region: "Calvanico / Amalfi / Pompeii / Rome",
-      deck: "Campania 숙소에서 출발해 Amalfi 해안을 짧게 보고, Pompeii를 마지막 고대 유적 핵심 관람지로 본 뒤 다음 날 오전 FCO 출국을 위해 로마 최종 숙소로 들어가는 날입니다.",
-      mapLabel: "Amalfi Pompeii and Rome final night map",
+      title: "Salerno Ferry, Amalfi, Pompeii and Rome Final Night",
+      region: "Calvanico / Salerno / Amalfi / Pompeii / Rome",
+      deck: "Campania 숙소에서 Salerno로 내려가 페리로 Amalfi를 가볍게 보고, 오후에는 Pompeii를 3시간 집중 투어한 뒤 다음 날 오전 FCO 출국을 위해 로마 최종 숙소로 들어가는 날입니다.",
+      mapLabel: "Salerno Amalfi Pompeii and Rome final night map",
       transportMode: "rental-car",
       accommodation: sicilyAccommodations.romeFinal,
       editorial: [
-        "수정 기준: Calvanico -> Amalfi -> Pompeii Archaeological Park -> Via della Riserva dell'Albaceto 25 Rome 순서로 로마 복귀 전 Amalfi 해안 정차를 추가했습니다.",
-        "6/7 오전 FCO 10:30 출국이 있으므로 Amalfi는 짧은 해안 도시 정차로 두고, Pompeii는 핵심 루프만 압축합니다.",
+        "동선 조정 기준: Calvanico -> Salerno parking/port -> Amalfi ferry -> Salerno -> Pompeii Archaeological Park -> Via della Riserva dell'Albaceto 25 Rome 순서입니다.",
+        "Amalfi 해안 도로 주차와 정체 리스크를 줄이기 위해 Salerno에 차를 두고 왕복 페리로 Amalfi만 선명하게 확보합니다.",
+        "6/7 오전 FCO 10:30 출국이 있으므로 Pompeii는 오후 3시간 핵심 루프로 압축하고, 페리 지연 시 Amalfi 체류를 줄이는 쪽을 우선합니다.",
         "Rome 최종 숙소 체크인 후에는 렌트카 반납 위치, 공항 이동 시간, 짐 정리를 우선합니다."
       ],
       routeOverview: [
         routePoint("day17-route-calvanico", "Calvanico", "Strada Provinciale 24b 체크아웃", 40.7783405, 14.8294063, "rental-car"),
-        routePoint("day17-route-amalfi", "Amalfi", "로마 복귀 전 해안 도시 정차", 40.634, 14.6027, "rental-car"),
-        routePoint("day17-route-pompeii", "Pompeii", "고대 도시 유적 집중 관람", 40.7484, 14.4847, "rental-car"),
+        routePoint("day17-route-salerno", "Salerno", "주차 후 Amalfi 왕복 페리, 복귀 후 Pompeii 이동", 40.6779, 14.7659, "rental-car"),
+        routePoint("day17-route-amalfi", "Amalfi", "페리로 접근하는 해안 도시 정차", 40.634, 14.6027, "ferry"),
+        routePoint("day17-route-pompeii", "Pompeii", "오후 3시간 고대 도시 집중 관람", 40.7484, 14.4847, "rental-car"),
         routePoint("day17-route-rome-final", "Rome Final Stay", "Via della Riserva dell'Albaceto, 25 체크인", 41.8832089, 12.3482148, "rental-car"),
         routePoint("day17-route-fiumicino-prep", "Rome Fiumicino", "다음날 출국 기준 공항", 41.8003, 12.2389, "rental-car")
       ],
       cityVisits: [
         {
-          id: "day17-amalfi-coast",
-          city: "Amalfi",
-          stayDuration: "09:20~10:35 해안 도시 짧은 정차",
-          routeMode: "drive",
+          id: "day17-salerno-amalfi-ferry",
+          city: "Salerno / Amalfi Ferry",
+          stayDuration: "08:30~13:50 Salerno 주차, Amalfi 왕복 페리와 해안 도시 산책",
+          routeMode: "ferry",
           entryPoint: "Calvanico",
-          coordinates: { lat: 40.634, lng: 14.6027 },
+          coordinates: { lat: 40.6779, lng: 14.7659 },
           spots: [
-            place("day17-amalfi", "Amalfi", "해안 도시", "로마 복귀 전 Campania 해안의 색을 한 번 확보하는 짧은 정차입니다. 긴 해안 드라이브가 아니라 Amalfi 중심부와 항구 주변을 압축해서 봅니다.", 40.634, 14.6027, amalfiImage, "09:20")
+            place("day17-amalfi", "Amalfi", "해안 도시", "Salerno에서 페리로 접근해 Campania 해안의 색을 짧고 선명하게 확보하는 정차입니다. 긴 해안 드라이브가 아니라 Amalfi 중심부와 항구 주변을 압축해서 봅니다.", 40.634, 14.6027, amalfiImage, "10:15")
           ],
           practicalNotes: [
-            "Calvanico에서 Amalfi까지는 산길과 해안 교통 변수 때문에 여유를 두고 출발하세요.",
-            "이 날은 Pompeii와 Rome 이동이 이어지므로 Amalfi는 60~75분 정도의 짧은 정차로 관리합니다.",
-            "주차가 어렵거나 해안 교통이 밀리면 Amalfi 체류를 줄이고 Pompeii 입장 시간을 우선합니다."
+            "Salerno에 주차하고 페리로 Amalfi를 왕복하면 Amalfi 해안 도로 주차와 정체 리스크를 크게 줄일 수 있습니다.",
+            "09:40 Salerno 출발, 10:15 Amalfi 도착, 12:45 Amalfi 출발, 13:20 Salerno 복귀를 기준으로 잡으면 Pompeii 오후 3시간 관람이 가장 안정적입니다.",
+            "페리 지연이나 매진 가능성이 있으면 Amalfi 체류를 줄이고 Pompeii 입장 시간을 우선합니다."
           ]
         },
         {
           id: "day17-pompeii-archaeological-park",
           city: "Pompeii Archaeological Park",
-          stayDuration: "12:00~14:30 고대 도시 핵심 루프",
+          stayDuration: "14:30~17:30 고대 도시 핵심 루프와 소르베 휴식",
           routeMode: "walk",
-          entryPoint: "Amalfi",
+          entryPoint: "Salerno",
           coordinates: { lat: 40.7484, lng: 14.4847 },
           spots: [
-            place("day17-pompeii-park", "Pompeii Archaeological Park", "고고학 공원", "베수비오 화산이 남긴 고대 로마 도시의 시간층을 보는 핵심 유적입니다.", 40.7484, 14.4847, pompeiiParkImage, "12:00"),
-            place("day17-forum-pompeii", "Forum of Pompeii", "고대 광장", "Pompeii의 정치·종교·상업 중심이었던 포룸 구역입니다.", 40.7481, 14.4842, forumPompeiiImage, "12:45"),
-            place("day17-villa-mysteries", "Villa of the Mysteries, Pompeii", "벽화 유적", "Dionysian fresco로 유명한 Pompeii 외곽의 주거 유적입니다.", 40.7513, 14.4769, villaMysteriesImage, "13:30"),
-            place("day17-amphitheatre-pompeii", "Amphitheatre of Pompeii", "원형 경기장", "Pompeii 동쪽에 남은 가장 오래된 로마 원형 경기장 중 하나입니다.", 40.7512, 14.4936, amphitheatrePompeiiImage, "14:10")
+            place("day17-pompeii-park", "Pompeii Archaeological Park", "고고학 공원", "베수비오 화산이 남긴 고대 로마 도시의 시간층을 보는 핵심 유적입니다.", 40.7484, 14.4847, pompeiiParkImage, "14:30"),
+            place("day17-forum-pompeii", "Forum of Pompeii", "고대 광장", "Pompeii의 정치·종교·상업 중심이었던 포룸 구역입니다.", 40.7481, 14.4842, forumPompeiiImage, "15:10"),
+            place("day17-villa-mysteries", "Villa of the Mysteries, Pompeii", "벽화 유적", "Dionysian fresco로 유명한 Pompeii 외곽의 주거 유적입니다.", 40.7513, 14.4769, villaMysteriesImage, "16:00"),
+            place("day17-amphitheatre-pompeii", "Amphitheatre of Pompeii", "원형 경기장", "Pompeii 동쪽에 남은 가장 오래된 로마 원형 경기장 중 하나입니다.", 40.7512, 14.4936, amphitheatrePompeiiImage, "16:50"),
+            place("day17-lungo-garden-sorbet", "Lungo Garden area", "휴식", "Pompeii 관람 후 Lungo Garden 근처에서 레몬 소르베로 당과 수분을 보충하는 짧은 회복 포인트입니다.", 40.7489, 14.4881, pompeiiParkImage, "17:25")
           ],
           practicalNotes: [
-            "Amalfi에서 Pompeii까지 이동 시간이 교통에 따라 흔들리므로 Pompeii는 핵심 구역만 압축합니다.",
+            "Pompeii는 오후 14:30 전후 입장을 목표로 잡고, 4인 일행 체력 관리를 위해 Lungo Garden 근처 소르베 휴식을 마지막에 넣습니다.",
             "Villa of the Mysteries와 Amphitheatre는 공원 양끝에 가까워 체력이 부족하면 하나를 줄이고 Forum 주변 체류를 늘리는 대안이 안전합니다.",
-            "Rome 이동이 길게 남아 있으므로 14:30 전후에는 Pompeii를 빠져나오는 기준으로 관리합니다."
+            "Rome 이동이 길게 남아 있으므로 17:45~18:00 전후에는 Pompeii를 빠져나오는 기준으로 관리합니다."
           ]
         }
       ],
       places: [
-        place("day17-amalfi", "Amalfi", "해안 도시", "로마 복귀 전 Campania 해안의 색을 한 번 확보하는 짧은 정차입니다. 긴 해안 드라이브가 아니라 Amalfi 중심부와 항구 주변을 압축해서 봅니다.", 40.634, 14.6027, amalfiImage, "09:20"),
-        place("day17-pompeii-park", "Pompeii Archaeological Park", "고고학 공원", "베수비오 화산이 남긴 고대 로마 도시의 시간층을 보는 핵심 유적입니다.", 40.7484, 14.4847, pompeiiParkImage, "12:00"),
-        place("day17-forum-pompeii", "Forum of Pompeii", "고대 광장", "Pompeii의 정치·종교·상업 중심이었던 포룸 구역입니다.", 40.7481, 14.4842, forumPompeiiImage, "12:45"),
-        place("day17-villa-mysteries", "Villa of the Mysteries, Pompeii", "벽화 유적", "Dionysian fresco로 유명한 Pompeii 외곽의 주거 유적입니다.", 40.7513, 14.4769, villaMysteriesImage, "13:30"),
-        place("day17-amphitheatre-pompeii", "Amphitheatre of Pompeii", "원형 경기장", "Pompeii 동쪽에 남은 가장 오래된 로마 원형 경기장 중 하나입니다.", 40.7512, 14.4936, amphitheatrePompeiiImage, "14:10")
+        place("day17-amalfi", "Amalfi", "해안 도시", "Salerno에서 페리로 접근해 Campania 해안의 색을 짧고 선명하게 확보하는 정차입니다. 긴 해안 드라이브가 아니라 Amalfi 중심부와 항구 주변을 압축해서 봅니다.", 40.634, 14.6027, amalfiImage, "10:15"),
+        place("day17-pompeii-park", "Pompeii Archaeological Park", "고고학 공원", "베수비오 화산이 남긴 고대 로마 도시의 시간층을 보는 핵심 유적입니다.", 40.7484, 14.4847, pompeiiParkImage, "14:30"),
+        place("day17-forum-pompeii", "Forum of Pompeii", "고대 광장", "Pompeii의 정치·종교·상업 중심이었던 포룸 구역입니다.", 40.7481, 14.4842, forumPompeiiImage, "15:10"),
+        place("day17-villa-mysteries", "Villa of the Mysteries, Pompeii", "벽화 유적", "Dionysian fresco로 유명한 Pompeii 외곽의 주거 유적입니다.", 40.7513, 14.4769, villaMysteriesImage, "16:00"),
+        place("day17-amphitheatre-pompeii", "Amphitheatre of Pompeii", "원형 경기장", "Pompeii 동쪽에 남은 가장 오래된 로마 원형 경기장 중 하나입니다.", 40.7512, 14.4936, amphitheatrePompeiiImage, "16:50"),
+        place("day17-lungo-garden-sorbet", "Lungo Garden area", "휴식", "Pompeii 관람 후 Lungo Garden 근처에서 레몬 소르베로 당과 수분을 보충하는 짧은 회복 포인트입니다.", 40.7489, 14.4881, pompeiiParkImage, "17:25")
       ]
     },
     {

@@ -25,18 +25,18 @@ const sicilyTrip: Trip = {
   heroImage: travelArt.mediterranean,
   countries: ["Italy", "Malta"],
   routeSummary:
-    "Rome에서 Catania로 들어가 Sicily 동부·남부·서부와 Malta를 돈 뒤, Messina 해협을 건너 Calabria, Amalfi, Pompeii를 거쳐 Rome/Fiumicino에서 출국하는 19일 루트입니다.",
+    "Rome에서 Catania로 들어가 Sicily 동부·남부·서부와 Malta를 돈 뒤, Messina 해협을 건너 Calabria, Salerno, Amalfi, Pompeii를 거쳐 Rome/Fiumicino에서 출국하는 19일 루트입니다.",
   itinerary: [
     {
       day: 1,
       date: "2026-05-21",
       city: "Seoul",
       country: "South Korea",
-      title: "Departure to Rome",
+      title: "Seoul to Rome via Helsinki",
       image: travelArt.rome,
       coordinates: { lat: 37.4602, lng: 126.4407 },
       weather: { condition: "출국일", tempC: 20, highC: 24, lowC: 16 },
-      highlights: ["ICN 21:50 출발", "헬싱키 경유", "로마 이동 시작"],
+      highlights: ["ICN 21:50 AY042 출발", "인천국제공항 출국", "환승 준비"],
       size: "wide"
     },
     {
@@ -56,11 +56,11 @@ const sicilyTrip: Trip = {
       date: "2026-05-23",
       city: "Catania",
       country: "Italy",
-      title: "Etna Light and Baroque Streets",
+      title: "Catania and Etna",
       image: travelArt.etna,
       coordinates: { lat: 37.5079, lng: 15.083 },
       weather: { condition: "맑음", tempC: 25, highC: 29, lowC: 19 },
-      highlights: ["Catania", "Aci Trezza", "Adrano"],
+      highlights: ["Catania", "Aci Trezza", "Mount Etna 선택"],
       size: "tall"
     },
     {
@@ -79,11 +79,11 @@ const sicilyTrip: Trip = {
       date: "2026-05-25",
       city: "Syracuse",
       country: "Italy",
-      title: "Ortigia Field Notes",
+      title: "Syracuse and Ortigia",
       image: travelArt.syracuse,
       coordinates: { lat: 37.0755, lng: 15.2866 },
       weather: { condition: "부드러운 햇빛", tempC: 23, highC: 27, lowC: 18 },
-      highlights: ["Syracuse", "Noto", "남동부 해안 도시"]
+      highlights: ["Syracuse", "Ortigia", "Noto"]
     },
     {
       day: 6,
@@ -94,7 +94,7 @@ const sicilyTrip: Trip = {
       image: travelArt.etna,
       coordinates: { lat: 36.9239306, lng: 14.7198951 },
       weather: { condition: "따뜻함", tempC: 24, highC: 28, lowC: 19 },
-      highlights: ["Ragusa / Modica", "Pozzallo / Marzamemi", "Caltagirone / Piazza Armerina / Enna 대안 루프"],
+      highlights: ["Ragusa / San Giovanni", "Modica / San Giorgio", "Pozzallo / Marzamemi"],
       size: "wide"
     },
     {
@@ -113,11 +113,11 @@ const sicilyTrip: Trip = {
       date: "2026-05-28",
       city: "Gozo",
       country: "Malta",
-      title: "Gozo and Blue Lagoon",
+      title: "Comino Blue Lagoon and Gozo Heritage",
       image: travelArt.gozo,
       coordinates: { lat: 36.0443, lng: 14.2512 },
       weather: { condition: "맑은 바다", tempC: 24, highC: 28, lowC: 20 },
-      highlights: ["Mellieha", "Comino", "Victoria / Xaghra"],
+      highlights: ["Cirkewwa Ferry Terminal", "Blue Lagoon Comino", "Mgarr / Victoria / Xaghra"],
       size: "tall"
     },
     {
@@ -129,18 +129,18 @@ const sicilyTrip: Trip = {
       image: travelArt.valletta,
       coordinates: { lat: 35.8858, lng: 14.4031 },
       weather: { condition: "늦은 귀환", tempC: 24, highC: 28, lowC: 20 },
-      highlights: ["Qrendi / Marsaxlokk", "Mdina / Mosta", "Luqa -> Catania"]
+      highlights: ["Blue Grotto / Marsaxlokk", "Mdina / Mosta", "MLA 20:45 -> CTA 21:30"]
     },
     {
       day: 10,
       date: "2026-05-30",
       city: "Realmonte",
       country: "Italy",
-      title: "Realmonte and Agrigento",
+      title: "Villa Romana and Valley of the Temples",
       image: travelArt.mediterranean,
       coordinates: { lat: 37.3087, lng: 13.4624 },
       weather: { condition: "남서부 시칠리아", tempC: 24, highC: 28, lowC: 19 },
-      highlights: ["Augusta 출발", "Realmonte", "Agrigento"],
+      highlights: ["Villa Romana del Casale", "Realmonte 숙소", "Valley of the Temples"],
       size: "tall"
     },
     {
@@ -148,11 +148,11 @@ const sicilyTrip: Trip = {
       date: "2026-05-31",
       city: "Realmonte",
       country: "Italy",
-      title: "Agrigento Base",
+      title: "Scala dei Turchi and Agrigento Old Town",
       image: travelArt.mediterranean,
       coordinates: { lat: 37.3087, lng: 13.4624 },
       weather: { condition: "남서부 시칠리아", tempC: 24, highC: 28, lowC: 18 },
-      highlights: ["Realmonte", "Agrigento", "남부 시칠리아 베이스"]
+      highlights: ["Scala dei Turchi", "Via Atenea", "Santa Maria dei Greci"]
     },
     {
       day: 12,
@@ -185,7 +185,7 @@ const sicilyTrip: Trip = {
       image: travelArt.mediterranean,
       coordinates: { lat: 38.0375, lng: 13.0252 },
       weather: { condition: "서부 시칠리아", tempC: 24, highC: 28, lowC: 18 },
-      highlights: ["Contrada Piano Milano 숙박", "Palermo", "Monreale"]
+      highlights: ["Balestrate 출발", "Palermo", "Monreale"]
     },
     {
       day: 15,
@@ -212,13 +212,13 @@ const sicilyTrip: Trip = {
     {
       day: 17,
       date: "2026-06-06",
-      city: "Amalfi / Pompeii / Rome",
+      city: "Salerno / Amalfi / Pompeii / Rome",
       country: "Italy",
-      title: "Amalfi, Pompeii and Rome Final Night",
+      title: "Salerno Ferry, Amalfi, Pompeii and Rome Final Night",
       image: travelArt.amalfi,
-      coordinates: { lat: 40.634, lng: 14.6027 },
+      coordinates: { lat: 40.6779, lng: 14.7659 },
       weather: { condition: "출국 전날", tempC: 24, highC: 28, lowC: 18 },
-      highlights: ["Calvanico", "Amalfi", "Pompeii / Rome final stay"]
+      highlights: ["Calvanico", "Salerno ferry", "Amalfi", "Pompeii / Rome final stay"]
     },
     {
       day: 18,

@@ -33,6 +33,7 @@ export type TimelineAccommodation = {
   address: string;
   checkIn?: string;
   checkOut?: string;
+  googleMapsUrl?: string;
   airbnbUrl?: string;
   image?: string;
   imageAlt?: string;
