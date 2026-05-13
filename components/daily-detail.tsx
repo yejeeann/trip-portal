@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import type { ReactNode } from "react";
 import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
@@ -25,10 +25,11 @@ import type { Trip, AppDesignConfig, AppStructureConfig } from "@/lib/types";
 import { OsmMap } from "./osm-map";
 import { MultiOsmMap } from "./multi-osm-map";
 import { optimizeRouteAction, generateMapLinkAction } from "@/lib/mcp-actions";
-import type { DailyGuide, DailyGuidePlace, FlightTicket } from "@/lib/swiss-guide-data";
+import type { DailyCityVisit, DailyGuide, DailyGuidePlace, FlightTicket } from "@/lib/swiss-guide-data";
 import { PlaceBottomSheet, StaticPlaceGuide } from "./place-detail";
 import { AppNavigation } from "./app-navigation";
 import { GuideImage } from "./guide-image";
+import { AirlineLogo } from "./airline-logo";
 import { useTravelPayload } from "@/lib/travel-payload-client";
 import { useDailyMapMarkers } from "@/lib/daily-map-markers-client";
 import { calculateDistanceKm, estimateRouteTime, formatDistance } from "@/lib/route-math";
@@ -118,8 +119,10 @@ function DailyTimeline({
   const [expandedPlaceId, setExpandedPlaceId] = useState<string | null>(null);
   const [expandedCitySegmentId, setExpandedCitySegmentId] = useState<string | null>(null);
   const [expandedOverviewPlaceId, setExpandedOverviewPlaceId] = useState<string | null>(null);
+  const [isOverviewMapCollapsed, setIsOverviewMapCollapsed] = useState(false);
   const [isOptimizing, setIsOptimizing] = useState(false);
   const [isMapLoading, setIsMapLoading] = useState(false);
+  const dayTabsRef = useRef<HTMLDivElement | null>(null);
   const { markers, isLoading: isMapMarkersLoading, isSmartFill } = useDailyMapMarkers({
     guide,
     trip,
@@ -185,18 +188,23 @@ function DailyTimeline({
           visit.spots.some((spot) => spot.id === stop.id || stop.name.toLowerCase().includes(spot.name.toLowerCase()))
         );
 
+        const sightseeingStops = getSegmentSightseeingStops(visit.spots);
+        const supportStops = visit.spots.filter((spot) => !sightseeingStops.some((item) => item.id === spot.id));
+
         return {
           id: visit.id,
           name: visit.city,
           detail: `${visit.routeMode} route`,
           label: String(index + 1),
           index,
-          place: visit.spots[0],
+          place: sightseeingStops[0] ?? visit.spots[0],
           cityVisit: visit,
           stayLabel: visit.stayDuration,
           legDistanceKm: matchingStop?.legDistanceKm ?? null,
           legTimeLabel: matchingStop?.legTimeLabel ?? "시간 확인 필요",
-          innerStops: visit.spots
+          innerStops: visit.spots,
+          sightseeingStops,
+          supportStops
         };
       });
     }
@@ -211,7 +219,9 @@ function DailyTimeline({
           place,
           cityVisit: null,
           stayLabel: inferStayLabel(stop.legDistanceKm, place?.category),
-          innerStops: place ? [place] : []
+          innerStops: place ? [place] : [],
+          sightseeingStops: place && isSightseeingPlace(place) ? [place] : [],
+          supportStops: place && !isSightseeingPlace(place) ? [place] : []
         };
       });
   }, [guide.cityVisits, guide.places, routeStops]);
@@ -221,13 +231,92 @@ function DailyTimeline({
     citySegments.length >= 2 &&
     (isSmartFill || guide.region.includes("/") || routeStops.some((stop) => (stop.legDistanceKm ?? 0) >= 20));
 
+  const explicitRouteOverviewStops = useMemo<RouteStopSummary[]>(() => {
+    if (!guide.routeOverview?.length) return [];
+
+    return guide.routeOverview.map((point, index, all) => {
+      const previous = all[index - 1];
+      const distanceKm = previous
+        ? calculateDistanceKm(previous.coordinates, point.coordinates)
+        : null;
+
+      return {
+        id: `route-overview-${point.id}`,
+        label: String(index + 1),
+        name: point.name,
+        detail: point.detail ?? "",
+        legDistanceKm: distanceKm,
+        legTimeLabel: distanceKm === null ? "출발" : estimateRouteTime(distanceKm),
+        kind: "city" as const
+      };
+    });
+  }, [guide.routeOverview]);
+
   const compactRouteStops = useMemo(
-    () => buildCompactRouteStops(routeStops, citySegments, isCityTransferDay),
-    [citySegments, isCityTransferDay, routeStops]
+    () => explicitRouteOverviewStops.length
+      ? explicitRouteOverviewStops
+      : buildCompactRouteStops(routeStops, citySegments, isCityTransferDay),
+    [citySegments, explicitRouteOverviewStops, isCityTransferDay, routeStops]
   );
+  const routeOverviewNames = useMemo(
+    () => (compactRouteStops.length ? compactRouteStops.map((stop) => stop.name) : guide.places.map((place) => place.name)),
+    [compactRouteStops, guide.places]
+  );
+  const overviewRouteMarkers = useMemo(() => {
+    if (guide.routeOverview?.length) {
+      return guide.routeOverview.map((point, index) => ({
+        lat: point.coordinates.lat,
+        lng: point.coordinates.lng,
+        label: String(index + 1),
+        id: `route-overview-${point.id}`
+      }));
+    }
+
+    if (citySegments.length > 0) {
+      return citySegments
+        .map((segment, index) => {
+          const coordinates =
+            segment.cityVisit?.coordinates ??
+            segment.place?.coordinates ??
+            segment.innerStops.find((place) => place.coordinates)?.coordinates;
+
+          if (!coordinates) return null;
+
+          return {
+            lat: coordinates.lat,
+            lng: coordinates.lng,
+            label: String(index + 1),
+            id: `city-segment-${segment.id}`
+          };
+        })
+        .filter((marker): marker is { lat: number; lng: number; label: string; id: string } => Boolean(marker));
+    }
+
+    const routeMarkers = routeStops
+      .filter((stop) => stop.coordinates)
+      .map((stop, index) => ({
+        lat: stop.coordinates!.lat,
+        lng: stop.coordinates!.lng,
+        label: String(index + 1),
+        id: `route-stop-${stop.id}`
+      }));
+
+    if (isCityTransferDay) return routeMarkers;
+
+    const firstMarker = routeMarkers[0];
+    const lastMarker = routeMarkers[routeMarkers.length - 1];
+    if (!firstMarker || !lastMarker || firstMarker.id === lastMarker.id) {
+      return firstMarker ? [firstMarker] : markers.slice(0, 1);
+    }
+
+    const routeHasMeaningfulSpan = routeStops.some((stop) => (stop.legDistanceKm ?? 0) >= 20);
+    return routeHasMeaningfulSpan ? [firstMarker, lastMarker] : [firstMarker];
+  }, [citySegments, guide.routeOverview, isCityTransferDay, markers, routeStops]);
 
   const cityLabel = guide.region?.split(" / ")[0] || guide.region || "Route";
   const activeDayIndex = Math.max(0, dailyGuides.findIndex((item) => item.day === guide.day));
+  const isLastGuideDay = activeDayIndex === dailyGuides.length - 1;
+  const headerDateLabel = formatDailyHeaderDate(guide.date);
   const firstPlaceImage = guide.places.find((place) => place.image)?.image;
   const statusChips = [
     `${guide.places.length} stops`,
@@ -239,8 +328,18 @@ function DailyTimeline({
   const totalRouteDistanceKm = routeStops.reduce((total, stop) => total + (stop.legDistanceKm ?? 0), 0);
   const dailyFlightTickets = useMemo(() => {
     const guideData = getGuideDataForTrip(trip);
-    return getFlightTicketsForDate(guideData.flightTickets, guide.date);
-  }, [guide.date, trip]);
+    return getFlightTicketsForDate(guideData.flightTickets, guide.date, isLastGuideDay);
+  }, [guide.date, isLastGuideDay, trip]);
+  const isFlightOnlyDay =
+    guide.transportMode === "flight" &&
+    dailyFlightTickets.length > 0 &&
+    guide.places.every(isTravelLogisticsPlace);
+  const hasNightTrainSegments = citySegments.some(isNightTrainSegment);
+
+  useEffect(() => {
+    const activeTab = dayTabsRef.current?.querySelector<HTMLElement>('[data-active-day="true"]');
+    activeTab?.scrollIntoView({ behavior: "smooth", block: "nearest", inline: "center" });
+  }, [guide.day]);
 
   // Daily 페이지 전용 커스텀 하단 탭 구성
   const dailyAppStructure = {
@@ -249,14 +348,14 @@ function DailyTimeline({
     tabs: [
       { id: "home", label: "Home", iconType: "home" },
       { id: "overview", label: "Overview", iconType: "overview" },
-      { id: "stays", label: "Stays", iconType: "hotel" }
+      { id: "stays", label: "Accommodations", iconType: "accommodations" }
     ]
   };
 
   const handleOptimizeRoute = async () => {
     setIsOptimizing(true);
     const city = guide.region?.split(" / ")[0] || guide.region;
-    const stops = guide.places.map((p) => ({ name: p.name, category: p.category }));
+    const stops = routeOverviewNames.map((name) => ({ name, category: "route overview" }));
     
     try {
       const res = await optimizeRouteAction(city, stops);
@@ -275,7 +374,7 @@ function DailyTimeline({
   const handleOpenMap = async () => {
     setIsMapLoading(true);
     const city = guide.region?.split(" / ")[0] || guide.region;
-    const stops = guide.places.map((p) => ({ name: p.name }));
+    const stops = routeOverviewNames.map((name) => ({ name }));
     
     try {
       const res = await generateMapLinkAction(city, stops);
@@ -297,29 +396,32 @@ function DailyTimeline({
   };
 
   return (
-    <main className="flex h-[100dvh] flex-col overflow-hidden bg-field-surface font-sans text-field-ink selection:bg-field-forest selection:text-field-surface">
+    <main className="flex h-[100dvh] w-full max-w-[24rem] flex-col overflow-hidden bg-field-surface font-sans text-field-ink selection:bg-field-forest selection:text-field-surface sm:mx-auto sm:max-w-none">
       <header className="z-40 shrink-0 border-b border-field-line bg-field-surface/95">
-        <div className="flex items-start gap-3 px-4 py-4">
+        <div className="relative flex items-start gap-2 px-4 py-4 sm:gap-3">
           <Link
             href={`/trips/${trip.id}`}
             className="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded border border-field-line bg-white text-field-forest transition hover:border-field-forest"
           >
             <ArrowLeft className="h-5 w-5" />
           </Link>
-          <div className="min-w-0 flex-1">
+          <div className="min-w-0 flex-1 pr-[6.25rem]">
             <span className="block text-[11px] font-extrabold uppercase tracking-[0.16em] text-field-teal">Field Guide</span>
             <h1 className="mt-1 truncate text-2xl font-extrabold leading-7 tracking-normal text-field-ink">
               Day {guide.day}
             </h1>
-            <p className="mt-1 truncate text-sm font-semibold text-field-forest/70">{guide.region}</p>
+            <p className="mt-1 truncate text-sm font-semibold text-field-forest/70">{guide.title} · {guide.region}</p>
           </div>
-          <div className="rounded border border-field-line bg-white px-2.5 py-2 text-right">
-            <span className="block text-[10px] font-extrabold uppercase tracking-[0.14em] text-field-forest/50">Leg</span>
-            <span className="text-sm font-extrabold text-field-forest">{activeDayIndex + 1}/{dailyGuides.length}</span>
+          <div className="fixed right-[max(1rem,calc(100vw-24rem))] top-4 z-50 w-[5.75rem] rounded border border-field-line bg-white px-2 py-2 text-right sm:right-4">
+            <span className="block text-[10px] font-extrabold uppercase tracking-[0.14em] text-field-forest/50">Date</span>
+            <span className="block whitespace-nowrap text-xs font-extrabold text-field-forest sm:text-sm">{headerDateLabel}</span>
           </div>
         </div>
 
-        <div className="flex gap-2 overflow-x-auto px-4 pb-4 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+        <div
+          ref={dayTabsRef}
+          className="flex gap-2 overflow-x-auto px-4 pb-4 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+        >
           {dailyGuides.map((item) => {
             const isActive = item.day === guide.day;
             const label = item.region?.split(" / ")[0] || `Day ${item.day}`;
@@ -328,68 +430,97 @@ function DailyTimeline({
               <Link
                 key={item.id}
                 href={`/trips/${trip.id}/day/${item.day}`}
-                className={`grid min-w-[72px] gap-1 rounded border px-3 py-2 text-left transition ${
+                data-active-day={isActive ? "true" : undefined}
+                className={`grid min-h-[3.9rem] min-w-[6.2rem] max-w-[7.5rem] shrink-0 content-start gap-1 rounded border px-2.5 py-2 text-left transition sm:min-w-[8.65rem] sm:px-3 ${
                   isActive
                     ? "border-field-forest bg-field-forest text-white"
                     : "border-field-line bg-white text-field-forest hover:border-field-teal"
                 }`}
               >
-                <span className={`text-[10px] font-extrabold uppercase tracking-[0.12em] ${isActive ? "text-field-brass" : "text-field-forest/50"}`}>
+                <span className={`whitespace-nowrap text-[10px] font-extrabold uppercase tracking-[0.12em] ${isActive ? "text-field-brass" : "text-field-forest/50"}`}>
                   Day {item.day}
                 </span>
-                <span className="truncate text-xs font-bold">{label}</span>
+                <span className="whitespace-normal break-words text-xs font-bold leading-[1.15] [overflow-wrap:anywhere]">{label}</span>
               </Link>
             );
           })}
         </div>
       </header>
 
-      <section className="relative z-0 h-[40vh] min-h-[300px] w-full shrink-0 overflow-hidden border-b border-field-line bg-field-mist lg:h-[45vh]">
-        {isMapMarkersLoading ? (
-          <div className="flex h-full w-full flex-col items-center justify-center gap-3 bg-field-mist text-sm font-bold text-field-forest/70">
-            <div className="h-6 w-6 animate-spin rounded-full border-2 border-field-forest/30 border-t-field-forest" />
-            타임라인 동선을 지도에 표시하는 중...
-          </div>
-        ) : markers.length > 1 ? (
-          <MultiOsmMap 
-            markers={markers} 
-            className="h-full w-full" 
-            onMarkerClick={(id) => {
-              const place = guide.places.find((p) => p.id === id);
-              if (place) {
-                setExpandedPlaceId(id);
-                document.getElementById(`timeline-place-${id}`)?.scrollIntoView({ behavior: 'smooth', block: 'center' });
-              }
-            }}
-          />
-        ) : markers.length === 1 && markers[0] ? (
-          <OsmMap
-            query={`${markers[0].lat},${markers[0].lng}`}
-            className="h-full w-full"
-          />
-        ) : guide.region || guide.places.length > 0 ? (
-          // 좌표가 아예 없는 경우, 도시/지역 이름(query)을 기반으로 지도를 검색해서 노출
-          <OsmMap
-            query={guide.region?.split(" / ")[0] || guide.places[0]?.name || "Seoul"}
-            className="h-full w-full"
-          />
-        ) : (
-          <div className="flex h-full w-full items-center justify-center bg-field-mist text-sm font-bold text-field-forest/70">
-            지도 데이터가 부족합니다.
-          </div>
-        )}
-        <div className="pointer-events-none absolute inset-x-0 bottom-0 border-t border-field-forest/10 bg-field-surface/92 px-4 py-3">
-          <div className="flex items-end justify-between gap-4">
-            <div>
-              <span className="text-[10px] font-extrabold uppercase tracking-[0.14em] text-field-teal">Active Route</span>
-              <p className="mt-1 text-lg font-extrabold leading-6 text-field-ink">{cityLabel}</p>
+      {!isFlightOnlyDay && (
+        <section className={`relative z-0 w-full shrink-0 overflow-hidden border-b border-field-line bg-field-mist transition-[height] duration-300 ${
+          isOverviewMapCollapsed ? "h-14" : "h-52 sm:h-56 lg:h-60"
+        }`}>
+          {!isOverviewMapCollapsed && (
+            <>
+              {isMapMarkersLoading && overviewRouteMarkers.length === 0 ? (
+                <div className="flex h-full w-full flex-col items-center justify-center gap-3 bg-field-mist text-sm font-bold text-field-forest/70">
+                  <div className="h-6 w-6 animate-spin rounded-full border-2 border-field-forest/30 border-t-field-forest" />
+                  도시 이동 동선을 지도에 표시하는 중...
+                </div>
+              ) : overviewRouteMarkers.length > 1 ? (
+                <MultiOsmMap
+                  markers={overviewRouteMarkers}
+                  className="h-full w-full"
+                  onMarkerClick={(id) => {
+                    if (id.startsWith("city-segment-")) {
+                      const segmentId = id.replace("city-segment-", "");
+                      setExpandedCitySegmentId(segmentId);
+                      document.getElementById(id)?.scrollIntoView({ behavior: "smooth", block: "center" });
+                      return;
+                    }
+
+                    const place = guide.places.find((p) => p.id === id);
+                    if (place) {
+                      setExpandedPlaceId(id);
+                      document.getElementById(`timeline-place-${id}`)?.scrollIntoView({ behavior: "smooth", block: "center" });
+                    }
+                  }}
+                />
+              ) : overviewRouteMarkers.length === 1 && overviewRouteMarkers[0] ? (
+                <OsmMap
+                  query={`${overviewRouteMarkers[0].lat},${overviewRouteMarkers[0].lng}`}
+                  className="h-full w-full"
+                />
+              ) : guide.region || guide.places.length > 0 ? (
+                <OsmMap
+                  query={guide.region?.split(" / ")[0] || guide.places[0]?.name || "Seoul"}
+                  className="h-full w-full"
+                />
+              ) : (
+                <div className="flex h-full w-full items-center justify-center bg-field-mist text-sm font-bold text-field-forest/70">
+                  지도 데이터가 부족합니다.
+                </div>
+              )}
+            </>
+          )}
+          <div className={`pointer-events-none absolute inset-x-0 border-field-forest/10 bg-field-surface/94 px-4 ${
+            isOverviewMapCollapsed ? "inset-y-0 flex items-center" : "bottom-0 border-t py-2.5"
+          }`}>
+            <div className="flex w-full items-center justify-between gap-4">
+              <div className="min-w-0">
+                <span className="text-[10px] font-extrabold uppercase tracking-[0.14em] text-field-teal">City Route Map</span>
+                <p className="mt-0.5 truncate text-base font-extrabold leading-5 text-field-ink">{cityLabel}</p>
+              </div>
+              <div className="flex shrink-0 items-center gap-2">
+                <div className="text-right text-xs font-bold text-field-forest/70">
+                  {isCityTransferDay
+                    ? overviewRouteMarkers.length ? `${overviewRouteMarkers.length} cities` : "city map pending"
+                    : overviewRouteMarkers.length ? `${overviewRouteMarkers.length} pins` : "unmapped"}
+                </div>
+                <button
+                  type="button"
+                  onClick={() => setIsOverviewMapCollapsed((value) => !value)}
+                  className="pointer-events-auto inline-flex h-9 items-center gap-1.5 rounded-md border border-field-line bg-white px-2.5 text-xs font-extrabold text-field-forest transition hover:border-field-teal hover:text-field-teal"
+                >
+                  {isOverviewMapCollapsed ? "지도 보기" : "접기"}
+                  <ChevronDown className={`h-4 w-4 transition-transform ${isOverviewMapCollapsed ? "" : "rotate-180"}`} />
+                </button>
+              </div>
             </div>
-            <div className="text-right text-xs font-bold text-field-forest/70">
-              {markers.length ? `${markers.length} pins` : "unmapped"}
-            </div>
           </div>
-        </div>
-      </section>
+        </section>
+      )}
 
       <div className="relative z-10 flex-1 overflow-y-auto bg-field-surface">
         <div className="mx-auto max-w-3xl px-4 pb-32 pt-6">
@@ -397,15 +528,17 @@ function DailyTimeline({
             <DailyFlightSchedule tickets={dailyFlightTickets} date={guide.date} />
           )}
 
-          <GuideSummary
-            guide={guide}
-            statusChips={statusChips}
-            mustSeeCount={guidePlaceGroups.mustSee.length}
-            hiddenGemCount={guidePlaceGroups.hidden.length}
-            totalDistanceLabel={totalRouteDistanceKm > 0 ? formatDistance(totalRouteDistanceKm) : "거리 확인 필요"}
-          />
+          {!isFlightOnlyDay && (
+            <GuideSummary
+              guide={guide}
+              statusChips={statusChips}
+              mustSeeCount={guidePlaceGroups.mustSee.length}
+              hiddenGemCount={guidePlaceGroups.hidden.length}
+              totalDistanceLabel={totalRouteDistanceKm > 0 ? formatDistance(totalRouteDistanceKm) : "거리 확인 필요"}
+            />
+          )}
 
-          {compactRouteStops.length > 0 && (
+          {!isFlightOnlyDay && compactRouteStops.length > 0 && (
             <CompactTodayRoute
               guide={guide}
               stops={compactRouteStops}
@@ -416,7 +549,7 @@ function DailyTimeline({
             />
           )}
 
-          {!isSmartFill && !isCityTransferDay && guide.places.length > 0 && (
+          {!isFlightOnlyDay && !isSmartFill && !isCityTransferDay && guide.places.length > 0 && (
             <PlacePrioritySections
               groups={guidePlaceGroups}
               onSelectPlace={(place) => {
@@ -426,30 +559,28 @@ function DailyTimeline({
             />
           )}
 
-          {isCityTransferDay && citySegments.length > 0 && (
+          {!isFlightOnlyDay && isCityTransferDay && citySegments.length > 0 && (
             <section className="mb-6">
               <div className="mb-3 flex items-end justify-between gap-3">
                 <div>
-                <p className="text-[10px] font-extrabold uppercase tracking-[0.14em] text-field-teal">City plan</p>
-                <h2 className="mt-1 text-lg font-extrabold text-field-ink">도시별 일정</h2>
-                <p className="mt-1 text-xs font-semibold leading-relaxed text-field-forest/60">
-                  도시 안에서 볼 장소를 먼저 확인하고, 필요한 도시만 펼쳐 지도와 상세 설명을 봅니다.
+                <p className="text-[10px] font-extrabold uppercase tracking-[0.14em] text-field-teal">
+                  {hasNightTrainSegments ? "City & train plan" : "City plan"}
                 </p>
+                <h2 className="mt-1 text-lg font-extrabold text-field-ink">
+                  {hasNightTrainSegments ? "도시별 일정 + 야간열차" : "도시별 일정"}
+                </h2>
               </div>
-                <span className="shrink-0 rounded-md border border-field-line bg-white px-2.5 py-1.5 text-[10px] font-extrabold text-field-forest/60">
-                  {citySegments.length} cities
-                </span>
               </div>
 
               <div className="grid gap-3">
                 {citySegments.map((segment) => {
                   const isExpanded = expandedCitySegmentId === segment.id;
-                  const segmentGroups = groupGuidePlaces(segment.innerStops);
-                  const sightseeingCount = segmentGroups.mustSee.length + segmentGroups.hidden.length;
+                  const isNightTrain = isNightTrainSegment(segment);
 
                   return (
                     <div
                       key={`city-segment-${segment.id}`}
+                      id={`city-segment-${segment.id}`}
                       className="rounded-lg border border-field-line bg-white shadow-[0_8px_24px_rgba(0,0,0,0.04)]"
                     >
                       <div className="grid gap-3 px-4 py-4">
@@ -467,27 +598,27 @@ function DailyTimeline({
                                 {segment.stayLabel}
                               </span>
                             </span>
-                            <span className="mt-0.5 block truncate text-[11px] font-bold text-field-forest/60">
-                              {sightseeingCount || segment.innerStops.length || 1} places · {formatDistance(segment.legDistanceKm)} · {segment.legTimeLabel}
-                            </span>
                           </span>
                           <span className="flex items-center gap-2 text-right">
-                            <span className="hidden text-[10px] font-extrabold text-field-forest/60 sm:block">
-                              {formatDistance(segment.legDistanceKm)} · {segment.legTimeLabel}
-                            </span>
                             <ChevronDown className={`h-4 w-4 text-field-forest/50 transition-transform ${isExpanded ? "rotate-180" : ""}`} />
                           </span>
                         </button>
 
                         <div className="grid min-w-0 gap-3">
-                          <CityCardMapPreview
-                            segment={segment}
-                            onSelectPlace={(place) => setSelectedPlace(place)}
-                          />
-                          <CitySightseeingTimeline
-                            places={segment.innerStops}
-                            onSelectPlace={(place) => setSelectedPlace(place)}
-                          />
+                          {isNightTrain ? (
+                            <NightTrainInfoCard segment={segment} />
+                          ) : (
+                            <>
+                              <CityCardMapPreview
+                                segment={segment}
+                                onSelectPlace={(place) => setSelectedPlace(place)}
+                              />
+                              <CitySightseeingTimeline
+                                places={segment.sightseeingStops}
+                                onSelectPlace={(place) => setSelectedPlace(place)}
+                              />
+                            </>
+                          )}
                         </div>
                       </div>
 
@@ -500,10 +631,14 @@ function DailyTimeline({
                             className="overflow-hidden bg-field-mist/30"
                           >
                             <div className="grid gap-3 px-4 pb-4">
-                              <CityAttractionThread
-                                segment={segment}
-                                onSelectPlace={(place) => setSelectedPlace(place)}
-                              />
+                              {isNightTrain ? (
+                                <NightTrainDetailPanel segment={segment} />
+                              ) : (
+                                <CityAttractionThread
+                                  segment={segment}
+                                  onSelectPlace={(place) => setSelectedPlace(place)}
+                                />
+                              )}
                             </div>
                           </motion.div>
                         )}
@@ -515,7 +650,7 @@ function DailyTimeline({
             </section>
           )}
 
-          {!isCityTransferDay && (
+          {!isFlightOnlyDay && !isCityTransferDay && (
             <>
             {/* Place details */}
             <div className="relative mb-3 flex items-center justify-between pb-2">
@@ -727,7 +862,7 @@ function DailyTimeline({
                 <X className="h-5 w-5" />
               </button>
 
-              <span className="text-[10px] font-bold uppercase tracking-widest text-sky-600">Day {selectedCityOverview.day} Overview</span>
+              <span className="text-[10px] font-bold uppercase tracking-widest text-sky-600">{formatDailyHeaderDate(selectedCityOverview.date)} Overview</span>
               <h2 className="mb-4 mt-1 font-serif text-3xl font-bold text-slate-900">{selectedCityOverview.region}</h2>
 
               {selectedCityOverview.places[0]?.image && (
@@ -834,21 +969,44 @@ function DailyFlightSchedule({ tickets, date }: { tickets: FlightTicket[]; date:
       </div>
 
       <div className="grid gap-4 p-4">
-        {tickets.map((ticket) => (
+        {tickets.map((ticket) => {
+          const firstSegment = ticket.segments[0];
+          const flightNumbers = ticket.segments.map((segment) => segment.flightNo).join(" / ");
+
+          return (
           <article key={ticket.id} className="rounded-lg border border-field-line bg-field-surface/45 p-4">
             <div className="mb-4 flex flex-wrap items-start justify-between gap-3">
-              <div className="min-w-0">
-                <p className="text-[10px] font-extrabold uppercase tracking-[0.14em] text-field-teal">{ticket.title}</p>
-                <h3 className="mt-1 break-words text-base font-extrabold leading-snug text-field-ink">{ticket.routeLabel}</h3>
+              <div className="flex min-w-0 gap-3">
+                <AirlineLogo code={firstSegment?.airlineCode} name={firstSegment?.airlineName} />
+                <div className="min-w-0">
+                  <p className="text-[10px] font-extrabold uppercase tracking-[0.14em] text-field-teal">{ticket.title}</p>
+                  <h3 className="mt-1 break-words text-base font-extrabold leading-snug text-field-ink">{ticket.routeLabel}</h3>
+                </div>
               </div>
               <span className="shrink-0 rounded-md border border-field-line bg-white px-2.5 py-1.5 text-[10px] font-extrabold text-field-forest/70">
                 {ticket.connectionLabel}
               </span>
             </div>
 
+            <div className="mb-4 grid gap-2 sm:grid-cols-3">
+              {ticket.reservationCode && <FlightMetaChip label="예약 번호" value={ticket.reservationCode} />}
+              {ticket.totalDuration && <FlightMetaChip label="총 소요" value={ticket.totalDuration} />}
+              <FlightMetaChip label="항공편" value={flightNumbers} />
+            </div>
+
             <div className="grid gap-3">
               {ticket.segments.map((segment, index) => (
                 <div key={`${ticket.id}-${segment.flightNo}-${index}`}>
+                  <div className="mb-2 flex flex-wrap items-center justify-between gap-2 px-1">
+                    <div className="flex flex-wrap items-center gap-2">
+                      <span className="rounded-md bg-field-forest px-2 py-1 text-[11px] font-black text-white">{segment.flightNo}</span>
+                      <AirlineLogo code={segment.airlineCode} name={segment.airlineName} size="sm" />
+                      <span className="text-xs font-extrabold text-field-forest">{segment.airlineName}</span>
+                    </div>
+                    {segment.aircraft && (
+                      <span className="text-[11px] font-bold text-field-forest/60">{segment.aircraft}</span>
+                    )}
+                  </div>
                   <div className="grid gap-3 rounded-md border border-field-line bg-white p-3 sm:grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)] sm:items-center">
                     <DailyAirportPoint icon={<PlaneTakeoff className="h-4 w-4" />} label="출발" point={segment.from} />
                     <div className="flex items-center justify-center gap-2 text-[10px] font-extrabold uppercase text-field-forest/60 sm:grid sm:justify-items-center">
@@ -867,9 +1025,19 @@ function DailyFlightSchedule({ tickets, date }: { tickets: FlightTicket[]; date:
               ))}
             </div>
           </article>
-        ))}
+          );
+        })}
       </div>
     </section>
+  );
+}
+
+function FlightMetaChip({ label, value }: { label: string; value: string }) {
+  return (
+    <div className="rounded-md border border-field-line bg-white px-3 py-2">
+      <div className="text-[10px] font-extrabold text-field-forest/50">{label}</div>
+      <div className="mt-0.5 break-words text-xs font-extrabold text-field-ink">{value}</div>
+    </div>
   );
 }
 
@@ -895,6 +1063,7 @@ function DailyAirportPoint({
       <div className="mt-0.5 break-words text-xs font-semibold leading-5 text-field-forest/65">
         {point.airport}
         {point.dateLabel ? <span className="ml-1 font-extrabold text-field-teal">{point.dateLabel}</span> : null}
+        {point.terminal ? <span className="ml-1 font-extrabold text-field-forest/55">{point.terminal}</span> : null}
       </div>
     </div>
   );
@@ -931,9 +1100,6 @@ function CompactTodayRoute({
         <div className="min-w-0 px-4 pt-4">
           <p className="text-[10px] font-extrabold uppercase tracking-[0.14em] text-field-teal">Today route</p>
           <h2 className="mt-1 text-lg font-extrabold text-field-ink">도시 이동 타임라인</h2>
-          <p className="mt-1 line-clamp-2 text-xs font-semibold leading-relaxed text-field-forest/60">
-            {getTransportModeLabel(guide.transportMode)} · 관광지는 아래 도시 카드에서 확인
-          </p>
         </div>
         <div className="flex shrink-0 items-center gap-1 px-4 pt-4">
           <button
@@ -976,10 +1142,6 @@ function CompactTodayRoute({
                   <span className="block min-h-[2.25rem] text-sm font-extrabold leading-[1.15] text-field-ink [display:-webkit-box] [-webkit-line-clamp:2] [-webkit-box-orient:vertical] overflow-hidden">
                     {stop.name}
                   </span>
-                  <span className="mt-0.5 block truncate text-[11px] font-semibold text-field-forest/60">{stop.detail}</span>
-                  <span className="mt-2 block text-[10px] font-extrabold uppercase tracking-[0.1em] text-field-teal">
-                    {stop.kind === "city" ? "City stop" : index === 0 ? "Start" : "Transfer"}
-                  </span>
                 </div>
                 {nextStop && (
                   <div className="grid content-center justify-items-center gap-1 text-center">
@@ -1010,7 +1172,8 @@ function CityCardMapPreview({
   segment: CityThreadSegment;
   onSelectPlace: (place: DailyGuidePlace) => void;
 }) {
-  const markerPlaces = segment.innerStops.filter((place) => place.coordinates);
+  const mapPlaces = segment.sightseeingStops.length > 0 ? segment.sightseeingStops : segment.innerStops;
+  const markerPlaces = mapPlaces.filter((place) => place.coordinates);
 
   return (
     <div className="min-w-0 overflow-hidden rounded-lg border border-field-line bg-field-surface/45">
@@ -1025,7 +1188,9 @@ function CityCardMapPreview({
       </div>
       {markerPlaces.length > 0 ? (
         <MultiOsmMap
-          className="h-36 w-full md:h-40"
+          className="h-56 w-full sm:h-64 lg:h-72"
+          fitPadding={44}
+          maxZoom={16}
           markers={markerPlaces.map((place, index) => ({
             lat: place.coordinates!.lat,
             lng: place.coordinates!.lng,
@@ -1033,12 +1198,12 @@ function CityCardMapPreview({
             id: place.id
           }))}
           onMarkerClick={(id) => {
-            const place = segment.innerStops.find((item) => item.id === id);
+            const place = mapPlaces.find((item) => item.id === id);
             if (place) onSelectPlace(place);
           }}
         />
       ) : (
-        <div className="flex h-40 items-center justify-center text-xs font-bold text-field-forest/55 md:h-44">
+        <div className="flex h-56 items-center justify-center text-xs font-bold text-field-forest/55 sm:h-64 lg:h-72">
           지도 좌표가 부족합니다.
         </div>
       )}
@@ -1046,10 +1211,135 @@ function CityCardMapPreview({
   );
 }
 
-function getCitySightseeingPlaces(places: DailyGuidePlace[]) {
-  const groups = groupGuidePlaces(places);
-  const sightseeingPlaces = [...groups.mustSee, ...groups.hidden];
-  return sightseeingPlaces.length > 0 ? sightseeingPlaces : places;
+function NightTrainInfoCard({ segment }: { segment: CityThreadSegment }) {
+  const trainInfo = segment.cityVisit?.trainInfo;
+  if (!trainInfo) return null;
+
+  return (
+    <div className="min-w-0 overflow-hidden rounded-lg border border-field-line bg-white">
+      <div className="grid gap-0">
+        <NightTrainPhoto src={trainInfo.image} alt={trainInfo.imageAlt} />
+        <div className="grid gap-4 p-4">
+          <div className="flex flex-wrap items-start justify-between gap-3">
+            <div className="min-w-0">
+              <p className="text-[10px] font-extrabold uppercase tracking-[0.14em] text-field-teal">
+                Overnight train
+              </p>
+              <h3 className="mt-1 break-words text-base font-extrabold leading-snug text-field-ink">
+                {trainInfo.title}
+              </h3>
+              <p className="mt-1 text-xs font-bold text-field-forest/60">{trainInfo.cabinType}</p>
+            </div>
+            <span className="shrink-0 rounded-md bg-field-forest px-2.5 py-1.5 text-[10px] font-extrabold text-white">
+              {trainInfo.durationLabel}
+            </span>
+          </div>
+
+          <div className="grid gap-2 rounded-md border border-field-line bg-field-surface/45 p-3">
+            <TrainScheduleRow label="열차" value={trainInfo.serviceName} />
+            <TrainScheduleRow label="출발" value={trainInfo.departureLabel} />
+            <TrainScheduleRow label="도착" value={trainInfo.arrivalLabel} />
+            <TrainScheduleRow label="구간" value={trainInfo.routeLabel} />
+          </div>
+
+          {trainInfo.mapUrl && (
+            <a
+              href={trainInfo.mapUrl}
+              target="_blank"
+              rel="noreferrer"
+              className="inline-flex min-h-11 w-full items-center justify-center gap-2 rounded-md bg-field-forest px-4 py-2.5 text-sm font-extrabold text-white transition hover:bg-field-ink"
+            >
+              <MapPinned className="h-4 w-4" />
+              야간열차 경로 지도
+              <ExternalLink className="h-3.5 w-3.5" />
+            </a>
+          )}
+
+          {(trainInfo.sourceUrl || trainInfo.routeSourceUrl) && (
+            <div className="flex flex-wrap gap-2">
+              {trainInfo.sourceUrl && (
+                <a
+                  href={trainInfo.sourceUrl}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="inline-flex items-center gap-1.5 rounded-md border border-field-line bg-white px-2.5 py-1.5 text-[10px] font-extrabold text-field-forest transition hover:border-field-teal hover:text-field-teal"
+                >
+                  객실 안내
+                  <ExternalLink className="h-3 w-3" />
+                </a>
+              )}
+              {trainInfo.routeSourceUrl && (
+                <a
+                  href={trainInfo.routeSourceUrl}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="inline-flex items-center gap-1.5 rounded-md border border-field-line bg-white px-2.5 py-1.5 text-[10px] font-extrabold text-field-forest transition hover:border-field-teal hover:text-field-teal"
+                >
+                  시칠리아 노선
+                  <ExternalLink className="h-3 w-3" />
+                </a>
+              )}
+            </div>
+          )}
+
+          <ul className="grid gap-2">
+            {trainInfo.highlights.map((item) => (
+              <li key={item} className="rounded-md bg-field-teal-soft px-3 py-2 text-xs font-semibold leading-relaxed text-field-forest">
+                {item}
+              </li>
+            ))}
+          </ul>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function NightTrainPhoto({ src, alt }: { src: string; alt: string }) {
+  return (
+    <div className="relative aspect-[21/10] w-full overflow-hidden bg-white sm:aspect-[5/2] lg:aspect-[3/1]">
+      <img
+        src={src}
+        alt={alt}
+        className="absolute inset-0 h-full w-full object-cover object-center"
+        loading="lazy"
+      />
+    </div>
+  );
+}
+
+function TrainScheduleRow({ label, value }: { label: string; value: string }) {
+  return (
+    <div className="grid grid-cols-[3rem_minmax(0,1fr)] gap-3 text-sm">
+      <span className="font-extrabold text-field-teal">{label}</span>
+      <span className="break-words font-bold text-field-ink">{value}</span>
+    </div>
+  );
+}
+
+function NightTrainDetailPanel({ segment }: { segment: CityThreadSegment }) {
+  const notes = segment.cityVisit?.practicalNotes ?? [];
+
+  return (
+    <div className="rounded-lg border border-field-line bg-white p-4">
+      <div className="mb-3 flex items-center justify-between gap-3">
+        <div>
+          <p className="text-[10px] font-extrabold uppercase tracking-[0.12em] text-field-teal">Boarding plan</p>
+          <h3 className="mt-1 text-sm font-extrabold text-field-ink">야간열차 탑승 체크리스트</h3>
+        </div>
+        <span className="rounded bg-field-surface px-2 py-1 text-[10px] font-extrabold text-field-forest/60">
+          실전 메모
+        </span>
+      </div>
+      <ul className="grid gap-2">
+        {notes.map((note) => (
+          <li key={note} className="rounded-md border border-field-line bg-field-surface/45 px-3 py-2 text-xs font-semibold leading-relaxed text-field-forest/75">
+            {note}
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
 }
 
 function CitySightseeingTimeline({
@@ -1059,9 +1349,9 @@ function CitySightseeingTimeline({
   places: DailyGuidePlace[];
   onSelectPlace: (place: DailyGuidePlace) => void;
 }) {
-  const timelinePlaces = getCitySightseeingPlaces(places);
+  const timelinePlaces = places;
 
-  if (timelinePlaces.length <= 1) return null;
+  if (timelinePlaces.length === 0) return null;
 
   return (
     <div className="min-w-0 rounded-lg border border-field-line bg-white p-3">
@@ -1142,10 +1432,14 @@ type CityThreadSegment = {
   legDistanceKm: number | null;
   legTimeLabel: string;
   innerStops: DailyGuidePlace[];
-  cityVisit: {
-    practicalNotes?: string[];
-  } | null;
+  sightseeingStops: DailyGuidePlace[];
+  supportStops: DailyGuidePlace[];
+  cityVisit: DailyCityVisit | null;
 };
+
+function isNightTrainSegment(segment: CityThreadSegment) {
+  return segment.cityVisit?.displayMode === "train" || Boolean(segment.cityVisit?.trainInfo);
+}
 
 function CityAttractionThread({
   segment,
@@ -1154,8 +1448,9 @@ function CityAttractionThread({
   segment: CityThreadSegment;
   onSelectPlace: (place: DailyGuidePlace) => void;
 }) {
-  const groups = groupGuidePlaces(segment.innerStops);
-  const sightseeingPlaces = [...groups.mustSee, ...groups.hidden];
+  const sightseeingPlaces = segment.sightseeingStops;
+  const supportPlaces = segment.supportStops;
+  const mapPlaces = sightseeingPlaces.length > 0 ? sightseeingPlaces : segment.innerStops;
   const sections = [
     {
       id: "sightseeing",
@@ -1166,7 +1461,7 @@ function CityAttractionThread({
     {
       id: "support",
       label: "이동/기준 지점",
-      places: groups.other,
+      places: supportPlaces,
       tone: "support" as const
     }
   ].filter((section) => section.places.length > 0);
@@ -1194,13 +1489,13 @@ function CityAttractionThread({
               </p>
             </div>
             <span className="rounded-md bg-field-surface px-2 py-1 text-[10px] font-extrabold text-field-forest/65">
-              {segment.innerStops.length} pins
+              {mapPlaces.length} pins
             </span>
           </div>
         </div>
       </ThreadNode>
 
-      {segment.innerStops.some((spot) => spot.coordinates) && (
+      {mapPlaces.some((spot) => spot.coordinates) && (
         <ThreadNode badge="지도" tone="teal">
           <div className="overflow-hidden rounded-lg border border-field-line bg-white">
             <div className="flex items-center justify-between border-b border-field-line px-3 py-2">
@@ -1211,8 +1506,10 @@ function CityAttractionThread({
               <span className="text-[10px] font-extrabold text-field-forest/55">번호 카드와 연결</span>
             </div>
             <MultiOsmMap
-              className="h-52 w-full"
-              markers={segment.innerStops
+              className="h-72 w-full sm:h-80 lg:h-[22rem]"
+              fitPadding={52}
+              maxZoom={16}
+              markers={mapPlaces
                 .filter((spot) => spot.coordinates)
                 .map((spot, spotIndex) => ({
                   lat: spot.coordinates!.lat,
@@ -1221,7 +1518,7 @@ function CityAttractionThread({
                   id: spot.id
                 }))}
               onMarkerClick={(id) => {
-                const place = segment.innerStops.find((spot) => spot.id === id);
+                const place = mapPlaces.find((spot) => spot.id === id);
                 if (place) onSelectPlace(place);
               }}
             />
@@ -1251,7 +1548,7 @@ function CityAttractionThread({
                   <MustSeePlaceCard
                     key={`sight-card-${place.id}`}
                     place={place}
-                    pin={getPlacePin(segment.innerStops, place)}
+                    pin={getPlacePin(mapPlaces, place)}
                     onSelect={() => onSelectPlace(place)}
                   />
                 ) : (
@@ -1328,7 +1625,7 @@ function MustSeePlaceCard({
     >
       <div className="grid grid-cols-[5.25rem_minmax(0,1fr)] gap-3 p-2.5">
         <div className="relative h-24 overflow-hidden rounded-md bg-field-mist">
-          {hasSpecificPlaceImage(place) ? (
+          {place.image ? (
             <GuideImage src={place.image} alt={place.imageAlt || place.name} className="absolute inset-0 h-full w-full" />
           ) : (
             <div className="flex h-full w-full items-center justify-center bg-field-teal-soft text-field-teal">
@@ -1408,19 +1705,6 @@ function getPlaceWhyLine(place: DailyGuidePlace) {
   return getSpotSummary(place);
 }
 
-function hasSpecificPlaceImage(place: DailyGuidePlace) {
-  if (!place.image) return false;
-
-  const genericImages = [
-    "/travel-photos/rome.jpg",
-    "/travel-photos/sicily-malta-hero.jpg",
-    "/travel-photos/gozo.jpg"
-  ];
-
-  const imageKey = place.image.toLowerCase();
-  return !genericImages.some((generic) => imageKey.includes(generic.toLowerCase()));
-}
-
 function GuideSummary({
   guide,
   statusChips,
@@ -1446,13 +1730,13 @@ function GuideSummary({
             <p className="mt-1 line-clamp-2 text-xs font-semibold leading-relaxed text-field-forest/65">{guide.deck}</p>
           </div>
           <span className="shrink-0 rounded-md bg-field-forest px-2.5 py-1.5 text-[10px] font-extrabold text-white">
-            Day {guide.day}
+            {formatDailyHeaderDate(guide.date)}
           </span>
         </div>
       </div>
 
       <div className="grid grid-cols-2 border-b border-field-line sm:grid-cols-4">
-        <SummaryMetric icon={<CalendarDays className="h-4 w-4" />} label="Date" value={guide.date} />
+        <SummaryMetric icon={<CalendarDays className="h-4 w-4" />} label="Date" value={formatDailyHeaderDate(guide.date)} />
         <SummaryMetric icon={<Navigation className="h-4 w-4" />} label="Move" value={getTransportModeLabel(guide.transportMode)} />
         <SummaryMetric icon={<MapPinned className="h-4 w-4" />} label="Route" value={totalDistanceLabel} />
         <SummaryMetric icon={<Hotel className="h-4 w-4" />} label="Base" value={baseLabel} />
@@ -1670,14 +1954,19 @@ function getSpotDuration(place: DailyGuidePlace) {
   return null;
 }
 
-function getFlightTicketsForDate(tickets: FlightTicket[], date: string) {
+function getFlightTicketsForDate(tickets: FlightTicket[], date: string, includeFinalArrival = false) {
   const dateLabel = formatTicketDateLabel(date);
+  const airTickets = tickets.filter(isAirTicket);
+  const departingTickets = airTickets.filter((ticket) => ticket.segments[0]?.from.dateLabel === dateLabel);
 
-  return tickets
-    .filter(isAirTicket)
-    .filter((ticket) =>
-      ticket.segments.some((segment) => segment.from.dateLabel === dateLabel || segment.to.dateLabel === dateLabel)
-    );
+  if (departingTickets.length > 0 || !includeFinalArrival) {
+    return departingTickets;
+  }
+
+  return airTickets.filter((ticket) => {
+    const finalSegment = ticket.segments[ticket.segments.length - 1];
+    return finalSegment?.to.dateLabel === dateLabel;
+  });
 }
 
 function isAirTicket(ticket: FlightTicket) {
@@ -1687,10 +1976,63 @@ function isAirTicket(ticket: FlightTicket) {
   });
 }
 
+function isTravelLogisticsPlace(place: DailyGuidePlace) {
+  const text = `${place.name} ${place.category}`.toLowerCase();
+  return (
+    text.includes("공항") ||
+    text.includes("airport") ||
+    text.includes("기차역") ||
+    text.includes("station") ||
+    text.includes("termini") ||
+    text.includes("centrale")
+  );
+}
+
+function isSightseeingPlace(place: DailyGuidePlace) {
+  const text = `${place.name} ${place.category}`.toLowerCase();
+  const logisticsTerms = [
+    "공항",
+    "airport",
+    "기차역",
+    "station",
+    "termini",
+    "centrale",
+    "숙소",
+    "거점",
+    "체크인",
+    "도착",
+    "터미널",
+    "terminal",
+    "ferry terminal",
+    "이동 기준",
+    "mgarr harbour gozo"
+  ];
+
+  return !logisticsTerms.some((term) => text.includes(term));
+}
+
+function getSegmentSightseeingStops(spots: DailyGuidePlace[]) {
+  const filtered = spots.filter(isSightseeingPlace);
+  const groups = groupGuidePlaces(filtered);
+  const prioritized = [...groups.mustSee, ...groups.hidden];
+  return prioritized.length > 0 ? prioritized : filtered;
+}
+
 function formatTicketDateLabel(date: string) {
   const parsed = new Date(`${date}T00:00:00`);
   if (Number.isNaN(parsed.getTime())) return date;
   return `${parsed.getMonth() + 1}/${parsed.getDate()}`;
+}
+
+function formatDailyHeaderDate(date: string) {
+  const [year, month, day] = date.split("-").map(Number);
+  if (!year || !month || !day) return date;
+
+  const weekday = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"][
+    new Date(Date.UTC(year, month - 1, day)).getUTCDay()
+  ];
+
+  return `${month}/${day} ${weekday}`;
 }
 
 function buildCompactRouteStops(
@@ -1710,6 +2052,7 @@ function buildCompactRouteStops(
     legDistanceKm: number | null;
     legTimeLabel: string;
     innerStops: DailyGuidePlace[];
+    cityVisit?: DailyCityVisit | null;
   }>,
   isCityTransferDay: boolean
 ): RouteStopSummary[] {
@@ -1720,63 +2063,20 @@ function buildCompactRouteStops(
     }));
   }
 
-  const compactStops: RouteStopSummary[] = [];
-  const addedCities = new Set<string>();
-  const cityByPlaceId = new Map<string, typeof citySegments[number]>();
-
-  citySegments.forEach((segment) => {
-    segment.innerStops.forEach((place) => cityByPlaceId.set(place.id, segment));
-  });
-
-  routeStops.forEach((stop) => {
-    const segment = cityByPlaceId.get(stop.id);
-    const isAnchor = isTransportAnchor(stop);
-
-    if (segment && !isAnchor && !addedCities.has(segment.id)) {
-      compactStops.push({
-        id: `city-${segment.id}`,
-        label: String(segment.index + 1),
-        name: segment.name,
-        detail: `${segment.innerStops.length} spot · 도시 안 관광지는 아래 카드에서 보기`,
-        legDistanceKm: stop.legDistanceKm,
-        legTimeLabel: stop.legTimeLabel,
-        kind: "city"
-      });
-      addedCities.add(segment.id);
-      return;
-    }
-
-    if (isAnchor) {
-      compactStops.push({
-        id: stop.id,
-        label: stop.label,
-        name: stop.name,
-        detail: stop.detail,
-        legDistanceKm: stop.legDistanceKm,
-        legTimeLabel: stop.legTimeLabel,
-        kind: "transport"
-      });
-    }
-  });
+  const compactStops = citySegments.map((segment) => ({
+    id: `city-${segment.id}`,
+    label: String(segment.index + 1),
+    name: segment.name,
+    detail: "",
+    legDistanceKm: segment.legDistanceKm,
+    legTimeLabel: segment.legTimeLabel,
+    kind: "city" as const
+  }));
 
   return compactStops.filter((stop, index, all) => {
     const previous = all[index - 1];
     return !(previous && previous.name === stop.name && previous.kind === stop.kind);
   });
-}
-
-function isTransportAnchor(stop: { id: string; name: string; detail: string }) {
-  const text = `${stop.id} ${stop.name} ${stop.detail}`.toLowerCase();
-  return (
-    text.includes("공항") ||
-    text.includes("기차역") ||
-    text.includes("airport") ||
-    text.includes("termini") ||
-    text.includes("centrale") ||
-    text.includes("station") ||
-    text.includes("숙소") ||
-    text.includes("accommodation")
-  );
 }
 
 function groupGuidePlaces(places: DailyGuidePlace[]) {

@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 280 96" role="img" aria-labelledby="title">
+  <title id="title">Qatar Airways logo</title>
+  <rect width="280" height="96" rx="14" fill="#ffffff"/>
+  <circle cx="54" cy="48" r="29" fill="#5C0632"/>
+  <path d="M45 68c7-20 15-34 29-46-1 16-5 31-13 46h-16Z" fill="#ffffff" opacity=".92"/>
+  <text x="94" y="43" fill="#5C0632" font-family="Arial, Helvetica, sans-serif" font-size="24" font-weight="800" letter-spacing="2">QATAR</text>
+  <text x="94" y="66" fill="#5C0632" font-family="Arial, Helvetica, sans-serif" font-size="18" font-weight="700" letter-spacing="2">AIRWAYS</text>
+</svg>

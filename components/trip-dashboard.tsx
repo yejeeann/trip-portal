@@ -17,6 +17,7 @@ import {
 import { getGuideDataForTrip } from "@/lib/trip-guide";
 import type { Trip } from "@/lib/types";
 import { useTravelPayload } from "@/lib/travel-payload-client";
+import { AirlineLogo } from "./airline-logo";
 
 const fadeUp = {
   hidden: { opacity: 0, y: 22 },
@@ -115,7 +116,7 @@ export function TripDashboard({ tripId }: { tripId: string }) {
           </div>
           <div className="bg-white border border-slate-200 rounded-2xl p-4 shadow-sm text-center">
             <div className="text-2xl font-serif font-bold text-sky-600">{uniqueStays.length}</div>
-            <div className="text-[10px] font-bold uppercase text-slate-400 mt-1 tracking-wider">Stays</div>
+            <div className="text-[10px] font-bold uppercase text-slate-400 mt-1 tracking-wider">Accommodations</div>
           </div>
         </div>
 
@@ -170,8 +171,13 @@ export function TripDashboard({ tripId }: { tripId: string }) {
               <h3 className="text-sm font-bold text-slate-900 mb-3 flex items-center gap-2"><Plane className="w-4 h-4 text-sky-600" /> 확정 교통편</h3>
               {flightTickets.map((t, idx) => (
                 <div key={t.id} className={`${idx > 0 ? "border-t border-slate-100 mt-3 pt-3" : ""}`}>
-                  <div className="text-xs font-bold text-slate-500 mb-1">{t.title}</div>
-                  <div className="text-sm">{t.segments[0].from.code} → {t.segments[t.segments.length-1].to.code}</div>
+                  <div className="flex items-center gap-3">
+                    <AirlineLogo code={t.segments[0]?.airlineCode} name={t.segments[0]?.airlineName} size="sm" />
+                    <div className="min-w-0">
+                      <div className="text-xs font-bold text-slate-500 mb-1">{t.title}</div>
+                      <div className="text-sm">{t.segments[0].from.code} → {t.segments[t.segments.length-1].to.code}</div>
+                    </div>
+                  </div>
                 </div>
               ))}
             </div>

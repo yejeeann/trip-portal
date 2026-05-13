@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 280 96" role="img" aria-labelledby="title">
+  <title id="title">Finnair logo</title>
+  <rect width="280" height="96" rx="14" fill="#ffffff"/>
+  <path d="M44 23h59v15H63v13h33v14H63v25H44V23Z" fill="#0B1560"/>
+  <path d="M119 23h18v67h-18V23Zm33 0h18l31 39V23h18v67h-17l-32-40v40h-18V23Z" fill="#0B1560"/>
+  <text x="45" y="83" fill="#0B1560" font-family="Arial, Helvetica, sans-serif" font-size="23" font-weight="800" letter-spacing="3">FINNAIR</text>
+</svg>

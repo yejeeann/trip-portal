@@ -1,0 +1,154 @@
+{
+  "generatedAt": "2026-05-12T11:07:15.403Z",
+  "routeResults": [
+    {
+      "day": 16,
+      "date": "2026-06-05",
+      "transportMode": "rental car",
+      "city": "Gioia Tauro / Tropea / Pizzo / Calvanico",
+      "stops": [
+        "Via Metauro Gioia Tauro",
+        "Tropea Calabria",
+        "Sanctuary of Santa Maria dell'Isola Tropea",
+        "Pizzo Calabria",
+        "Chiesa di Piedigrotta Pizzo",
+        "Castello Murat Pizzo",
+        "Strada Provinciale 24b Calvanico"
+      ],
+      "optimizedRoute": {
+        "error": "The operation was aborted due to timeout"
+      },
+      "mapLinks": {
+        "error": "The operation was aborted due to timeout"
+      }
+    },
+    {
+      "day": 17,
+      "date": "2026-06-06",
+      "transportMode": "rental car",
+      "city": "Calvanico / Pompeii / Rome",
+      "stops": [
+        "Strada Provinciale 24b Calvanico",
+        "Pompeii Archaeological Park",
+        "Forum of Pompeii",
+        "Villa of the Mysteries Pompeii",
+        "Amphitheatre of Pompeii",
+        "Via della Riserva dell'Albaceto 25 Rome"
+      ],
+      "optimizedRoute": {
+        "jsonrpc": "2.0",
+        "id": "call",
+        "result": {
+          "content": [
+            {
+              "type": "text",
+              "text": "다음 장소들의 동선을 최적화했습니다: Strada Provinciale 24b Calvanico, Pompeii Archaeological Park, Forum of Pompeii, Villa of the Mysteries Pompeii, Amphitheatre of Pompeii, Via della Riserva dell'Albaceto 25 Rome"
+            }
+          ],
+          "structuredContent": {
+            "result": "다음 장소들의 동선을 최적화했습니다: Strada Provinciale 24b Calvanico, Pompeii Archaeological Park, Forum of Pompeii, Villa of the Mysteries Pompeii, Amphitheatre of Pompeii, Via della Riserva dell'Albaceto 25 Rome"
+          },
+          "isError": false
+        }
+      },
+      "mapLinks": {
+        "jsonrpc": "2.0",
+        "id": "call",
+        "result": {
+          "content": [
+            {
+              "type": "text",
+              "text": "구글 지도 링크: https://www.google.com/maps/dir/Strada+Provinciale+24b+Calvanico/Pompeii+Archaeological+Park/Forum+of+Pompeii/Villa+of+the+Mysteries+Pompeii/Amphitheatre+of+Pompeii/Via+della+Riserva+dell'Albaceto+25+Rome"
+            }
+          ],
+          "structuredContent": {
+            "result": "구글 지도 링크: https://www.google.com/maps/dir/Strada+Provinciale+24b+Calvanico/Pompeii+Archaeological+Park/Forum+of+Pompeii/Villa+of+the+Mysteries+Pompeii/Amphitheatre+of+Pompeii/Via+della+Riserva+dell'Albaceto+25+Rome"
+          },
+          "isError": false
+        }
+      }
+    },
+    {
+      "day": 18,
+      "date": "2026-06-07",
+      "transportMode": "flight",
+      "city": "Rome Fiumicino / Helsinki / Seoul",
+      "stops": [
+        "Via della Riserva dell'Albaceto 25 Rome",
+        "Rome Fiumicino Airport",
+        "Helsinki Airport",
+        "Incheon International Airport"
+      ],
+      "optimizedRoute": {
+        "jsonrpc": "2.0",
+        "id": "call",
+        "result": {
+          "content": [
+            {
+              "type": "text",
+              "text": "다음 장소들의 동선을 최적화했습니다: Via della Riserva dell'Albaceto 25 Rome, Rome Fiumicino Airport, Helsinki Airport, Incheon International Airport"
+            }
+          ],
+          "structuredContent": {
+            "result": "다음 장소들의 동선을 최적화했습니다: Via della Riserva dell'Albaceto 25 Rome, Rome Fiumicino Airport, Helsinki Airport, Incheon International Airport"
+          },
+          "isError": false
+        }
+      },
+      "mapLinks": {
+        "jsonrpc": "2.0",
+        "id": "call",
+        "result": {
+          "content": [
+            {
+              "type": "text",
+              "text": "구글 지도 링크: https://www.google.com/maps/dir/Via+della+Riserva+dell'Albaceto+25+Rome/Rome+Fiumicino+Airport/Helsinki+Airport/Incheon+International+Airport"
+            }
+          ],
+          "structuredContent": {
+            "result": "구글 지도 링크: https://www.google.com/maps/dir/Via+della+Riserva+dell'Albaceto+25+Rome/Rome+Fiumicino+Airport/Helsinki+Airport/Incheon+International+Airport"
+          },
+          "isError": false
+        }
+      }
+    }
+  ],
+  "attractionResults": [
+    {
+      "attractionName": "Tropea Calabria",
+      "error": "The operation was aborted due to timeout"
+    },
+    {
+      "attractionName": "Sanctuary of Santa Maria dell'Isola Tropea",
+      "error": "The operation was aborted due to timeout"
+    },
+    {
+      "attractionName": "Pizzo Calabria",
+      "error": "The operation was aborted due to timeout"
+    },
+    {
+      "attractionName": "Chiesa di Piedigrotta Pizzo",
+      "error": "The operation was aborted due to timeout"
+    },
+    {
+      "attractionName": "Castello Murat Pizzo",
+      "error": "The operation was aborted due to timeout"
+    },
+    {
+      "attractionName": "Pompeii Archaeological Park",
+      "error": "The operation was aborted due to timeout"
+    },
+    {
+      "attractionName": "Forum of Pompeii",
+      "error": "The operation was aborted due to timeout"
+    },
+    {
+      "attractionName": "Villa of the Mysteries Pompeii",
+      "error": "The operation was aborted due to timeout"
+    },
+    {
+      "attractionName": "Amphitheatre of Pompeii",
+      "error": "The operation was aborted due to timeout"
+    }
+  ]
+}

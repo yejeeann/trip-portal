@@ -7,13 +7,15 @@ type GuideImageProps = {
   alt: string;
   className?: string;
   imageClassName?: string;
+  fit?: "cover" | "contain";
 };
 
 export function GuideImage({
   src,
   alt,
   className = "",
-  imageClassName = ""
+  imageClassName = "",
+  fit = "cover"
 }: GuideImageProps) {
   const [failed, setFailed] = useState(false);
   const isLocalAsset = Boolean(src?.startsWith("/"));
@@ -39,7 +41,7 @@ export function GuideImage({
         <img
           src={src}
           alt={alt}
-          className={`absolute inset-0 h-full w-full object-cover transition-opacity duration-500 ${
+          className={`absolute inset-0 h-full w-full ${fit === "contain" ? "object-contain" : "object-cover"} transition-opacity duration-500 ${
             loaded || isLocalAsset ? "opacity-100" : "opacity-0"
           } ${imageClassName}`}
           onLoad={() => setLoaded(true)}

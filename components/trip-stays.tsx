@@ -3,9 +3,10 @@
 import type { AppDesignConfig, AppStructureConfig, Trip } from "@/lib/types";
 import { buildDailyGuidesForTrip, getGuideDataForTrip } from "@/lib/trip-guide";
 import { collectStays, formatStayDays } from "@/lib/stays";
-import { ArrowLeft, CalendarDays, ExternalLink, Home, Hotel, MapPin, Route } from "lucide-react";
+import { ArrowLeft, ExternalLink, House, MapPin } from "lucide-react";
 import Link from "next/link";
 import { AppNavigation } from "./app-navigation";
+import { GuideImage } from "./guide-image";
 import { MultiOsmMap, type OsmMarker } from "./multi-osm-map";
 
 export function TripStays({ trip, uiConfig }: { trip: Trip; uiConfig?: AppDesignConfig }) {
@@ -22,7 +23,6 @@ export function TripStays({ trip, uiConfig }: { trip: Trip; uiConfig?: AppDesign
       id: stay.id
     }];
   });
-  const firstDay = trip.itinerary[0]?.day ?? 1;
   const themeColor = uiConfig?.themeColor ?? "#00696C";
   const staysNavigation: AppStructureConfig = {
     navigationType: "bottom-tab",
@@ -30,48 +30,33 @@ export function TripStays({ trip, uiConfig }: { trip: Trip; uiConfig?: AppDesign
       { id: "home", label: "Home", iconType: "home" },
       { id: "overview", label: "Overview", iconType: "overview" },
       { id: "daily", label: "Daily", iconType: "calendar" },
-      { id: "stays", label: "Stays", iconType: "hotel" }
+      { id: "stays", label: "Accommodations", iconType: "accommodations" }
     ]
   };
 
   return (
     <main className="min-h-screen bg-[#F7F4EE] pb-32 text-[#17201D]">
-      <div className="mx-auto w-full max-w-5xl px-3 py-4 sm:px-6 sm:py-6">
+      <div className="w-full max-w-[24rem] px-3 py-4 sm:mx-auto sm:max-w-5xl sm:px-6 sm:py-6">
         <div className="mb-5 flex items-center justify-between gap-3">
           <Link href={`/trips/${trip.id}`} className="flex h-10 w-10 shrink-0 items-center justify-center rounded-md border border-black/10 bg-white text-[#17201D] shadow-sm">
             <ArrowLeft className="h-4 w-4" />
           </Link>
           <div className="min-w-0 flex-1">
             <p className="text-[10px] font-extrabold uppercase tracking-[0.16em]" style={{ color: themeColor }}>Stay plan</p>
-            <h1 className="truncate text-2xl font-black tracking-normal sm:text-4xl">숙소 정보</h1>
+            <h1 className="truncate text-2xl font-black tracking-normal sm:text-4xl">Accommodations</h1>
             <p className="mt-1 truncate text-xs font-bold text-[#6F746F] sm:text-sm">{trip.dateRange}</p>
           </div>
           <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-md text-white" style={{ backgroundColor: themeColor }}>
-            <Hotel className="h-5 w-5" />
+            <House className="h-5 w-5" />
           </span>
         </div>
-
-        <nav className="mb-5 grid grid-cols-3 gap-2">
-          <Link href={`/trips/${trip.id}`} className="inline-flex min-h-11 items-center justify-center gap-1.5 rounded-md border border-black/10 bg-white px-3 py-2 text-xs font-extrabold shadow-sm">
-            <Route className="h-4 w-4 shrink-0" />
-            <span className="truncate">Overview</span>
-          </Link>
-          <Link href={`/trips/${trip.id}/day/${firstDay}`} className="inline-flex min-h-11 items-center justify-center gap-1.5 rounded-md border border-black/10 bg-white px-3 py-2 text-xs font-extrabold shadow-sm">
-            <CalendarDays className="h-4 w-4 shrink-0" />
-            <span className="truncate">Daily</span>
-          </Link>
-          <Link href="/" className="inline-flex min-h-11 items-center justify-center gap-1.5 rounded-md border border-black/10 bg-white px-3 py-2 text-xs font-extrabold shadow-sm">
-            <Home className="h-4 w-4 shrink-0" />
-            <span className="truncate">Home</span>
-          </Link>
-        </nav>
 
         {stays.length > 0 ? (
           <section className="grid gap-3">
             <div className="overflow-hidden rounded-lg border border-black/10 bg-white shadow-[0_12px_30px_rgba(31,36,33,0.08)]">
               <div className="flex items-center justify-between gap-3 border-b border-black/10 bg-[#ECE7DD]/60 px-4 py-3">
                 <div className="min-w-0">
-                  <p className="text-[10px] font-extrabold uppercase tracking-[0.14em] text-[#6F746F]">Stay map</p>
+                  <p className="text-[10px] font-extrabold uppercase tracking-[0.14em] text-[#6F746F]">Accommodation map</p>
                   <h2 className="mt-1 truncate text-lg font-black">숙소 위치 한눈에 보기</h2>
                 </div>
                 <span className="shrink-0 rounded-md bg-white px-2.5 py-1 text-[10px] font-extrabold text-[#6F746F]">
@@ -91,8 +76,15 @@ export function TripStays({ trip, uiConfig }: { trip: Trip; uiConfig?: AppDesign
                     <a
                       key={`map-chip-${stay.id}`}
                       href={`#stay-${stay.id}`}
-                      className="inline-flex shrink-0 items-center gap-1.5 rounded-full border border-black/10 bg-[#F7F4EE] px-2.5 py-1.5 text-xs font-extrabold text-[#17201D]"
+                      className="inline-flex shrink-0 items-center gap-2 rounded-full border border-black/10 bg-[#F7F4EE] py-1.5 pl-1.5 pr-2.5 text-xs font-extrabold text-[#17201D]"
                     >
+                      {stay.image && (
+                        <GuideImage
+                          src={stay.image}
+                          alt={stay.imageAlt || stay.name}
+                          className="h-7 w-7 rounded-full border border-white shadow-sm"
+                        />
+                      )}
                       <span className="flex h-5 w-5 items-center justify-center rounded-full text-[10px] text-white" style={{ backgroundColor: themeColor }}>
                         {index + 1}
                       </span>
@@ -105,9 +97,24 @@ export function TripStays({ trip, uiConfig }: { trip: Trip; uiConfig?: AppDesign
 
             {stays.map((stay, index) => (
               <article id={`stay-${stay.id}`} key={stay.id} className="scroll-mt-5 overflow-hidden rounded-lg border border-black/10 bg-white shadow-[0_12px_30px_rgba(31,36,33,0.08)]">
+                {stay.image && (
+                  <div className="relative aspect-[16/9] w-full overflow-hidden bg-[#ECE7DD] sm:aspect-[21/9]">
+                    <GuideImage
+                      src={stay.image}
+                      alt={stay.imageAlt || stay.name}
+                      className="absolute inset-0 h-full w-full"
+                      imageClassName="transition duration-700 hover:scale-[1.03]"
+                    />
+                    <div className="absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-black/45 to-transparent" />
+                    <div className="absolute bottom-3 left-3 flex items-center gap-2 rounded-md bg-white/92 px-2.5 py-1.5 text-[10px] font-extrabold uppercase tracking-[0.12em] text-[#17201D] shadow-sm backdrop-blur">
+                      <span className="h-2 w-2 rounded-full bg-[#FF385C]" />
+                      Airbnb Photo
+                    </div>
+                  </div>
+                )}
                 <div className="flex items-start justify-between gap-3 border-b border-black/10 bg-[#ECE7DD]/60 px-4 py-3">
                   <div className="min-w-0">
-                    <p className="text-[10px] font-extrabold uppercase tracking-[0.14em] text-[#6F746F]">Stay {index + 1}</p>
+                    <p className="text-[10px] font-extrabold uppercase tracking-[0.14em] text-[#6F746F]">Accommodation {index + 1}</p>
                     <h2 className="mt-1 break-words text-lg font-black leading-tight [overflow-wrap:anywhere]">{stay.name}</h2>
                   </div>
                   <span className="shrink-0 rounded-md px-2.5 py-1 text-[10px] font-extrabold text-white" style={{ backgroundColor: themeColor }}>

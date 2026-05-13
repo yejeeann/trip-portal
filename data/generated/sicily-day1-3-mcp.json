@@ -1,0 +1,223 @@
+{
+  "generatedAt": "2026-05-11T12:44:34.337Z",
+  "source": "https://travelmcp.yejeelee.synology.me",
+  "mcpChecks": [
+    {
+      "day": 2,
+      "tool": "generate_map_links",
+      "route": [
+        "Roma Termini",
+        "Catania Centrale"
+      ],
+      "result": "구글 지도 링크: https://www.google.com/maps/dir/Roma+Termini/Catania+Centrale",
+      "checkedAt": "2026-05-12"
+    }
+  ],
+  "routes": [
+    {
+      "day": 1,
+      "route": [
+        "Incheon International Airport",
+        "Helsinki Airport"
+      ],
+      "optimized": {
+        "jsonrpc": "2.0",
+        "id": "call",
+        "result": {
+          "content": [
+            {
+              "type": "text",
+              "text": "다음 장소들의 동선을 최적화했습니다: Incheon International Airport, Helsinki Airport"
+            }
+          ],
+          "structuredContent": {
+            "result": "다음 장소들의 동선을 최적화했습니다: Incheon International Airport, Helsinki Airport"
+          },
+          "isError": false
+        }
+      },
+      "mapLinks": {
+        "jsonrpc": "2.0",
+        "id": "call",
+        "result": {
+          "content": [
+            {
+              "type": "text",
+              "text": "구글 지도 링크: https://www.google.com/maps/dir/Incheon+International+Airport/Helsinki+Airport"
+            }
+          ],
+          "structuredContent": {
+            "result": "구글 지도 링크: https://www.google.com/maps/dir/Incheon+International+Airport/Helsinki+Airport"
+          },
+          "isError": false
+        }
+      }
+    },
+    {
+      "day": 2,
+      "route": [
+        "Rome Fiumicino Airport",
+        "Roma Termini",
+        "Colosseum",
+        "Roman Forum",
+        "Piazza Venezia",
+        "Pantheon",
+        "Piazza Navona",
+        "Trevi Fountain",
+        "Spanish Steps",
+        "Monti District",
+        "Roma Termini"
+      ],
+      "optimized": {
+        "jsonrpc": "2.0",
+        "id": "call",
+        "result": {
+          "content": [
+            {
+              "type": "text",
+              "text": "다음 장소들의 동선을 최적화했습니다: Rome Fiumicino Airport, Roma Termini, Colosseum, Roman Forum, Piazza Venezia, Pantheon, Piazza Navona, Trevi Fountain, Spanish Steps, Monti District, Roma Termini"
+            }
+          ],
+          "structuredContent": {
+            "result": "다음 장소들의 동선을 최적화했습니다: Rome Fiumicino Airport, Roma Termini, Colosseum, Roman Forum, Piazza Venezia, Pantheon, Piazza Navona, Trevi Fountain, Spanish Steps, Monti District, Roma Termini"
+          },
+          "isError": false
+        }
+      },
+      "mapLinks": {
+        "jsonrpc": "2.0",
+        "id": "call",
+        "result": {
+          "content": [
+            {
+              "type": "text",
+              "text": "구글 지도 링크: https://www.google.com/maps/dir/Rome+Fiumicino+Airport/Roma+Termini/Colosseum/Roman+Forum/Piazza+Venezia/Pantheon/Piazza+Navona/Trevi+Fountain/Spanish+Steps/Monti+District/Roma+Termini"
+            }
+          ],
+          "structuredContent": {
+            "result": "구글 지도 링크: https://www.google.com/maps/dir/Rome+Fiumicino+Airport/Roma+Termini/Colosseum/Roman+Forum/Piazza+Venezia/Pantheon/Piazza+Navona/Trevi+Fountain/Spanish+Steps/Monti+District/Roma+Termini"
+          },
+          "isError": false
+        }
+      }
+    },
+    {
+      "day": 3,
+      "route": [
+        "Catania Centrale",
+        "Piazza del Duomo Catania",
+        "Basilica Cattedrale di Sant Agata",
+        "Piazza Universita",
+        "La Pescheria",
+        "Via Etnea",
+        "Aci Trezza",
+        "Faraglioni Aci Trezza",
+        "Via II Scacchiere Pisano 87 Zafferana Etnea",
+        "Mount Etna",
+        "Adrano"
+      ],
+      "optimized": {
+        "jsonrpc": "2.0",
+        "id": "call",
+        "result": {
+          "content": [
+            {
+              "type": "text",
+              "text": "다음 장소들의 동선을 최적화했습니다: Catania Centrale, Piazza del Duomo Catania, Basilica Cattedrale di Sant Agata, Piazza Universita, La Pescheria, Via Etnea, Aci Trezza, Faraglioni Aci Trezza, Via II Scacchiere Pisano 87 Zafferana Etnea, Mount Etna, Adrano"
+            }
+          ],
+          "structuredContent": {
+            "result": "다음 장소들의 동선을 최적화했습니다: Catania Centrale, Piazza del Duomo Catania, Basilica Cattedrale di Sant Agata, Piazza Universita, La Pescheria, Via Etnea, Aci Trezza, Faraglioni Aci Trezza, Via II Scacchiere Pisano 87 Zafferana Etnea, Mount Etna, Adrano"
+          },
+          "isError": false
+        }
+      },
+      "mapLinks": {
+        "jsonrpc": "2.0",
+        "id": "call",
+        "result": {
+          "content": [
+            {
+              "type": "text",
+              "text": "구글 지도 링크: https://www.google.com/maps/dir/Catania+Centrale/Piazza+del+Duomo+Catania/Basilica+Cattedrale+di+Sant+Agata/Piazza+Universita/La+Pescheria/Via+Etnea/Aci+Trezza/Faraglioni+Aci+Trezza/Via+II+Scacchiere+Pisano+87+Zafferana+Etnea/Mount+Etna/Adrano"
+            }
+          ],
+          "structuredContent": {
+            "result": "구글 지도 링크: https://www.google.com/maps/dir/Catania+Centrale/Piazza+del+Duomo+Catania/Basilica+Cattedrale+di+Sant+Agata/Piazza+Universita/La+Pescheria/Via+Etnea/Aci+Trezza/Faraglioni+Aci+Trezza/Via+II+Scacchiere+Pisano+87+Zafferana+Etnea/Mount+Etna/Adrano"
+          },
+          "isError": false
+        }
+      }
+    }
+  ],
+  "wiki": [
+    {
+      "name": "Colosseum",
+      "error": "timeout"
+    },
+    {
+      "name": "Roman Forum",
+      "error": "timeout"
+    },
+    {
+      "name": "Piazza Venezia",
+      "error": "timeout"
+    },
+    {
+      "name": "Pantheon",
+      "error": "timeout"
+    },
+    {
+      "name": "Piazza Navona",
+      "error": "timeout"
+    },
+    {
+      "name": "Trevi Fountain",
+      "error": "timeout"
+    },
+    {
+      "name": "Spanish Steps",
+      "error": "timeout"
+    },
+    {
+      "name": "Monti District Rome",
+      "error": "timeout"
+    },
+    {
+      "name": "Piazza del Duomo Catania",
+      "error": "timeout"
+    },
+    {
+      "name": "Basilica Cattedrale di Sant Agata Catania",
+      "error": "timeout"
+    },
+    {
+      "name": "Piazza Universita Catania",
+      "error": "timeout"
+    },
+    {
+      "name": "La Pescheria Catania",
+      "error": "timeout"
+    },
+    {
+      "name": "Via Etnea Catania",
+      "error": "timeout"
+    },
+    {
+      "name": "Aci Trezza",
+      "error": "timeout"
+    },
+    {
+      "name": "Faraglioni Aci Trezza",
+      "error": "timeout"
+    },
+    {
+      "name": "Mount Etna",
+      "error": "timeout"
+    },
+    {
+      "name": "Adrano Sicily",
+      "error": "timeout"
+    }
+  ]
+}

@@ -3,20 +3,21 @@
 import type { AppStructureConfig } from "@/lib/types";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Home, Compass, Map, Heart, User, LayoutGrid, CalendarDays, Hotel } from "lucide-react";
+import { Bed, Compass, Map, Heart, User, LayoutGrid, CalendarDays } from "lucide-react";
 
 // Stitch가 반환한 iconType 문자열을 실제 Lucide 아이콘 컴포넌트로 매핑
 const IconMap: Record<string, React.ElementType> = {
-  home: Home,
+  home: Compass,
   compass: Compass,
   map: Map,
   heart: Heart,
   user: User,
   calendar: CalendarDays,
   daily: CalendarDays,
-  overview: LayoutGrid,
-  hotel: Hotel,
-  stays: Hotel,
+  overview: Map,
+  hotel: Bed,
+  stays: Bed,
+  accommodations: Bed,
 };
 
 export function AppNavigation({
@@ -72,6 +73,7 @@ export function AppNavigation({
         {tabs.map((tab) => {
           const Icon = IconMap[tab.iconType] || IconMap[tab.id] || LayoutGrid;
           const isActive = checkIsActive(tab.id);
+          const label = tab.id === "stays" ? "Stays" : tab.label;
 
           return (
             <Link
@@ -90,10 +92,10 @@ export function AppNavigation({
                 />
               </div>
               <span
-                className="mt-0.5 max-w-full truncate text-[10px] font-extrabold tracking-normal transition-colors"
+                className="mt-0.5 max-w-full truncate text-[9px] font-extrabold tracking-normal transition-colors sm:text-[10px]"
                 style={{ color: isActive ? themeColor : "#727876" }}
               >
-                {tab.label}
+                {label}
               </span>
             </Link>
           );

@@ -1,0 +1,208 @@
+{
+  "generatedAt": "2026-05-12T04:57:19.303Z",
+  "routeResults": [
+    {
+      "day": 7,
+      "date": "2026-05-27",
+      "transportMode": "flight + taxi + walk",
+      "city": "Malta / Valletta / Three Cities",
+      "stops": [
+        "Catania Fontanarossa Airport",
+        "Malta International Airport",
+        "Gzira",
+        "Valletta",
+        "Upper Barrakka Gardens",
+        "St John's Co-Cathedral",
+        "Birgu",
+        "Bormla Cospicua",
+        "Senglea"
+      ],
+      "optimizedRoute": {
+        "jsonrpc": "2.0",
+        "id": "call",
+        "result": {
+          "content": [
+            {
+              "type": "text",
+              "text": "다음 장소들의 동선을 최적화했습니다: Catania Fontanarossa Airport, Malta International Airport, Gzira, Valletta, Upper Barrakka Gardens, St John's Co-Cathedral, Birgu, Bormla Cospicua, Senglea"
+            }
+          ],
+          "structuredContent": {
+            "result": "다음 장소들의 동선을 최적화했습니다: Catania Fontanarossa Airport, Malta International Airport, Gzira, Valletta, Upper Barrakka Gardens, St John's Co-Cathedral, Birgu, Bormla Cospicua, Senglea"
+          },
+          "isError": false
+        }
+      },
+      "mapLinks": {
+        "jsonrpc": "2.0",
+        "id": "call",
+        "result": {
+          "content": [
+            {
+              "type": "text",
+              "text": "구글 지도 링크: https://www.google.com/maps/dir/Catania+Fontanarossa+Airport/Malta+International+Airport/Gzira/Valletta/Upper+Barrakka+Gardens/St+John's+Co-Cathedral/Birgu/Bormla+Cospicua/Senglea"
+            }
+          ],
+          "structuredContent": {
+            "result": "구글 지도 링크: https://www.google.com/maps/dir/Catania+Fontanarossa+Airport/Malta+International+Airport/Gzira/Valletta/Upper+Barrakka+Gardens/St+John's+Co-Cathedral/Birgu/Bormla+Cospicua/Senglea"
+          },
+          "isError": false
+        }
+      }
+    },
+    {
+      "day": 8,
+      "date": "2026-05-28",
+      "transportMode": "taxi + ferry + boat",
+      "city": "Comino / Gozo",
+      "stops": [
+        "Gzira",
+        "Cirkewwa Ferry Terminal",
+        "Blue Lagoon Comino",
+        "Mgarr Harbour Gozo",
+        "Cittadella Victoria Gozo",
+        "Gozo Island",
+        "Ggantija Archaeological Park",
+        "Gzira"
+      ],
+      "optimizedRoute": {
+        "jsonrpc": "2.0",
+        "id": "call",
+        "result": {
+          "content": [
+            {
+              "type": "text",
+              "text": "다음 장소들의 동선을 최적화했습니다: Gzira, Cirkewwa Ferry Terminal, Blue Lagoon Comino, Mgarr Harbour Gozo, Cittadella Victoria Gozo, Gozo Island, Ggantija Archaeological Park, Gzira"
+            }
+          ],
+          "structuredContent": {
+            "result": "다음 장소들의 동선을 최적화했습니다: Gzira, Cirkewwa Ferry Terminal, Blue Lagoon Comino, Mgarr Harbour Gozo, Cittadella Victoria Gozo, Gozo Island, Ggantija Archaeological Park, Gzira"
+          },
+          "isError": false
+        }
+      },
+      "mapLinks": {
+        "jsonrpc": "2.0",
+        "id": "call",
+        "result": {
+          "content": [
+            {
+              "type": "text",
+              "text": "구글 지도 링크: https://www.google.com/maps/dir/Gzira/Cirkewwa+Ferry+Terminal/Blue+Lagoon+Comino/Mgarr+Harbour+Gozo/Cittadella+Victoria+Gozo/Gozo+Island/Ggantija+Archaeological+Park/Gzira"
+            }
+          ],
+          "structuredContent": {
+            "result": "구글 지도 링크: https://www.google.com/maps/dir/Gzira/Cirkewwa+Ferry+Terminal/Blue+Lagoon+Comino/Mgarr+Harbour+Gozo/Cittadella+Victoria+Gozo/Gozo+Island/Ggantija+Archaeological+Park/Gzira"
+          },
+          "isError": false
+        }
+      }
+    },
+    {
+      "day": 9,
+      "date": "2026-05-29",
+      "transportMode": "taxi + walk + flight",
+      "city": "Blue Grotto / Marsaxlokk / Mdina / Mosta / Catania",
+      "stops": [
+        "Gzira",
+        "Blue Grotto Malta",
+        "Marsaxlokk",
+        "Mdina",
+        "Mosta Rotunda",
+        "Malta International Airport",
+        "Catania Fontanarossa Airport",
+        "Contrada San Calogero Costa Saracena Castelluccio"
+      ],
+      "optimizedRoute": {
+        "jsonrpc": "2.0",
+        "id": "call",
+        "result": {
+          "content": [
+            {
+              "type": "text",
+              "text": "다음 장소들의 동선을 최적화했습니다: Gzira, Blue Grotto Malta, Marsaxlokk, Mdina, Mosta Rotunda, Malta International Airport, Catania Fontanarossa Airport, Contrada San Calogero Costa Saracena Castelluccio"
+            }
+          ],
+          "structuredContent": {
+            "result": "다음 장소들의 동선을 최적화했습니다: Gzira, Blue Grotto Malta, Marsaxlokk, Mdina, Mosta Rotunda, Malta International Airport, Catania Fontanarossa Airport, Contrada San Calogero Costa Saracena Castelluccio"
+          },
+          "isError": false
+        }
+      },
+      "mapLinks": {
+        "jsonrpc": "2.0",
+        "id": "call",
+        "result": {
+          "content": [
+            {
+              "type": "text",
+              "text": "구글 지도 링크: https://www.google.com/maps/dir/Gzira/Blue+Grotto+Malta/Marsaxlokk/Mdina/Mosta+Rotunda/Malta+International+Airport/Catania+Fontanarossa+Airport/Contrada+San+Calogero+Costa+Saracena+Castelluccio"
+            }
+          ],
+          "structuredContent": {
+            "result": "구글 지도 링크: https://www.google.com/maps/dir/Gzira/Blue+Grotto+Malta/Marsaxlokk/Mdina/Mosta+Rotunda/Malta+International+Airport/Catania+Fontanarossa+Airport/Contrada+San+Calogero+Costa+Saracena+Castelluccio"
+          },
+          "isError": false
+        }
+      }
+    }
+  ],
+  "attractionResults": [
+    {
+      "attractionName": "Valletta",
+      "error": "The operation was aborted due to timeout"
+    },
+    {
+      "attractionName": "Upper Barrakka Gardens",
+      "error": "The operation was aborted due to timeout"
+    },
+    {
+      "attractionName": "St John's Co-Cathedral Valletta",
+      "error": "The operation was aborted due to timeout"
+    },
+    {
+      "attractionName": "Birgu Vittoriosa",
+      "error": "The operation was aborted due to timeout"
+    },
+    {
+      "attractionName": "Bormla Cospicua",
+      "error": "The operation was aborted due to timeout"
+    },
+    {
+      "attractionName": "Senglea",
+      "error": "The operation was aborted due to timeout"
+    },
+    {
+      "attractionName": "Gozo Island",
+      "error": "The operation was aborted due to timeout"
+    },
+    {
+      "attractionName": "Cittadella Victoria Gozo",
+      "error": "The operation was aborted due to timeout"
+    },
+    {
+      "attractionName": "Ggantija Archaeological Park",
+      "error": "The operation was aborted due to timeout"
+    },
+    {
+      "attractionName": "Blue Lagoon Comino",
+      "error": "The operation was aborted due to timeout"
+    },
+    {
+      "attractionName": "Blue Grotto Malta",
+      "error": "The operation was aborted due to timeout"
+    },
+    {
+      "attractionName": "Marsaxlokk",
+      "error": "The operation was aborted due to timeout"
+    },
+    {
+      "attractionName": "Mdina Malta",
+      "error": "The operation was aborted due to timeout"
+    },
+    {
+      "attractionName": "Mosta Rotunda",
+      "error": "The operation was aborted due to timeout"
+    }
+  ]
+}

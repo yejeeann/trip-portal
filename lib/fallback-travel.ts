@@ -19,13 +19,13 @@ const travelArt = {
 const sicilyTrip: Trip = {
   id: "sicily-malta-rome-17d",
   title: "Sicily & Malta — 19 Days",
-  subtitle: "로마에서 시칠리아, 몰타와 아말피까지 이어지는 지중해 루트를 매거진형 가이드로 정리했습니다.",
+  subtitle: "로마에서 시칠리아와 몰타를 지나 칼라브리아, 캄파니아, 폼페이를 거쳐 돌아오는 지중해 루트를 매거진형 가이드로 정리했습니다.",
   dateRange: "May 21, 2026 — Jun 8, 2026",
   status: "upcoming",
   heroImage: travelArt.mediterranean,
   countries: ["Italy", "Malta"],
   routeSummary:
-    "야간열차, 석회암 항구, 오래된 도심, 느린 해안 드라이브를 하나의 흐름으로 묶고 6/7 로마 피우미치노 출국으로 마무리하는 일정입니다.",
+    "Rome에서 Catania로 들어가 Sicily 동부·남부·서부와 Malta를 돈 뒤, Messina 해협을 건너 Calabria, Amalfi, Pompeii를 거쳐 Rome/Fiumicino에서 출국하는 19일 루트입니다.",
   itinerary: [
     {
       day: 1,
@@ -60,7 +60,7 @@ const sicilyTrip: Trip = {
       image: travelArt.etna,
       coordinates: { lat: 37.5079, lng: 15.083 },
       weather: { condition: "맑음", tempC: 25, highC: 29, lowC: 19 },
-      highlights: ["두오모 광장", "어시장", "에트나 전망"],
+      highlights: ["Catania", "Aci Trezza", "Adrano"],
       size: "tall"
     },
     {
@@ -72,7 +72,7 @@ const sicilyTrip: Trip = {
       image: travelArt.taormina,
       coordinates: { lat: 37.8516, lng: 15.2853 },
       weather: { condition: "따뜻한 바람", tempC: 24, highC: 28, lowC: 18 },
-      highlights: ["고대 극장", "이솔라 벨라", "코르소 움베르토"]
+      highlights: ["Taormina", "Castelmola", "Giardini Naxos"]
     },
     {
       day: 5,
@@ -83,18 +83,18 @@ const sicilyTrip: Trip = {
       image: travelArt.syracuse,
       coordinates: { lat: 37.0755, lng: 15.2866 },
       weather: { condition: "부드러운 햇빛", tempC: 23, highC: 27, lowC: 18 },
-      highlights: ["오르티지아", "아폴로 신전", "해안가 아페리티보"]
+      highlights: ["Syracuse", "Noto", "남동부 해안 도시"]
     },
     {
       day: 6,
       date: "2026-05-26",
-      city: "Catania",
+      city: "Ragusa / Modica",
       country: "Italy",
-      title: "Sicily Buffer Day",
+      title: "Southeast Baroque and Fishing Villages",
       image: travelArt.etna,
-      coordinates: { lat: 37.5079, lng: 15.083 },
+      coordinates: { lat: 36.9239306, lng: 14.7198951 },
       weather: { condition: "따뜻함", tempC: 24, highC: 28, lowC: 19 },
-      highlights: ["카타니아 베이스", "몰타 이동 준비", "시칠리아 동부 정리"],
+      highlights: ["Ragusa / Modica", "Pozzallo / Marzamemi", "Caltagirone / Piazza Armerina / Enna 대안 루프"],
       size: "wide"
     },
     {
@@ -117,19 +117,19 @@ const sicilyTrip: Trip = {
       image: travelArt.gozo,
       coordinates: { lat: 36.0443, lng: 14.2512 },
       weather: { condition: "맑은 바다", tempC: 24, highC: 28, lowC: 20 },
-      highlights: ["빅토리아", "치타델", "블루 라군"],
+      highlights: ["Mellieha", "Comino", "Victoria / Xaghra"],
       size: "tall"
     },
     {
       day: 9,
       date: "2026-05-29",
-      city: "Catania",
+      city: "Mdina / Mosta",
       country: "Italy",
-      title: "Malta to Catania",
+      title: "Mdina, Mosta and Catania Return",
       image: travelArt.valletta,
-      coordinates: { lat: 37.5079, lng: 15.083 },
+      coordinates: { lat: 35.8858, lng: 14.4031 },
       weather: { condition: "늦은 귀환", tempC: 24, highC: 28, lowC: 20 },
-      highlights: ["몰타 마지막 산책", "MLA 20:45 출발", "CTA 21:30 도착"]
+      highlights: ["Qrendi / Marsaxlokk", "Mdina / Mosta", "Luqa -> Catania"]
     },
     {
       day: 10,
@@ -140,7 +140,7 @@ const sicilyTrip: Trip = {
       image: travelArt.mediterranean,
       coordinates: { lat: 37.3087, lng: 13.4624 },
       weather: { condition: "남서부 시칠리아", tempC: 24, highC: 28, lowC: 19 },
-      highlights: ["Realmonte 체크인", "신전의 계곡", "Agrigento"],
+      highlights: ["Augusta 출발", "Realmonte", "Agrigento"],
       size: "tall"
     },
     {
@@ -152,29 +152,29 @@ const sicilyTrip: Trip = {
       image: travelArt.mediterranean,
       coordinates: { lat: 37.3087, lng: 13.4624 },
       weather: { condition: "남서부 시칠리아", tempC: 24, highC: 28, lowC: 18 },
-      highlights: ["Realmonte 숙박", "Agrigento", "서부 이동 준비"]
+      highlights: ["Realmonte", "Agrigento", "남부 시칠리아 베이스"]
     },
     {
       day: 12,
       date: "2026-06-01",
-      city: "Trapani",
+      city: "Trapani / Erice",
       country: "Italy",
-      title: "Western Sicily Base",
+      title: "Western Sicily Transfer",
       image: travelArt.mediterranean,
       coordinates: { lat: 38.0375, lng: 13.0252 },
       weather: { condition: "서부 시칠리아", tempC: 24, highC: 28, lowC: 18 },
-      highlights: ["Contrada Piano Milano 체크인", "Trapani", "Erice"]
+      highlights: ["Realmonte 체크아웃", "Trapani / Torre di Ligny", "Erice / Contrada Piano Milano"]
     },
     {
       day: 13,
       date: "2026-06-02",
-      city: "Erice",
+      city: "Balestrate / Segesta",
       country: "Italy",
-      title: "Trapani, Erice and Scopello",
+      title: "Segesta and Scopello Coast",
       image: travelArt.mediterranean,
       coordinates: { lat: 38.0375, lng: 13.0252 },
       weather: { condition: "서부 시칠리아", tempC: 24, highC: 28, lowC: 18 },
-      highlights: ["Contrada Piano Milano 숙박", "Erice", "Scopello"]
+      highlights: ["Balestrate 베이스", "Segesta", "Scopello / Zingaro"]
     },
     {
       day: 14,
@@ -190,35 +190,35 @@ const sicilyTrip: Trip = {
     {
       day: 15,
       date: "2026-06-04",
-      city: "Calabria",
+      city: "Cefalu / Scilla",
       country: "Italy",
-      title: "Calabria Transfer",
+      title: "Cefalu and Calabria Transfer",
       image: travelArt.amalfi,
       coordinates: { lat: 38.4297, lng: 15.8826 },
       weather: { condition: "본토 이동", tempC: 24, highC: 28, lowC: 18 },
-      highlights: ["Via Metauro 체크인", "Calabria", "본토 이동"]
+      highlights: ["Balestrate 체크아웃", "Cefalu", "Messina Ferry / Scilla / Gioia Tauro"]
     },
     {
       day: 16,
       date: "2026-06-05",
-      city: "Campania",
+      city: "Tropea / Pizzo",
       country: "Italy",
-      title: "Campania Transfer",
+      title: "Calabria Coast to Campania",
       image: travelArt.mediterranean,
-      coordinates: { lat: 40.7783, lng: 14.8294 },
+      coordinates: { lat: 38.6786, lng: 15.8972 },
       weather: { condition: "북상 이동", tempC: 24, highC: 28, lowC: 18 },
-      highlights: ["Strada Provinciale 24b 체크인", "Calvanico", "로마 방향 이동"]
+      highlights: ["Gioia Tauro 출발", "Tropea", "Pizzo / Calvanico"]
     },
     {
       day: 17,
       date: "2026-06-06",
-      city: "Rome",
+      city: "Amalfi / Pompeii / Rome",
       country: "Italy",
-      title: "Rome Final Night",
-      image: travelArt.rome,
-      coordinates: { lat: 41.8832, lng: 12.3482 },
+      title: "Amalfi, Pompeii and Rome Final Night",
+      image: travelArt.amalfi,
+      coordinates: { lat: 40.634, lng: 14.6027 },
       weather: { condition: "출국 전날", tempC: 24, highC: 28, lowC: 18 },
-      highlights: ["Via della Riserva dell'Albaceto 체크인", "FCO 출국 준비", "로마 마지막 숙박"]
+      highlights: ["Calvanico", "Amalfi", "Pompeii / Rome final stay"]
     },
     {
       day: 18,
@@ -429,25 +429,25 @@ export const fallbackTravelPayload: TravelPayload = {
   },
   recommendations: [
     {
-      id: "valletta-harbor",
-      title: "어퍼 바라카 골든아워 전망 포인트",
+      id: "sicily-valletta-harbor",
+      title: "Valletta와 Three Cities 항구 저녁 산책",
       city: "Valletta",
-      category: "전망",
+      category: "도시 전망",
       distanceKm: 0.8
     },
     {
-      id: "zermatt-gornergrat",
-      title: "고르너그라트 일출 열차 구간",
-      city: "Zermatt",
-      category: "알프스 전망",
-      distanceKm: 4.7
+      id: "sicily-ragusa-modica",
+      title: "Ragusa와 Modica 바로크 도시 루프",
+      city: "Ragusa",
+      category: "남동부 시칠리아",
+      distanceKm: 45
     },
     {
-      id: "ravello-terrace",
-      title: "라벨로 정원 테라스 휴식",
-      city: "Amalfi",
-      category: "느린 정차",
-      distanceKm: 6.4
+      id: "sicily-palermo-monreale",
+      title: "Palermo와 Monreale 서부 시칠리아 하루",
+      city: "Palermo",
+      category: "서부 시칠리아",
+      distanceKm: 9
     }
   ]
 };

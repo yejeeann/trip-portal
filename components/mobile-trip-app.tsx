@@ -5,7 +5,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
 import {
-  Home,
+  Compass,
   Route,
   CalendarDays,
   Images,   
@@ -28,6 +28,7 @@ import { MultiOsmMap } from "./multi-osm-map";
 import { optimizeRouteAction, generateMapLinkAction } from "@/lib/mcp-actions";
 import { PlaceBottomSheet } from "./place-detail";
 import { useDailyMapMarkers } from "@/lib/daily-map-markers-client";
+import { AirlineLogo } from "./airline-logo";
 
 type MobileTripTab = "home" | "route" | "daily" | "sights" | "logistics";
 
@@ -142,6 +143,7 @@ function DailyMenu({ guides, trip, uiConfig, onSelectPlace }: { guides: DailyGui
   };
 
   if (!guide) return null;
+  const headerDateLabel = formatDailyHeaderDate(guide.date);
 
   return (
     <div className="flex h-full flex-col bg-slate-50">
@@ -150,7 +152,8 @@ function DailyMenu({ guides, trip, uiConfig, onSelectPlace }: { guides: DailyGui
         <div className="flex items-end justify-between px-6 py-4">
           <div>
             <span className="mb-1 block text-[10px] font-bold uppercase tracking-widest text-sky-600">The Journal</span>
-            <h1 className="font-serif text-3xl font-bold leading-none text-slate-900">Day {guide.day}</h1>
+            <h1 className="font-serif text-3xl font-bold leading-none text-slate-900">{headerDateLabel}</h1>
+            <p className="mt-1 text-xs font-bold uppercase tracking-widest text-slate-400">Day {guide.day}</p>
           </div>
           <div className="pb-0.5 text-right">
             <span className="text-xs font-medium uppercase tracking-widest text-slate-500">{guide.region?.split(" / ")[0]}</span>
@@ -194,7 +197,7 @@ function DailyMenu({ guides, trip, uiConfig, onSelectPlace }: { guides: DailyGui
                 <span className={`text-[10px] font-bold uppercase tracking-wider transition-colors ${
                   isActive ? "text-slate-900" : "text-slate-400"
                 }`}>
-                  Day {g.day}
+                  {formatDailyHeaderDate(g.date, false)}
                 </span>
               </button>
             );
@@ -681,11 +684,20 @@ function LogisticsMenu({ tickets }: { tickets: FlightTicket[] }) {
           <h2 className="text-xl font-serif font-bold text-slate-900">Transport Schedule</h2>
         </div>
         
-        {tickets.map((ticket) => (
+        {tickets.map((ticket) => {
+          const firstSegment = ticket.segments[0];
+
+          return (
           <div key={ticket.id} className="rounded-2xl border border-slate-100 bg-white p-5 shadow-sm transition-colors hover:shadow-md">
-            <div className="flex justify-between items-center mb-5">
-              <div className="text-xs font-bold text-slate-500 uppercase tracking-wider">{ticket.title}</div>
-              <div className="text-[11px] text-sky-600 font-semibold">{ticket.dateLabel}</div>
+            <div className="mb-5 flex items-start justify-between gap-3">
+              <div className="flex min-w-0 items-center gap-3">
+                <AirlineLogo code={firstSegment?.airlineCode} name={firstSegment?.airlineName} size="sm" />
+                <div className="min-w-0">
+                  <div className="truncate text-xs font-bold uppercase tracking-wider text-slate-500">{ticket.title}</div>
+                  <div className="mt-1 text-[11px] font-semibold text-slate-400">{firstSegment?.airlineName}</div>
+                </div>
+              </div>
+              <div className="shrink-0 text-[11px] font-semibold text-sky-600">{ticket.dateLabel}</div>
             </div>
             
             {ticket.segments.map((seg, idx) => (
@@ -723,7 +735,8 @@ function LogisticsMenu({ tickets }: { tickets: FlightTicket[] }) {
               </div>
             </div>
           </div>
-        ))}
+          );
+        })}
       </div>
     </div>
   );
@@ -819,9 +832,22 @@ function RouteMenu({ trip, items }: { trip: Trip; items: MasterTimelineItem[] })
   );
 }
 
+function formatDailyHeaderDate(date: string, includeWeekday = true) {
+  const [year, month, day] = date.split("-").map(Number);
+  if (!year || !month || !day) return date;
+
+  if (!includeWeekday) return `${month}/${day}`;
+
+  const weekday = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"][
+    new Date(Date.UTC(year, month - 1, day)).getUTCDay()
+  ];
+
+  return `${month}/${day} ${weekday}`;
+}
+
 function BottomNav({ activeTab, onTabChange }: { activeTab: MobileTripTab; onTabChange: (tab: MobileTripTab) => void }) {
-  const tabs: Array<{ id: MobileTripTab; label: string; icon: typeof Home }> = [
-    { id: "home", label: "Overview", icon: Home },
+  const tabs: Array<{ id: MobileTripTab; label: string; icon: typeof Compass }> = [
+    { id: "home", label: "Overview", icon: Compass },
     { id: "route", label: "Route", icon: Route },
     { id: "daily", label: "Daily", icon: CalendarDays },
     { id: "sights", label: "Sights", icon: Images },

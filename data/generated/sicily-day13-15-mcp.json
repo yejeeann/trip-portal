@@ -1,0 +1,219 @@
+{
+  "generatedAt": "2026-05-12T10:14:53.302Z",
+  "routeResults": [
+    {
+      "day": 13,
+      "date": "2026-06-02",
+      "transportMode": "rental car",
+      "city": "Balestrate / Segesta / Scopello",
+      "stops": [
+        "Contrada Piano Milano Balestrate",
+        "Segesta Archaeological Park",
+        "Doric Temple of Segesta",
+        "Theater of Segesta",
+        "Scopello Sicily",
+        "Tonnara di Scopello",
+        "Faraglioni di Scopello",
+        "Contrada Piano Milano Balestrate"
+      ],
+      "optimizedRoute": {
+        "jsonrpc": "2.0",
+        "id": "call",
+        "result": {
+          "content": [
+            {
+              "type": "text",
+              "text": "다음 장소들의 동선을 최적화했습니다: Contrada Piano Milano Balestrate, Segesta Archaeological Park, Doric Temple of Segesta, Theater of Segesta, Scopello Sicily, Tonnara di Scopello, Faraglioni di Scopello, Contrada Piano Milano Balestrate"
+            }
+          ],
+          "structuredContent": {
+            "result": "다음 장소들의 동선을 최적화했습니다: Contrada Piano Milano Balestrate, Segesta Archaeological Park, Doric Temple of Segesta, Theater of Segesta, Scopello Sicily, Tonnara di Scopello, Faraglioni di Scopello, Contrada Piano Milano Balestrate"
+          },
+          "isError": false
+        }
+      },
+      "mapLinks": {
+        "jsonrpc": "2.0",
+        "id": "call",
+        "result": {
+          "content": [
+            {
+              "type": "text",
+              "text": "구글 지도 링크: https://www.google.com/maps/dir/Contrada+Piano+Milano+Balestrate/Segesta+Archaeological+Park/Doric+Temple+of+Segesta/Theater+of+Segesta/Scopello+Sicily/Tonnara+di+Scopello/Faraglioni+di+Scopello/Contrada+Piano+Milano+Balestrate"
+            }
+          ],
+          "structuredContent": {
+            "result": "구글 지도 링크: https://www.google.com/maps/dir/Contrada+Piano+Milano+Balestrate/Segesta+Archaeological+Park/Doric+Temple+of+Segesta/Theater+of+Segesta/Scopello+Sicily/Tonnara+di+Scopello/Faraglioni+di+Scopello/Contrada+Piano+Milano+Balestrate"
+          },
+          "isError": false
+        }
+      }
+    },
+    {
+      "day": 14,
+      "date": "2026-06-03",
+      "transportMode": "rental car + walk",
+      "city": "Balestrate / Palermo / Monreale",
+      "stops": [
+        "Contrada Piano Milano Balestrate",
+        "Palermo Cathedral",
+        "Quattro Canti Palermo",
+        "Fontana Pretoria Palermo",
+        "Mercato Ballaro Palermo",
+        "Cappella Palatina Palermo",
+        "Monreale Cathedral",
+        "Contrada Piano Milano Balestrate"
+      ],
+      "optimizedRoute": {
+        "jsonrpc": "2.0",
+        "id": "call",
+        "result": {
+          "content": [
+            {
+              "type": "text",
+              "text": "다음 장소들의 동선을 최적화했습니다: Contrada Piano Milano Balestrate, Palermo Cathedral, Quattro Canti Palermo, Fontana Pretoria Palermo, Mercato Ballaro Palermo, Cappella Palatina Palermo, Monreale Cathedral, Contrada Piano Milano Balestrate"
+            }
+          ],
+          "structuredContent": {
+            "result": "다음 장소들의 동선을 최적화했습니다: Contrada Piano Milano Balestrate, Palermo Cathedral, Quattro Canti Palermo, Fontana Pretoria Palermo, Mercato Ballaro Palermo, Cappella Palatina Palermo, Monreale Cathedral, Contrada Piano Milano Balestrate"
+          },
+          "isError": false
+        }
+      },
+      "mapLinks": {
+        "jsonrpc": "2.0",
+        "id": "call",
+        "result": {
+          "content": [
+            {
+              "type": "text",
+              "text": "구글 지도 링크: https://www.google.com/maps/dir/Contrada+Piano+Milano+Balestrate/Palermo+Cathedral/Quattro+Canti+Palermo/Fontana+Pretoria+Palermo/Mercato+Ballaro+Palermo/Cappella+Palatina+Palermo/Monreale+Cathedral/Contrada+Piano+Milano+Balestrate"
+            }
+          ],
+          "structuredContent": {
+            "result": "구글 지도 링크: https://www.google.com/maps/dir/Contrada+Piano+Milano+Balestrate/Palermo+Cathedral/Quattro+Canti+Palermo/Fontana+Pretoria+Palermo/Mercato+Ballaro+Palermo/Cappella+Palatina+Palermo/Monreale+Cathedral/Contrada+Piano+Milano+Balestrate"
+          },
+          "isError": false
+        }
+      }
+    },
+    {
+      "day": 15,
+      "date": "2026-06-04",
+      "transportMode": "rental car + ferry",
+      "city": "Balestrate / Cefalu / Messina Strait / Scilla / Gioia Tauro",
+      "stops": [
+        "Contrada Piano Milano Balestrate",
+        "Cefalu Cathedral",
+        "Cefalu Old Harbour",
+        "Messina Ferry Terminal",
+        "Villa San Giovanni Ferry Terminal",
+        "Chianalea di Scilla",
+        "Castello Ruffo Scilla",
+        "Via Metauro Gioia Tauro"
+      ],
+      "optimizedRoute": {
+        "jsonrpc": "2.0",
+        "id": "call",
+        "result": {
+          "content": [
+            {
+              "type": "text",
+              "text": "다음 장소들의 동선을 최적화했습니다: Contrada Piano Milano Balestrate, Cefalu Cathedral, Cefalu Old Harbour, Messina Ferry Terminal, Villa San Giovanni Ferry Terminal, Chianalea di Scilla, Castello Ruffo Scilla, Via Metauro Gioia Tauro"
+            }
+          ],
+          "structuredContent": {
+            "result": "다음 장소들의 동선을 최적화했습니다: Contrada Piano Milano Balestrate, Cefalu Cathedral, Cefalu Old Harbour, Messina Ferry Terminal, Villa San Giovanni Ferry Terminal, Chianalea di Scilla, Castello Ruffo Scilla, Via Metauro Gioia Tauro"
+          },
+          "isError": false
+        }
+      },
+      "mapLinks": {
+        "jsonrpc": "2.0",
+        "id": "call",
+        "result": {
+          "content": [
+            {
+              "type": "text",
+              "text": "구글 지도 링크: https://www.google.com/maps/dir/Contrada+Piano+Milano+Balestrate/Cefalu+Cathedral/Cefalu+Old+Harbour/Messina+Ferry+Terminal/Villa+San+Giovanni+Ferry+Terminal/Chianalea+di+Scilla/Castello+Ruffo+Scilla/Via+Metauro+Gioia+Tauro"
+            }
+          ],
+          "structuredContent": {
+            "result": "구글 지도 링크: https://www.google.com/maps/dir/Contrada+Piano+Milano+Balestrate/Cefalu+Cathedral/Cefalu+Old+Harbour/Messina+Ferry+Terminal/Villa+San+Giovanni+Ferry+Terminal/Chianalea+di+Scilla/Castello+Ruffo+Scilla/Via+Metauro+Gioia+Tauro"
+          },
+          "isError": false
+        }
+      }
+    }
+  ],
+  "attractionResults": [
+    {
+      "attractionName": "Segesta Archaeological Park",
+      "error": "The operation was aborted due to timeout"
+    },
+    {
+      "attractionName": "Doric Temple of Segesta",
+      "error": "The operation was aborted due to timeout"
+    },
+    {
+      "attractionName": "Theater of Segesta",
+      "error": "The operation was aborted due to timeout"
+    },
+    {
+      "attractionName": "Scopello Sicily",
+      "error": "The operation was aborted due to timeout"
+    },
+    {
+      "attractionName": "Tonnara di Scopello",
+      "error": "The operation was aborted due to timeout"
+    },
+    {
+      "attractionName": "Faraglioni di Scopello",
+      "error": "The operation was aborted due to timeout"
+    },
+    {
+      "attractionName": "Riserva Naturale dello Zingaro",
+      "error": "The operation was aborted due to timeout"
+    },
+    {
+      "attractionName": "Palermo Cathedral",
+      "error": "The operation was aborted due to timeout"
+    },
+    {
+      "attractionName": "Quattro Canti Palermo",
+      "error": "The operation was aborted due to timeout"
+    },
+    {
+      "attractionName": "Fontana Pretoria Palermo",
+      "error": "The operation was aborted due to timeout"
+    },
+    {
+      "attractionName": "Mercato Ballaro Palermo",
+      "error": "The operation was aborted due to timeout"
+    },
+    {
+      "attractionName": "Cappella Palatina Palermo",
+      "error": "The operation was aborted due to timeout"
+    },
+    {
+      "attractionName": "Monreale Cathedral",
+      "error": "The operation was aborted due to timeout"
+    },
+    {
+      "attractionName": "Cefalu Cathedral",
+      "error": "The operation was aborted due to timeout"
+    },
+    {
+      "attractionName": "Cefalu Old Harbour",
+      "error": "The operation was aborted due to timeout"
+    },
+    {
+      "attractionName": "Chianalea di Scilla",
+      "error": "The operation was aborted due to timeout"
+    },
+    {
+      "attractionName": "Castello Ruffo Scilla",
+      "error": "The operation was aborted due to timeout"
+    }
+  ]
+}

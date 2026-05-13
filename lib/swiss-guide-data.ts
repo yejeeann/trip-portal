@@ -4,12 +4,14 @@ export type AirportPoint = {
   code: string;
   time: string;
   dateLabel?: string;
+  terminal?: string;
 };
 
 export type FlightSegment = {
   flightNo: string;
   airlineCode: string;
   airlineName: string;
+  aircraft?: string;
   from: AirportPoint;
   to: AirportPoint;
   duration: string;
@@ -21,6 +23,8 @@ export type FlightTicket = {
   routeLabel: string;
   dateLabel: string;
   connectionLabel: string;
+  reservationCode?: string;
+  totalDuration?: string;
   segments: FlightSegment[];
 };
 
@@ -30,6 +34,8 @@ export type TimelineAccommodation = {
   checkIn?: string;
   checkOut?: string;
   airbnbUrl?: string;
+  image?: string;
+  imageAlt?: string;
 };
 
 export type MasterTimelineItem = {
@@ -83,6 +89,7 @@ export type DailyCityVisit = {
   city: string;
   stayDuration: string;
   routeMode: "walk" | "drive" | "transit" | "ferry";
+  displayMode?: "city" | "train";
   entryPoint?: string;
   coordinates?: {
     lat: number;
@@ -90,6 +97,33 @@ export type DailyCityVisit = {
   };
   spots: CityVisitSpot[];
   practicalNotes: string[];
+  trainInfo?: {
+    title: string;
+    serviceName: string;
+    cabinType: string;
+    routeLabel: string;
+    departureLabel: string;
+    arrivalLabel: string;
+    durationLabel: string;
+    image: string;
+    imageAlt: string;
+    sourceLabel?: string;
+    sourceUrl?: string;
+    routeSourceUrl?: string;
+    mapUrl?: string;
+    highlights: string[];
+  };
+};
+
+export type DailyRouteOverviewPoint = {
+  id: string;
+  name: string;
+  detail?: string;
+  mode?: MasterTimelineItem["transportMode"];
+  coordinates: {
+    lat: number;
+    lng: number;
+  };
 };
 
 export type DailyGuideAccommodation = TimelineAccommodation & {
@@ -107,6 +141,7 @@ export type DailyGuide = {
   editorial: string[];
   transportMode?: MasterTimelineItem["transportMode"];
   accommodation?: DailyGuideAccommodation;
+  routeOverview?: DailyRouteOverviewPoint[];
   cityVisits?: DailyCityVisit[];
   places: DailyGuidePlace[];
 };

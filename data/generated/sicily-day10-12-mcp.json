@@ -1,0 +1,192 @@
+{
+  "generatedAt": "2026-05-12T09:35:15.788Z",
+  "routeResults": [
+    {
+      "day": 10,
+      "date": "2026-05-30",
+      "transportMode": "rental car",
+      "city": "San Calogero / Realmonte / Agrigento",
+      "stops": [
+        "Contrada San Calogero Costa Saracena Castelluccio",
+        "Realmonte Sicily",
+        "Valley of the Temples Agrigento",
+        "Temple of Concordia Agrigento",
+        "Temple of Heracles Agrigento",
+        "Realmonte Sicily"
+      ],
+      "optimizedRoute": {
+        "jsonrpc": "2.0",
+        "id": "call",
+        "result": {
+          "content": [
+            {
+              "type": "text",
+              "text": "다음 장소들의 동선을 최적화했습니다: Contrada San Calogero Costa Saracena Castelluccio, Realmonte Sicily, Valley of the Temples Agrigento, Temple of Concordia Agrigento, Temple of Heracles Agrigento, Realmonte Sicily"
+            }
+          ],
+          "structuredContent": {
+            "result": "다음 장소들의 동선을 최적화했습니다: Contrada San Calogero Costa Saracena Castelluccio, Realmonte Sicily, Valley of the Temples Agrigento, Temple of Concordia Agrigento, Temple of Heracles Agrigento, Realmonte Sicily"
+          },
+          "isError": false
+        }
+      },
+      "mapLinks": {
+        "jsonrpc": "2.0",
+        "id": "call",
+        "result": {
+          "content": [
+            {
+              "type": "text",
+              "text": "구글 지도 링크: https://www.google.com/maps/dir/Contrada+San+Calogero+Costa+Saracena+Castelluccio/Realmonte+Sicily/Valley+of+the+Temples+Agrigento/Temple+of+Concordia+Agrigento/Temple+of+Heracles+Agrigento/Realmonte+Sicily"
+            }
+          ],
+          "structuredContent": {
+            "result": "구글 지도 링크: https://www.google.com/maps/dir/Contrada+San+Calogero+Costa+Saracena+Castelluccio/Realmonte+Sicily/Valley+of+the+Temples+Agrigento/Temple+of+Concordia+Agrigento/Temple+of+Heracles+Agrigento/Realmonte+Sicily"
+          },
+          "isError": false
+        }
+      }
+    },
+    {
+      "day": 11,
+      "date": "2026-05-31",
+      "transportMode": "rental car",
+      "city": "Realmonte / Scala dei Turchi / Agrigento",
+      "stops": [
+        "Realmonte Sicily",
+        "Scala dei Turchi Realmonte",
+        "Via Atenea Agrigento",
+        "Santa Maria dei Greci Agrigento",
+        "Realmonte Sicily"
+      ],
+      "optimizedRoute": {
+        "jsonrpc": "2.0",
+        "id": "call",
+        "result": {
+          "content": [
+            {
+              "type": "text",
+              "text": "다음 장소들의 동선을 최적화했습니다: Realmonte Sicily, Scala dei Turchi Realmonte, Via Atenea Agrigento, Santa Maria dei Greci Agrigento, Realmonte Sicily"
+            }
+          ],
+          "structuredContent": {
+            "result": "다음 장소들의 동선을 최적화했습니다: Realmonte Sicily, Scala dei Turchi Realmonte, Via Atenea Agrigento, Santa Maria dei Greci Agrigento, Realmonte Sicily"
+          },
+          "isError": false
+        }
+      },
+      "mapLinks": {
+        "jsonrpc": "2.0",
+        "id": "call",
+        "result": {
+          "content": [
+            {
+              "type": "text",
+              "text": "구글 지도 링크: https://www.google.com/maps/dir/Realmonte+Sicily/Scala+dei+Turchi+Realmonte/Via+Atenea+Agrigento/Santa+Maria+dei+Greci+Agrigento/Realmonte+Sicily"
+            }
+          ],
+          "structuredContent": {
+            "result": "구글 지도 링크: https://www.google.com/maps/dir/Realmonte+Sicily/Scala+dei+Turchi+Realmonte/Via+Atenea+Agrigento/Santa+Maria+dei+Greci+Agrigento/Realmonte+Sicily"
+          },
+          "isError": false
+        }
+      }
+    },
+    {
+      "day": 12,
+      "date": "2026-06-01",
+      "transportMode": "rental car",
+      "city": "Realmonte / Trapani / Erice / Balestrate",
+      "stops": [
+        "Realmonte Sicily",
+        "Trapani Old Town",
+        "Torre di Ligny Trapani",
+        "Erice Sicily",
+        "Church of San Giuliano Erice",
+        "Contrada Piano Milano Balestrate"
+      ],
+      "optimizedRoute": {
+        "jsonrpc": "2.0",
+        "id": "call",
+        "result": {
+          "content": [
+            {
+              "type": "text",
+              "text": "다음 장소들의 동선을 최적화했습니다: Realmonte Sicily, Trapani Old Town, Torre di Ligny Trapani, Erice Sicily, Church of San Giuliano Erice, Contrada Piano Milano Balestrate"
+            }
+          ],
+          "structuredContent": {
+            "result": "다음 장소들의 동선을 최적화했습니다: Realmonte Sicily, Trapani Old Town, Torre di Ligny Trapani, Erice Sicily, Church of San Giuliano Erice, Contrada Piano Milano Balestrate"
+          },
+          "isError": false
+        }
+      },
+      "mapLinks": {
+        "jsonrpc": "2.0",
+        "id": "call",
+        "result": {
+          "content": [
+            {
+              "type": "text",
+              "text": "구글 지도 링크: https://www.google.com/maps/dir/Realmonte+Sicily/Trapani+Old+Town/Torre+di+Ligny+Trapani/Erice+Sicily/Church+of+San+Giuliano+Erice/Contrada+Piano+Milano+Balestrate"
+            }
+          ],
+          "structuredContent": {
+            "result": "구글 지도 링크: https://www.google.com/maps/dir/Realmonte+Sicily/Trapani+Old+Town/Torre+di+Ligny+Trapani/Erice+Sicily/Church+of+San+Giuliano+Erice/Contrada+Piano+Milano+Balestrate"
+          },
+          "isError": false
+        }
+      }
+    }
+  ],
+  "attractionResults": [
+    {
+      "attractionName": "Realmonte Sicily",
+      "error": "The operation was aborted due to timeout"
+    },
+    {
+      "attractionName": "Valley of the Temples Agrigento",
+      "error": "The operation was aborted due to timeout"
+    },
+    {
+      "attractionName": "Temple of Concordia Agrigento",
+      "error": "The operation was aborted due to timeout"
+    },
+    {
+      "attractionName": "Temple of Heracles Agrigento",
+      "error": "The operation was aborted due to timeout"
+    },
+    {
+      "attractionName": "Scala dei Turchi Realmonte",
+      "error": "The operation was aborted due to timeout"
+    },
+    {
+      "attractionName": "Via Atenea Agrigento",
+      "error": "fetch failed"
+    },
+    {
+      "attractionName": "Santa Maria dei Greci Agrigento",
+      "error": "The operation was aborted due to timeout"
+    },
+    {
+      "attractionName": "Trapani Old Town",
+      "error": "The operation was aborted due to timeout"
+    },
+    {
+      "attractionName": "Torre di Ligny Trapani",
+      "error": "The operation was aborted due to timeout"
+    },
+    {
+      "attractionName": "Erice Sicily",
+      "error": "The operation was aborted due to timeout"
+    },
+    {
+      "attractionName": "Church of San Giuliano Erice",
+      "error": "The operation was aborted due to timeout"
+    },
+    {
+      "attractionName": "Giardini del Balio Erice",
+      "error": "The operation was aborted due to timeout"
+    }
+  ]
+}

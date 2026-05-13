@@ -41,6 +41,7 @@ import { OsmMap } from "./osm-map";
 import { MultiOsmMap } from "./multi-osm-map";
 import { PlaceBottomSheet } from "./place-detail";
 import { useTravelPayload } from "@/lib/travel-payload-client";
+import { AirlineLogo } from "./airline-logo";
 
 const fadeUp = {
   hidden: { opacity: 0, y: 22 },
@@ -349,9 +350,7 @@ function FlightTicketCard({ ticket }: { ticket: FlightTicket }) {
 function AirlineMark({ code, name }: { code: string; name: string }) {
   return (
     <div className="flex items-center gap-3">
-      <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-full bg-wine text-lg font-black text-paper">
-        {code}
-      </div>
+      <AirlineLogo code={code} name={name} size="lg" className="border-stone" />
       <div className="hidden sm:block">
         <div className="text-xs font-bold uppercase text-moss">Operator</div>
         <div className="text-sm font-bold text-ink">{name}</div>

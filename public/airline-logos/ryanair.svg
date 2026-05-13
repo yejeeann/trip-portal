@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 280 96" role="img" aria-labelledby="title">
+  <title id="title">Ryanair logo</title>
+  <rect width="280" height="96" rx="14" fill="#073590"/>
+  <path d="M52 70c22-22 42-36 64-45-12 16-18 31-19 45H52Z" fill="#F8D038"/>
+  <path d="M94 20c5 9 5 17 0 25-5 8-12 14-21 18 3-11 2-22-1-33 9-5 16-8 22-10Z" fill="#F8D038"/>
+  <text x="115" y="60" fill="#F8D038" font-family="Arial, Helvetica, sans-serif" font-size="35" font-weight="900" letter-spacing="1">RYANAIR</text>
+</svg>

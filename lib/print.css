@@ -1,0 +1,149 @@
+/* 1. Page & Font Setup */
+/* 고급 매거진 스타일: Playfair Display(제목) + Lato(본문) 조합 */
+@import url("https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Lato:ital,wght@0,300;0,400;0,700;1,300;1,400&display=swap");
+
+@page {
+  size: A4;
+  margin: 20mm 15mm 25mm 15mm; /* 하단 여백을 조금 더 넓게 */
+}
+
+body.print-body {
+  font-family: "Lato", sans-serif;
+  color: #222; /* 너무 진하지 않은 먹색 */
+  background-color: #fff;
+  -webkit-print-color-adjust: exact;
+  print-color-adjust: exact;
+  line-height: 1.6;
+}
+
+body.print-body h1,
+body.print-body h2,
+body.print-body h3,
+body.print-body h4,
+body.print-body h5,
+body.print-body h6 {
+  font-family: "Playfair Display", serif;
+}
+
+/* 웹 전용 UI 숨기기 */
+.no-print {
+  display: none !important;
+}
+
+.page-break-before {
+  break-before: page;
+  page-break-before: always;
+}
+
+.avoid-break-inside {
+  break-inside: avoid;
+  page-break-inside: avoid;
+}
+
+/* 2. Magazine Editorial Styles */
+
+/* 다단 레이아웃 (2단 구성) */
+.multi-column {
+  column-count: 2;
+  column-gap: 2.5rem;
+  text-align: justify; /* 양쪽 정렬로 깔끔하게 */
+  hyphens: auto;
+}
+
+/* 드롭캡 (첫 글자 크게) */
+.drop-cap::first-letter {
+  font-family: "Playfair Display", serif;
+  font-size: 3.8rem;
+  line-height: 0.8;
+  float: left;
+  padding-right: 0.5rem;
+  padding-top: 0.3rem;
+  color: var(--print-theme, #84947b);
+}
+
+/* Cover Page */
+.print-cover {
+  height: calc(297mm - 45mm);
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end; /* 제목을 아래쪽으로 배치 */
+  align-items: center;
+  text-align: center;
+  background-size: cover;
+  background-position: center;
+  color: white;
+  padding: 4rem 2rem;
+  position: relative;
+}
+.print-cover::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to bottom, rgba(0,0,0,0.1), rgba(0,0,0,0.8));
+}
+.print-cover > * {
+  position: relative;
+  z-index: 1;
+}
+.print-cover h1 {
+  font-size: 4.5rem;
+  font-weight: 700;
+  color: white;
+  line-height: 1.1;
+  margin-bottom: 1rem;
+  letter-spacing: -0.02em;
+}
+.print-cover p {
+  font-size: 1.25rem;
+  font-family: "Lato", sans-serif;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+}
+
+/* Section Header */
+.section-header {
+  font-size: 3rem;
+  font-weight: 400;
+  font-style: italic;
+  border-bottom: 1px solid #d4d4d8;
+  padding-bottom: 1rem;
+  margin-bottom: 2.5rem;
+  color: var(--print-theme, #333);
+}
+
+/* Daily Guide Header */
+.daily-guide-header {
+  position: relative;
+  margin-bottom: 2.5rem;
+  padding-top: 2rem;
+  text-align: center;
+}
+.daily-guide-header .day-number {
+  font-family: "Lato", sans-serif;
+  font-size: 1rem;
+  font-weight: 700;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--print-theme, #84947b);
+  margin-bottom: 0.5rem;
+}
+.daily-guide-header h2 {
+  font-size: 3.5rem;
+  margin: 0 0 1rem 0;
+  line-height: 1.1;
+}
+
+/* 테이블 (숙소/교통) 잡지 스타일 */
+table.magazine-table th {
+  font-family: "Lato", sans-serif;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  font-size: 0.85rem;
+  color: #71717a;
+  border-bottom: 1px solid #e4e4e7;
+  padding-bottom: 0.75rem;
+}
+table.magazine-table td {
+  padding: 1rem 0;
+  border-bottom: 1px solid #f4f4f5;
+}

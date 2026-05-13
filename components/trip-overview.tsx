@@ -1,9 +1,9 @@
 "use client";
 
+import { useState } from "react";
 import type { Trip, AppDesignConfig } from "@/lib/types";
 import { getGuideDataForTrip, type SwissGuideData } from "@/lib/trip-guide";
-import { collectStays } from "@/lib/stays";
-import { Calendar, ExternalLink, Flag, Hotel, MapPin } from "lucide-react";
+import { Calendar, Flag } from "lucide-react";
 import Link from "next/link";
 import { motion } from "framer-motion";
 import { AppNavigation } from "./app-navigation";
@@ -17,32 +17,64 @@ const CITY_COORDINATES: Record<string, { lat: number; lng: number }> = {
   "Roma Termini": { lat: 41.9012873, lng: 12.5015756 },
   Catania: { lat: 37.5079, lng: 15.083 },
   "Catania Centrale": { lat: 37.507496, lng: 15.099303 },
+  "Catania Airport": { lat: 37.4668, lng: 15.0664 },
+  "Catania Fontanarossa Airport": { lat: 37.4668, lng: 15.0664 },
   "Piazza del Duomo": { lat: 37.502415, lng: 15.087212 },
+  "Piazza del Duomo Catania": { lat: 37.502415, lng: 15.087212 },
   Etna: { lat: 37.7518413, lng: 14.994712 },
   "Mount Etna": { lat: 37.7518413, lng: 14.994712 },
   Taormina: { lat: 37.8516, lng: 15.2853 },
   Castelmola: { lat: 37.8584036, lng: 15.2773601 },
   "Teatro Antico": { lat: 37.8523175, lng: 15.2921343 },
   Naxos: { lat: 37.8277558, lng: 15.2651969 },
+  "Giardini Naxos": { lat: 37.8277558, lng: 15.2651969 },
   "Forza d'Agro": { lat: 37.9145179, lng: 15.3342203 },
   Savoca: { lat: 37.9557389, lng: 15.3398339 },
   Syracuse: { lat: 37.0755, lng: 15.2866 },
   Siracusa: { lat: 37.0755, lng: 15.2866 },
   Ortigia: { lat: 37.0612, lng: 15.2936 },
   Noto: { lat: 36.8924433, lng: 15.0651945 },
+  "Neapolis Archaeological Park": { lat: 37.075969, lng: 15.276869 },
   Ragusa: { lat: 36.9239306, lng: 14.7198951 },
   Modica: { lat: 36.8589716, lng: 14.7608405 },
+  Pozzallo: { lat: 36.7299146, lng: 14.849099 },
   Marzamemi: { lat: 36.7420487, lng: 15.1175207 },
   "Aci Trezza": { lat: 37.5615555, lng: 15.1574868 },
   Adrano: { lat: 37.6627603, lng: 14.8325995 },
   Caltagirone: { lat: 37.2371653, lng: 14.5133945 },
   "Piazza Armerina": { lat: 37.3856182, lng: 14.3705567 },
+  "Villa Romana del Casale": { lat: 37.3647239, lng: 14.3345523 },
+  "카살레의 빌라 로마나": { lat: 37.3647239, lng: 14.3345523 },
   Enna: { lat: 37.5676891, lng: 14.2877167 },
+  "Monastero dei Benedettini": { lat: 37.503012, lng: 15.080405 },
+  "Villa Bellini": { lat: 37.511667, lng: 15.085556 },
   Valletta: { lat: 35.8997, lng: 14.5147 },
   Malta: { lat: 35.937496, lng: 14.375416 },
+  "Malta Airport": { lat: 35.8575, lng: 14.4775 },
+  "Malta International Airport": { lat: 35.8575, lng: 14.4775 },
+  Luqa: { lat: 35.8575, lng: 14.4775 },
+  Gzira: { lat: 35.9023915, lng: 14.4906557 },
+  Birgu: { lat: 35.8880695, lng: 14.5220972 },
+  Bormla: { lat: 35.882448, lng: 14.522503 },
+  Cospicua: { lat: 35.882448, lng: 14.522503 },
+  Senglea: { lat: 35.8878874, lng: 14.5167449 },
+  "Three Cities": { lat: 35.8880695, lng: 14.5220972 },
+  Mellieha: { lat: 35.9564, lng: 14.3622 },
+  Cirkewwa: { lat: 35.988007, lng: 14.329245 },
+  Comino: { lat: 36.0125, lng: 14.3361 },
   Gozo: { lat: 36.0443, lng: 14.2512 },
+  Victoria: { lat: 36.0444, lng: 14.2397 },
+  Mgarr: { lat: 36.0268, lng: 14.2987 },
+  Xaghra: { lat: 36.0505, lng: 14.2644 },
   Citadel: { lat: 36.0465151, lng: 14.2397758 },
   "Blue Lagoon": { lat: 36.0139773, lng: 14.3228273 },
+  "Mgarr Harbour": { lat: 36.0268, lng: 14.2987 },
+  Ggantija: { lat: 36.049147, lng: 14.267777 },
+  "Blue Grotto": { lat: 35.8215, lng: 14.4579 },
+  Qrendi: { lat: 35.8347, lng: 14.4581 },
+  Marsaxlokk: { lat: 35.8419, lng: 14.5431 },
+  Mdina: { lat: 35.8858, lng: 14.4031 },
+  Mosta: { lat: 35.9097, lng: 14.4261 },
   Amalfi: { lat: 40.634, lng: 14.6027 },
   Naples: { lat: 40.8518, lng: 14.2681 },
   Napoli: { lat: 40.8518, lng: 14.2681 },
@@ -66,14 +98,46 @@ const CITY_COORDINATES: Record<string, { lat: number; lng: number }> = {
   Bari: { lat: 41.1171, lng: 16.8719 },
   Pompeii: { lat: 40.7462, lng: 14.4989 },
   Palermo: { lat: 38.1157, lng: 13.3615 },
+  "Quattro Canti": { lat: 38.1156779, lng: 13.3614681 },
+  "Fontana Pretoria": { lat: 38.115569, lng: 13.362073 },
+  Ballaro: { lat: 38.1106144, lng: 13.3636751 },
+  "Cappella Palatina": { lat: 38.111169, lng: 13.353078 },
+  "Costa Saracena": { lat: 37.2429, lng: 15.1822 },
+  "Contrada San Calogero": { lat: 37.2536, lng: 13.6086 },
+  Augusta: { lat: 37.2304, lng: 15.2194 },
   Realmonte: { lat: 37.3087064, lng: 13.462396 },
+  "Scala dei Turchi": { lat: 37.2901, lng: 13.4722 },
   Agrigento: { lat: 37.3088381, lng: 13.5857818 },
   "Valley of the Temples": { lat: 37.2923664, lng: 13.5937011 },
+  "Via Atenea": { lat: 37.3119, lng: 13.5772 },
+  "Santa Maria dei Greci": { lat: 37.3136, lng: 13.5773 },
   Trapani: { lat: 38.0174282, lng: 12.5364464 },
+  "Torre di Ligny": { lat: 38.0177, lng: 12.5067 },
   Erice: { lat: 38.03778, lng: 12.5879274 },
+  "Contrada Piano Milano": { lat: 38.0374729, lng: 13.0252165 },
+  Balestrate: { lat: 38.0523, lng: 13.0072 },
+  Segesta: { lat: 37.9414, lng: 12.8348 },
+  "Calatafimi-Segesta": { lat: 37.9145, lng: 12.8637 },
   Scopello: { lat: 38.0702839, lng: 12.8179128 },
+  "San Vito Lo Capo": { lat: 38.1736, lng: 12.7356 },
+  Zingaro: { lat: 38.1069, lng: 12.7906 },
   Monreale: { lat: 38.0807591, lng: 13.28809 },
   Cefalu: { lat: 38.0349976, lng: 14.021222 },
+  Cefalù: { lat: 38.0349976, lng: 14.021222 },
+  "Messina Ferry Port": { lat: 38.193814, lng: 15.560659 },
+  Messina: { lat: 38.193814, lng: 15.560659 },
+  "Villa San Giovanni": { lat: 38.219714, lng: 15.636395 },
+  Scilla: { lat: 38.253612, lng: 15.715223 },
+  "Gioia Tauro": { lat: 38.4296851, lng: 15.8826302 },
+  Tropea: { lat: 38.6786, lng: 15.8972 },
+  Pizzo: { lat: 38.7359, lng: 16.1607 },
+  Calvanico: { lat: 40.7783405, lng: 14.8294063 },
+  "Pompeii Archaeological Park": { lat: 40.7484, lng: 14.4847 },
+  "Forum of Pompeii": { lat: 40.7481, lng: 14.4842 },
+  "Villa of the Mysteries": { lat: 40.7513, lng: 14.4769 },
+  "Villa of the Mysteries, Pompeii": { lat: 40.7513, lng: 14.4769 },
+  "Amphitheatre of Pompeii": { lat: 40.7512, lng: 14.4936 },
+  "Rome Final Stay": { lat: 41.8832089, lng: 12.3482148 },
   Corleone: { lat: 37.8137744, lng: 13.2989432 },
   Padua: { lat: 45.4064, lng: 11.8768 },
   Padova: { lat: 45.4064, lng: 11.8768 },
@@ -220,8 +284,8 @@ function TimelineItem({ tripId, item }: { tripId: string; item: SwissGuideData["
       </div>
       {item.cities && item.cities.length > 0 && (
          <div className="mt-3 sm:mt-5 flex flex-wrap gap-1 sm:gap-1.5 border-t border-slate-100 pt-3 sm:pt-4 dark:border-slate-700">
-           {item.cities.slice(0, 3).map((city) => (
-             <span key={city} className="rounded-md bg-slate-50 px-1.5 sm:px-2 py-0.5 sm:py-1 text-[8.5px] sm:text-[9.5px] font-bold text-slate-600 dark:bg-slate-700/50 dark:text-slate-300">
+           {item.cities.map((city) => (
+             <span key={city} className="max-w-full break-words rounded-md bg-slate-50 px-1.5 py-0.5 text-[8.5px] font-bold leading-snug text-slate-600 [overflow-wrap:anywhere] sm:px-2 sm:py-1 sm:text-[9.5px] dark:bg-slate-700/50 dark:text-slate-300">
                {city}
              </span>
            ))}
@@ -235,6 +299,7 @@ export function TripOverview({ trip, uiConfig, appStructure }: { trip: Trip; uiC
   const guideData = getGuideDataForTrip(trip);
   const overviewLayout = uiConfig?.overviewLayout ?? "timeline";
   const titleParts = splitOverviewTitle(trip.title);
+  const [isLegendExpanded, setIsLegendExpanded] = useState(false);
 
   // 개요 페이지 전용 커스텀 하단 탭 구성
   const overviewAppStructure = {
@@ -243,7 +308,7 @@ export function TripOverview({ trip, uiConfig, appStructure }: { trip: Trip; uiC
     tabs: [
       { id: "home", label: "Home", iconType: "home" },
       { id: "daily", label: "Daily", iconType: "calendar" },
-      { id: "stays", label: "Stays", iconType: "hotel" }
+      { id: "stays", label: "Accommodations", iconType: "accommodations" }
     ]
   };
 
@@ -277,11 +342,26 @@ export function TripOverview({ trip, uiConfig, appStructure }: { trip: Trip; uiC
     "aci trezza": "Catania",
     adrano: "Catania",
     "piazza armerina": "Piazza Armerina",
+    "villa romana del casale": "Villa Romana del Casale",
+    "카살레의 빌라 로마나": "Villa Romana del Casale",
     "valley of the temples": "Agrigento",
+    "scala dei turchi": "Realmonte",
     citadel: "Gozo",
     "blue lagoon": "Gozo",
+    "mgarr harbour": "Gozo",
+    victoria: "Gozo",
+    ggantija: "Gozo",
     "three cities": "Valletta",
-    "catania airport": "Catania"
+    bormla: "Valletta",
+    cospicua: "Valletta",
+    birgu: "Valletta",
+    senglea: "Valletta",
+    "malta airport": "Malta",
+    "malta international airport": "Malta",
+    "catania airport": "Catania",
+    "catania fontanarossa airport": "Catania",
+    "messina ferry port": "Messina",
+    "pompeii archaeological park": "Pompeii"
   };
 
   const markers: { lat: number; lng: number; label: string; city: string; day: number; onClickUrl?: string }[] = [];
@@ -297,22 +377,8 @@ export function TripOverview({ trip, uiConfig, appStructure }: { trip: Trip; uiC
   };
 
   const getOverviewCityName = (city: string) => overviewCityAliases[normalizeLegendKey(city)] ?? city.trim();
-  const dailyGuideByDay = new Map(guideData.dailyGuides.map((dailyGuide) => [dailyGuide.day, dailyGuide]));
-  const accommodations = collectStays(guideData.dailyGuides);
-
   guideData.masterTimeline.forEach((item) => {
-    const itineraryCity = trip.itinerary.find((d) => d.day === item.day)?.city;
-    const dailyGuide = dailyGuideByDay.get(item.day);
-    const routeParts = item.primaryRoute.split(/[-/]/).map(s => s.trim());
-    const guideRegionParts = dailyGuide?.region?.split("/").map(s => s.trim()) ?? [];
-    const guideCityVisitParts = dailyGuide?.cityVisits?.map((visit) => visit.city.trim()) ?? [];
-    const candidates = [
-      ...(item.cities ?? []),
-      ...routeParts,
-      ...(itineraryCity ? [itineraryCity] : []),
-      ...guideRegionParts,
-      ...guideCityVisitParts
-    ];
+    const candidates = item.cities ?? [];
 
     candidates.forEach((candidate) => {
       const city = getOverviewCityName(candidate);
@@ -340,55 +406,50 @@ export function TripOverview({ trip, uiConfig, appStructure }: { trip: Trip; uiC
     });
   });
 
-  // 지도 마커 범례 (번호 - 도시명 표시)
   const renderMapLegend = () => {
     if (markers.length === 0) return null;
-    const featuredMarkers = markers.slice(0, 12);
-    const remainingCount = Math.max(0, markers.length - featuredMarkers.length);
+
+    const compactLimit = 12;
+    const visibleMarkers = isLegendExpanded ? markers : markers.slice(0, compactLimit);
+    const hiddenCount = Math.max(0, markers.length - visibleMarkers.length);
+    const firstCity = markers[0]?.city;
+    const lastCity = markers[markers.length - 1]?.city;
 
     return (
-      <div className="mt-4 rounded-xl border border-slate-200 bg-white/92 p-3 shadow-sm dark:border-slate-800 dark:bg-slate-900/80">
-        <div className="mb-2 flex items-center justify-between gap-3">
-          <span className="text-[10px] font-extrabold uppercase tracking-[0.16em] text-slate-400">Major cities</span>
-          <span className="rounded-full bg-slate-100 px-2 py-1 text-[10px] font-extrabold text-slate-500 dark:bg-slate-800 dark:text-slate-400">
-            {markers.length} cities
+      <div className="mt-3 rounded-lg border border-slate-200 bg-white/92 px-2.5 py-2 shadow-sm dark:border-slate-800 dark:bg-slate-900/80">
+        <div className="mb-2 flex min-w-0 items-center gap-2">
+          <span className="shrink-0 text-[10px] font-extrabold uppercase tracking-[0.14em] text-slate-400">Route key</span>
+          <span className="min-w-0 truncate text-[11px] font-bold text-slate-500 dark:text-slate-400">
+            {firstCity}{lastCity && lastCity !== firstCity ? ` → ${lastCity}` : ""}
+          </span>
+          <span className="ml-auto shrink-0 rounded-full bg-slate-100 px-2 py-0.5 text-[10px] font-extrabold text-slate-500 dark:bg-slate-800 dark:text-slate-400">
+            {markers.length}
           </span>
         </div>
-        <div className="flex gap-2 overflow-x-auto pb-1 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
-          {featuredMarkers.map((m) => (
+        <div className="flex flex-wrap gap-1.5">
+          {visibleMarkers.map((m) => (
             <Link
               key={m.city}
               href={`/trips/${trip.id}/day/${m.day}`}
-              className="group inline-flex shrink-0 items-center gap-1.5 rounded-full border border-slate-200 bg-slate-50 px-2.5 py-1.5 text-xs font-bold transition hover:border-blue-300 hover:bg-blue-50 dark:border-slate-700 dark:bg-slate-800 dark:hover:border-blue-500"
+              title={m.city}
+              className="group inline-flex max-w-full items-center gap-1 rounded-md border border-slate-200 bg-slate-50 px-1.5 py-1 text-[10px] font-bold transition hover:border-blue-300 hover:bg-blue-50 dark:border-slate-700 dark:bg-slate-800 dark:hover:border-blue-500"
             >
-              <span className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-blue-600 text-[10px] font-bold text-white shadow-sm transition-colors group-hover:bg-blue-700 dark:bg-blue-500 dark:group-hover:bg-blue-400">
+              <span className="flex h-4 w-4 shrink-0 items-center justify-center rounded-full bg-blue-600 text-[9px] font-bold text-white shadow-sm transition-colors group-hover:bg-blue-700 dark:bg-blue-500 dark:group-hover:bg-blue-400">
                 {m.label}
               </span>
-              <span className="text-slate-700 transition-colors group-hover:text-blue-600 dark:text-slate-300 dark:group-hover:text-blue-400">{m.city}</span>
+              <span className="whitespace-nowrap text-slate-700 transition-colors group-hover:text-blue-600 dark:text-slate-300 dark:group-hover:text-blue-400">{m.city}</span>
             </Link>
           ))}
-          {remainingCount > 0 && (
-            <span className="inline-flex shrink-0 items-center rounded-full border border-dashed border-slate-300 px-2.5 py-1.5 text-xs font-extrabold text-slate-500 dark:border-slate-700 dark:text-slate-400">
-              +{remainingCount}
-            </span>
+          {markers.length > compactLimit && (
+            <button
+              type="button"
+              onClick={() => setIsLegendExpanded((value) => !value)}
+              className="inline-flex items-center justify-center rounded-md border border-slate-200 bg-white px-2 py-1 text-[10px] font-extrabold text-slate-500 transition hover:border-blue-300 hover:text-blue-600 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-400"
+            >
+              {isLegendExpanded ? "Show less" : `+${hiddenCount} more`}
+            </button>
           )}
         </div>
-        {remainingCount > 0 && (
-          <details className="mt-2">
-            <summary className="cursor-pointer text-xs font-bold text-blue-600 dark:text-blue-400">전체 도시 보기</summary>
-            <div className="mt-2 flex flex-wrap gap-1.5">
-              {markers.slice(12).map((m) => (
-                <Link
-                  key={`extra-${m.city}`}
-                  href={`/trips/${trip.id}/day/${m.day}`}
-                  className="rounded-full bg-slate-100 px-2 py-1 text-[11px] font-bold text-slate-600 hover:bg-blue-50 hover:text-blue-600 dark:bg-slate-800 dark:text-slate-300"
-                >
-                  {m.label}. {m.city}
-                </Link>
-              ))}
-            </div>
-          </details>
-        )}
       </div>
     );
   };
@@ -431,7 +492,7 @@ export function TripOverview({ trip, uiConfig, appStructure }: { trip: Trip; uiC
   );
 
   return (
-    <div className="mx-auto w-full max-w-7xl overflow-x-hidden px-3 pb-32 pt-4 sm:px-4 sm:pt-8">
+    <div className="w-full max-w-[24rem] overflow-x-hidden px-3 pb-32 pt-4 sm:mx-auto sm:max-w-7xl sm:px-4 sm:pt-8">
       {/* 히어로 섹션 */}
       <div className="relative mb-5 h-[22rem] min-w-0 overflow-hidden rounded-lg sm:mb-8 md:h-80">
         <GuideImage src={trip.heroImage} alt={trip.title} className="h-full w-full" />
@@ -462,51 +523,6 @@ export function TripOverview({ trip, uiConfig, appStructure }: { trip: Trip; uiC
           </div>
         </div>
       </div>
-
-      {accommodations.length > 0 && (
-        <section className="mb-6 min-w-0 sm:mb-8">
-          <div className="mb-3 flex min-w-0 items-center justify-between gap-3 sm:mb-4">
-            <div className="min-w-0">
-              <p className="text-[10px] font-extrabold uppercase tracking-[0.16em] text-slate-400">Stay plan</p>
-              <h2 className="mt-1 text-2xl font-semibold text-slate-900 dark:text-slate-100">숙소 정보</h2>
-            </div>
-            <Hotel className="h-5 w-5 shrink-0 text-slate-400" />
-          </div>
-          <div className="grid min-w-0 grid-cols-[minmax(0,1fr)] gap-3 sm:grid-cols-2 lg:grid-cols-3">
-            {accommodations.map((accommodation) => (
-              <article key={`${accommodation.address}-${accommodation.checkIn ?? ""}-${accommodation.checkOut ?? ""}`} className="min-w-0 rounded-lg border border-slate-200 bg-white p-4 shadow-sm dark:border-slate-700 dark:bg-slate-800">
-                <div className="flex min-w-0 items-start justify-between gap-3">
-                  <div className="min-w-0">
-                    <div className="mb-2 inline-flex max-w-full items-center gap-1.5 rounded-md bg-slate-50 px-2 py-1 text-[10px] font-extrabold uppercase tracking-normal text-slate-600 dark:bg-slate-700/60 dark:text-slate-200">
-                      <Calendar className="h-3.5 w-3.5 shrink-0" />
-                      <span className="min-w-0 truncate">{accommodation.checkIn ?? "-"} - {accommodation.checkOut ?? "-"}</span>
-                    </div>
-                    <h3 className="break-words text-base font-bold leading-tight text-slate-900 [overflow-wrap:anywhere] dark:text-slate-100">
-                      {accommodation.name}
-                    </h3>
-                  </div>
-                  <div className="flex shrink-0 gap-1.5">
-                    {accommodation.googleMapsUrl && (
-                      <a href={accommodation.googleMapsUrl} target="_blank" rel="noreferrer" className="inline-flex h-8 w-8 items-center justify-center rounded-md border border-slate-200 text-slate-500 transition hover:border-blue-300 hover:text-blue-600 dark:border-slate-700 dark:text-slate-300" aria-label={`${accommodation.name} Google Maps`}>
-                        <ExternalLink className="h-3.5 w-3.5" />
-                      </a>
-                    )}
-                    {accommodation.airbnbUrl && (
-                      <a href={accommodation.airbnbUrl} target="_blank" rel="noreferrer" className="inline-flex h-8 items-center justify-center rounded-md bg-[#FF385C] px-2 text-[10px] font-extrabold text-white transition hover:bg-[#E03152]">
-                        Airbnb
-                      </a>
-                    )}
-                  </div>
-                </div>
-                <p className="mt-3 flex min-w-0 gap-2 break-words text-xs leading-relaxed text-slate-500 [overflow-wrap:anywhere] dark:text-slate-400">
-                  <MapPin className="mt-0.5 h-3.5 w-3.5 shrink-0" />
-                  <span className="min-w-0">{accommodation.address}</span>
-                </p>
-              </article>
-            ))}
-          </div>
-        </section>
-      )}
 
       {/* 마스터 타임라인 */}
       <div>

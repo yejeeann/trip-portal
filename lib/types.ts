@@ -8,6 +8,9 @@ export type WeatherSnapshot = {
   tempC: number;
   highC: number;
   lowC: number;
+  weatherCode?: number;
+  source?: "forecast" | "estimate" | "unavailable";
+  updatedAt?: string;
 };
 
 export type ItineraryDay = {

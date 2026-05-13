@@ -11,7 +11,21 @@ export type OsmMarker = {
   id?: string;
 };
 
-export function MultiOsmMap({ markers, className, onMarkerClick }: { markers: OsmMarker[]; className?: string; onMarkerClick?: (id: string) => void }) {
+type MultiOsmMapProps = {
+  markers: OsmMarker[];
+  className?: string;
+  onMarkerClick?: (id: string) => void;
+  fitPadding?: number;
+  maxZoom?: number;
+};
+
+export function MultiOsmMap({
+  markers,
+  className,
+  onMarkerClick,
+  fitPadding = 36,
+  maxZoom = 15
+}: MultiOsmMapProps) {
   const router = useRouter();
   const googleMapsEmbedKey = process.env.NEXT_PUBLIC_GOOGLE_MAPS_EMBED_API_KEY;
   const useGoogleEmbed = process.env.NEXT_PUBLIC_ENABLE_GOOGLE_EMBED_MAPS === "true";
@@ -28,7 +42,7 @@ export function MultiOsmMap({ markers, className, onMarkerClick }: { markers: Os
     };
     window.addEventListener("message", handleMessage);
     return () => window.removeEventListener("message", handleMessage);
-  }, [router]);
+  }, [onMarkerClick, router]);
 
   if (!markers || markers.length === 0) {
     return (
@@ -63,10 +77,11 @@ export function MultiOsmMap({ markers, className, onMarkerClick }: { markers: Os
   const rawMaxLat = Math.max(...lats);
   const rawMinLng = Math.min(...lngs);
   const rawMaxLng = Math.max(...lngs);
-  const latRange = Math.max(rawMaxLat - rawMinLat, 0.01);
-  const lngRange = Math.max(rawMaxLng - rawMinLng, 0.01);
-  const latPadding = Math.min(Math.max(latRange * 0.28, 0.008), 0.35);
-  const lngPadding = Math.min(Math.max(lngRange * 0.28, 0.008), 0.35);
+  const isSingleMarker = markers.length === 1;
+  const latRange = Math.max(rawMaxLat - rawMinLat, isSingleMarker ? 0.012 : 0.0025);
+  const lngRange = Math.max(rawMaxLng - rawMinLng, isSingleMarker ? 0.012 : 0.0025);
+  const latPadding = Math.min(Math.max(latRange * 0.22, isSingleMarker ? 0.006 : 0.002), 0.35);
+  const lngPadding = Math.min(Math.max(lngRange * 0.22, isSingleMarker ? 0.006 : 0.002), 0.35);
   const minLat = rawMinLat - latPadding;
   const maxLat = rawMaxLat + latPadding;
   const minLng = rawMinLng - lngPadding;
@@ -121,10 +136,15 @@ export function MultiOsmMap({ markers, className, onMarkerClick }: { markers: Os
       <body>
         <div id="map"></div>
         <script>
-          var map = L.map('map').fitBounds([
+          var map = L.map('map');
+          var bounds = L.latLngBounds([
             [${minLat}, ${minLng}],
             [${maxLat}, ${maxLng}]
           ]);
+          map.fitBounds(bounds, {
+            padding: [${fitPadding}, ${fitPadding}],
+            maxZoom: ${maxZoom}
+          });
           
           /* Mapbox 느낌의 모던한 CARTO Voyager 타일 적용 */
           L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', {
