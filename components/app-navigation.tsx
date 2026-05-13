@@ -22,7 +22,7 @@ const IconMap: Record<string, React.ElementType> = {
 
 export function AppNavigation({
   appStructure,
-  themeColor = "#00696C",
+  themeColor = "#1A434E",
   tripIdOverride
 }: {
   appStructure?: AppStructureConfig;
@@ -69,7 +69,7 @@ export function AppNavigation({
 
   return (
     <div className="pointer-events-none fixed bottom-2 left-0 right-0 z-50 flex justify-center px-3 pb-[env(safe-area-inset-bottom)] sm:bottom-4 sm:px-4">
-      <nav className="pointer-events-auto flex w-[min(22rem,calc(100vw-1.5rem))] items-center gap-1 overflow-hidden rounded-lg border border-black/10 bg-white/94 px-1.5 py-1.5 shadow-[0_18px_45px_rgba(31,36,33,0.16)] backdrop-blur-xl sm:w-full sm:max-w-sm sm:px-2">
+      <nav className="pointer-events-auto flex w-[min(22rem,calc(100vw-1.5rem))] items-center gap-1 overflow-hidden rounded-[1.25rem] border border-[#E6DAC8] bg-white/94 px-1.5 py-1.5 shadow-[0_18px_45px_rgba(45,45,45,0.14)] backdrop-blur-xl sm:w-full sm:max-w-sm sm:px-2">
         {tabs.map((tab) => {
           const Icon = IconMap[tab.iconType] || IconMap[tab.id] || LayoutGrid;
           const isActive = checkIsActive(tab.id);
@@ -79,8 +79,8 @@ export function AppNavigation({
             <Link
               key={tab.id}
               href={getHref(tab.id)}
-              className={`relative flex min-w-0 flex-1 flex-col items-center justify-center rounded-md px-1.5 py-1.5 transition-colors sm:px-2 ${
-                isActive ? "bg-[#E2F2EF]" : "hover:bg-[#F3F0EA]"
+              className={`relative flex min-w-0 flex-1 flex-col items-center justify-center rounded-full px-1.5 py-1.5 transition-colors sm:px-2 ${
+                isActive ? "bg-[#E7F0EE]" : "hover:bg-[#F9F7F2]"
               }`}
             >
               <div
@@ -88,12 +88,12 @@ export function AppNavigation({
               >
                 <Icon
                   className="h-4 w-4 transition-colors"
-                  style={{ color: isActive ? themeColor : "#727876" }}
+                  style={{ color: isActive ? themeColor : "#6B6861" }}
                 />
               </div>
               <span
                 className="mt-0.5 max-w-full truncate text-[9px] font-extrabold tracking-normal transition-colors sm:text-[10px]"
-                style={{ color: isActive ? themeColor : "#727876" }}
+                style={{ color: isActive ? themeColor : "#6B6861" }}
               >
                 {label}
               </span>

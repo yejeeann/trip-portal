@@ -51,7 +51,7 @@ export function MobileTripApp({
   );
 
   return (
-    <div className="relative flex flex-col h-[100dvh] w-full bg-slate-50 text-slate-900 overflow-hidden font-sans selection:bg-sky-500/30">
+    <div className="relative flex h-[100dvh] w-full flex-col overflow-hidden bg-[#F9F7F2] font-sans text-[#2D2D2D] selection:bg-[#1A434E]/20">
       <div className="relative flex-1 overflow-hidden">
         <AnimatePresence mode="wait">
           <motion.div
@@ -146,17 +146,17 @@ function DailyMenu({ guides, trip, uiConfig, onSelectPlace }: { guides: DailyGui
   const headerDateLabel = formatDailyHeaderDate(guide.date);
 
   return (
-    <div className="flex h-full flex-col bg-slate-50">
+    <div className="flex h-full flex-col bg-[#F9F7F2]">
       {/* Fixed Header */}
-      <div className="z-40 shrink-0 flex flex-col border-b border-slate-200 bg-white/95 backdrop-blur-xl">
+      <div className="z-40 flex shrink-0 flex-col border-b border-[#E6DAC8] bg-[#F9F7F2]/95 backdrop-blur-xl">
         <div className="flex items-end justify-between px-6 py-4">
           <div>
-            <span className="mb-1 block text-[10px] font-bold uppercase tracking-widest text-sky-600">The Journal</span>
-            <h1 className="font-serif text-3xl font-bold leading-none text-slate-900">{headerDateLabel}</h1>
-            <p className="mt-1 text-xs font-bold uppercase tracking-widest text-slate-400">Day {guide.day}</p>
+            <span className="mb-1 block text-[10px] font-bold uppercase tracking-widest text-[#B98045]">The Journal</span>
+            <h1 className="font-serif text-3xl font-semibold leading-none text-[#2D2D2D]">{headerDateLabel}</h1>
+            <p className="mt-1 text-xs font-bold uppercase tracking-widest text-[#6B6861]">Day {guide.day}</p>
           </div>
           <div className="pb-0.5 text-right">
-            <span className="text-xs font-medium uppercase tracking-widest text-slate-500">{guide.region?.split(" / ")[0]}</span>
+            <span className="text-xs font-medium uppercase tracking-widest text-[#1A434E]">{guide.region?.split(" / ")[0]}</span>
           </div>
         </div>
         {/* Day Selector (Instagram Story Style) */}
@@ -173,10 +173,10 @@ function DailyMenu({ guides, trip, uiConfig, onSelectPlace }: { guides: DailyGui
               >
                 <div className={`relative p-[2.5px] rounded-full transition-all duration-300 ${
                   isActive 
-                    ? "bg-gradient-to-tr from-amber-400 via-rose-500 to-fuchsia-600 shadow-md scale-105" 
-                    : "bg-slate-200 hover:bg-slate-300 scale-100"
+                    ? "scale-105 bg-[#D4A373] shadow-md" 
+                    : "scale-100 bg-[#E6DAC8] hover:bg-[#D4A373]/55"
                 }`}>
-                  <div className="relative flex h-14 w-14 items-center justify-center overflow-hidden rounded-full border-[2.5px] border-white bg-slate-50">
+                  <div className="relative flex h-14 w-14 items-center justify-center overflow-hidden rounded-full border-[2.5px] border-white bg-[#F9F7F2]">
                     {coverImage ? (
                       <>
                         <Image src={coverImage} alt={`Day ${g.day}`} fill sizes="56px" className="object-cover opacity-90" />
@@ -187,7 +187,7 @@ function DailyMenu({ guides, trip, uiConfig, onSelectPlace }: { guides: DailyGui
                       </>
                     ) : (
                       <span className={`font-serif text-xl font-bold transition-colors ${
-                        isActive ? "text-slate-900" : "text-slate-400 group-hover:text-slate-600"
+                        isActive ? "text-[#2D2D2D]" : "text-[#8A8174] group-hover:text-[#1A434E]"
                       }`}>
                         {g.day}
                       </span>
@@ -195,7 +195,7 @@ function DailyMenu({ guides, trip, uiConfig, onSelectPlace }: { guides: DailyGui
                   </div>
                 </div>
                 <span className={`text-[10px] font-bold uppercase tracking-wider transition-colors ${
-                  isActive ? "text-slate-900" : "text-slate-400"
+                  isActive ? "text-[#2D2D2D]" : "text-[#8A8174]"
                 }`}>
                   {formatDailyHeaderDate(g.date, false)}
                 </span>
@@ -206,10 +206,10 @@ function DailyMenu({ guides, trip, uiConfig, onSelectPlace }: { guides: DailyGui
       </div>
 
       {/* Map Section (Fixed below header) */}
-      <div className="relative z-0 h-[35vh] w-full shrink-0 overflow-hidden bg-slate-200">
+      <div className="relative z-0 h-[35vh] w-full shrink-0 overflow-hidden bg-[#EFE8DB]">
         {isMapMarkersLoading ? (
-          <div className="flex h-full w-full flex-col items-center justify-center gap-2 bg-slate-200 text-sm font-bold text-slate-500">
-            <div className="h-5 w-5 animate-spin rounded-full border-2 border-slate-400/30 border-t-slate-500" />
+          <div className="flex h-full w-full flex-col items-center justify-center gap-2 bg-[#EFE8DB] text-sm font-bold text-[#6B6861]">
+            <div className="h-5 w-5 animate-spin rounded-full border-2 border-[#E6DAC8] border-t-[#1A434E]" />
             동선 불러오는 중...
           </div>
         ) : markers.length > 1 ? (
@@ -227,27 +227,27 @@ function DailyMenu({ guides, trip, uiConfig, onSelectPlace }: { guides: DailyGui
             className="h-full w-full"
           />
         ) : (
-          <div className="flex h-full w-full items-center justify-center bg-slate-200 text-sm font-bold text-slate-500">
+          <div className="flex h-full w-full items-center justify-center bg-[#EFE8DB] text-sm font-bold text-[#6B6861]">
             지도 데이터가 부족합니다.
           </div>
         )}
       </div>
 
       {/* Scrollable Timeline Overlay */}
-      <div ref={scrollRef} className="flex-1 overflow-y-auto bg-slate-50 relative z-10 rounded-t-3xl -mt-6 pt-6 shadow-[0_-8px_20px_rgba(0,0,0,0.08)]">
+      <div ref={scrollRef} className="relative z-10 -mt-6 flex-1 overflow-y-auto rounded-t-[1.75rem] bg-[#F9F7F2] pt-6 shadow-[0_-8px_20px_rgba(45,45,45,0.08)]">
         <div className="px-4 pb-28">
           {/* Bento Grid Header */}
           <div className="mb-8 grid grid-cols-2 gap-3">
             <div
               onClick={() => setSelectedCityOverview(guide)}
-              className="col-span-2 group relative cursor-pointer overflow-hidden rounded-3xl border border-sky-900 bg-slate-900 text-white shadow-md active:scale-[0.98] transition-transform"
+              className="group relative col-span-2 cursor-pointer overflow-hidden rounded-[1.5rem] border border-[#1A434E] bg-[#1A434E] text-white shadow-md transition-transform active:scale-[0.98]"
             >
               {guide.places[0]?.image && (
                 <Image src={guide.places[0].image} alt={guide.region} fill className="object-cover opacity-40 mix-blend-overlay transition-transform duration-700 group-hover:scale-105" />
               )}
-              <div className="absolute inset-0 bg-gradient-to-t from-slate-900 via-slate-900/40 to-transparent" />
+              <div className="absolute inset-0 bg-gradient-to-t from-[#1A434E] via-[#1A434E]/45 to-transparent" />
               <div className="relative p-5 flex flex-col justify-end h-full min-h-[140px]">
-                <span className="text-[10px] font-bold uppercase tracking-widest text-sky-400 mb-1 flex items-center gap-1.5"><Sparkles className="w-3 h-3"/> City Brief</span>
+                <span className="mb-1 flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-widest text-[#D4A373]"><Sparkles className="h-3 w-3"/> City Brief</span>
                 <div className="flex items-end justify-between">
                   <h3 className="font-serif text-2xl font-bold">{guide.region}</h3>
                   <div className="flex h-8 w-8 items-center justify-center rounded-full bg-white/20 backdrop-blur-md">
@@ -261,22 +261,22 @@ function DailyMenu({ guides, trip, uiConfig, onSelectPlace }: { guides: DailyGui
             <button
               onClick={handleOptimizeRoute}
               disabled={isOptimizing}
-              className="col-span-1 flex flex-col items-center justify-center gap-3 rounded-3xl border border-slate-200 bg-white p-4 shadow-sm transition hover:border-sky-300 hover:bg-sky-50 active:scale-[0.98] disabled:opacity-50"
+              className="col-span-1 flex flex-col items-center justify-center gap-3 rounded-[1.25rem] border border-[#E6DAC8] bg-white p-4 shadow-sm transition hover:border-[#D4A373] hover:bg-[#FFFDF8] active:scale-[0.98] disabled:opacity-50"
             >
-              {isOptimizing ? <div className="h-6 w-6 animate-spin rounded-full border-2 border-sky-300 border-t-sky-500" /> : <div className="flex h-10 w-10 items-center justify-center rounded-full bg-sky-500 text-white shadow-inner"><Sparkles className="h-4 w-4 text-sky-50" /></div>}
-              <span className="text-center text-[11px] font-bold tracking-wide text-slate-700">스마트 동선<br/>최적화</span>
+              {isOptimizing ? <div className="h-6 w-6 animate-spin rounded-full border-2 border-[#E6DAC8] border-t-[#1A434E]" /> : <div className="flex h-10 w-10 items-center justify-center rounded-full bg-[#1A434E] text-white shadow-inner"><Sparkles className="h-4 w-4 text-white" /></div>}
+              <span className="text-center text-[11px] font-bold tracking-wide text-[#2D2D2D]">스마트 동선<br/>최적화</span>
             </button>
             <button
               onClick={handleOpenMap}
               disabled={isMapLoading}
-              className="col-span-1 flex flex-col items-center justify-center gap-3 rounded-3xl border border-slate-200 bg-white p-4 shadow-sm transition hover:border-sky-300 hover:bg-sky-50 active:scale-[0.98] disabled:opacity-50"
+              className="col-span-1 flex flex-col items-center justify-center gap-3 rounded-[1.25rem] border border-[#E6DAC8] bg-white p-4 shadow-sm transition hover:border-[#D4A373] hover:bg-[#FFFDF8] active:scale-[0.98] disabled:opacity-50"
             >
-              {isMapLoading ? <div className="h-6 w-6 animate-spin rounded-full border-2 border-sky-300 border-t-sky-500" /> : <div className="flex h-10 w-10 items-center justify-center rounded-full bg-slate-100 text-slate-700"><MapPin className="h-4 w-4" /></div>}
-              <span className="text-center text-[11px] font-bold tracking-wide text-slate-700">지도 앱에서<br/>보기</span>
+              {isMapLoading ? <div className="h-6 w-6 animate-spin rounded-full border-2 border-[#E6DAC8] border-t-[#1A434E]" /> : <div className="flex h-10 w-10 items-center justify-center rounded-full bg-[#F9F7F2] text-[#1A434E]"><MapPin className="h-4 w-4" /></div>}
+              <span className="text-center text-[11px] font-bold tracking-wide text-[#2D2D2D]">지도 앱에서<br/>보기</span>
             </button>
 
             {actionMessage && (
-              <div className="col-span-2 rounded-2xl border border-sky-100 bg-sky-50 px-4 py-3 text-xs font-bold leading-relaxed text-sky-800">
+              <div className="col-span-2 rounded-lg border border-[#D4A373]/45 bg-[#FFFDF8] px-4 py-3 text-xs font-bold leading-relaxed text-[#1A434E]">
                 {actionMessage}
               </div>
             )}
@@ -284,17 +284,17 @@ function DailyMenu({ guides, trip, uiConfig, onSelectPlace }: { guides: DailyGui
 
           {/* Quick Route Summary */}
           {guide.places.length > 0 && (
-            <div className="mb-6 rounded-3xl border border-slate-200 bg-white p-5 shadow-sm">
-              <h3 className="mb-3 text-[10px] font-bold uppercase tracking-widest text-sky-500">Movement Route</h3>
+            <div className="mb-6 rounded-[1.5rem] border border-[#E6DAC8] bg-white p-5 shadow-sm">
+              <h3 className="mb-3 text-[10px] font-bold uppercase tracking-widest text-[#B98045]">Movement Route</h3>
               <div className="flex flex-wrap items-center gap-2">
                 {guide.places.map((place, idx) => (
                   <div key={`summary-${place.id}`} className="flex items-center gap-1.5">
-                    <span className="flex h-5 w-5 items-center justify-center rounded-full bg-slate-100 text-[10px] font-bold text-slate-600">
+                    <span className="flex h-5 w-5 items-center justify-center rounded-full bg-[#E7F0EE] text-[10px] font-bold text-[#1A434E]">
                       {idx + 1}
                     </span>
-                    <span className="text-xs font-bold text-slate-800">{place.name}</span>
+                    <span className="text-xs font-bold text-[#2D2D2D]">{place.name}</span>
                     {idx < guide.places.length - 1 && (
-                      <ChevronRight className="h-3 w-3 text-slate-300" />
+                      <ChevronRight className="h-3 w-3 text-[#D4A373]" />
                     )}
                   </div>
                 ))}
@@ -314,21 +314,21 @@ function DailyMenu({ guides, trip, uiConfig, onSelectPlace }: { guides: DailyGui
                   viewport={{ once: true, margin: "-10%" }}
                   className="group relative flex gap-3 pb-6"
                 >
-                  <div className={`absolute left-[19px] top-10 bottom-[-10px] w-[2px] transition-all duration-300 ${idx === arr.length - 1 && !guide.accommodation ? 'hidden' : 'bg-gradient-to-b from-sky-400/40 via-slate-200 to-slate-200 group-hover:from-sky-400/80'}`} />
+                  <div className={`absolute bottom-[-10px] left-[19px] top-10 w-[2px] transition-all duration-300 ${idx === arr.length - 1 && !guide.accommodation ? 'hidden' : 'bg-gradient-to-b from-[#D4A373]/60 via-[#E6DAC8] to-[#E6DAC8] group-hover:from-[#1A434E]/75'}`} />
 
                   <div className="relative flex w-10 shrink-0 flex-col items-center pt-1">
-                    <span className="mb-2 block rounded-full bg-slate-800 border border-slate-800 px-1.5 py-0.5 text-[9px] font-bold tracking-wider text-white shadow-sm">
+                    <span className="mb-2 block rounded-full border border-[#1A434E] bg-[#1A434E] px-1.5 py-0.5 text-[9px] font-bold tracking-wider text-white shadow-sm">
                       City
                     </span>
-                    <div className="relative z-10 flex h-5 w-5 items-center justify-center rounded-full border-[2.5px] border-slate-50 bg-slate-800 shadow-sm transition-transform group-hover:scale-110">
+                    <div className="relative z-10 flex h-5 w-5 items-center justify-center rounded-full border-[2.5px] border-[#F9F7F2] bg-[#1A434E] shadow-sm transition-transform group-hover:scale-110">
                       <MapPinned className="h-2 w-2 text-white" />
                     </div>
                   </div>
 
-                  <div className="flex-1 overflow-hidden rounded-3xl border border-slate-200/60 bg-slate-100/50 backdrop-blur-xl shadow-sm transition-all hover:border-sky-300 hover:shadow-md">
+                  <div className="flex-1 overflow-hidden rounded-[1.5rem] border border-[#E6DAC8] bg-white/80 shadow-sm backdrop-blur-xl transition-all hover:border-[#D4A373] hover:shadow-md">
                     <div className="p-4">
-                      <h3 className="mb-3 text-lg font-bold text-slate-900 tracking-tight">📍 {city}</h3>
-                      <div className="rounded-2xl border border-slate-200 bg-white p-3.5 shadow-sm">
+                      <h3 className="mb-3 text-lg font-bold tracking-tight text-[#2D2D2D]">📍 {city}</h3>
+                      <div className="rounded-lg border border-[#E6DAC8] bg-white p-3.5 shadow-sm">
                         <DynamicCityAttractions city={city} />
                       </div>
                     </div>
@@ -346,14 +346,14 @@ function DailyMenu({ guides, trip, uiConfig, onSelectPlace }: { guides: DailyGui
                   className="group relative flex gap-3 pb-6"
                 >
                   {/* Vertical Connection Line */}
-                  <div className={`absolute left-[19px] top-10 bottom-[-10px] w-[2px] transition-all duration-300 ${idx === guide.places.length - 1 && !guide.accommodation ? 'hidden' : 'bg-gradient-to-b from-sky-400/40 via-slate-200 to-slate-200 group-hover:from-sky-400/80 group-hover:via-sky-400/50 group-hover:to-slate-200'}`} />
+                  <div className={`absolute bottom-[-10px] left-[19px] top-10 w-[2px] transition-all duration-300 ${idx === guide.places.length - 1 && !guide.accommodation ? 'hidden' : 'bg-gradient-to-b from-[#D4A373]/60 via-[#E6DAC8] to-[#E6DAC8] group-hover:from-[#1A434E]/75 group-hover:via-[#D4A373]/50 group-hover:to-[#E6DAC8]'}`} />
 
                   {/* Time & Node */}
                   <div className="relative flex w-10 shrink-0 flex-col items-center pt-1">
-                    <span className="mb-2 block rounded-full bg-white border border-slate-200 px-1.5 py-0.5 text-[9px] font-bold tracking-wider text-slate-500 shadow-sm">
+                    <span className="mb-2 block rounded-full border border-[#E6DAC8] bg-white px-1.5 py-0.5 text-[9px] font-bold tracking-wider text-[#6B6861] shadow-sm">
                       {place.timeLabel || "--:--"}
                     </span>
-                    <div className="relative z-10 flex h-5 w-5 items-center justify-center rounded-full border-[2.5px] border-slate-50 bg-sky-500 shadow-sm transition-transform group-hover:scale-110">
+                    <div className="relative z-10 flex h-5 w-5 items-center justify-center rounded-full border-[2.5px] border-[#F9F7F2] bg-[#1A434E] shadow-sm transition-transform group-hover:scale-110">
                       <div className="h-1.5 w-1.5 rounded-full bg-white shadow-[0_0_6px_rgba(255,255,255,0.8)]" />
                     </div>
                   </div>
@@ -361,11 +361,11 @@ function DailyMenu({ guides, trip, uiConfig, onSelectPlace }: { guides: DailyGui
                   {/* Card */}
                   <div
                     onClick={() => onSelectPlace(place, guide.region)}
-                    className="flex-1 cursor-pointer overflow-hidden rounded-3xl border border-slate-200/60 bg-white/90 backdrop-blur-xl shadow-sm transition-all hover:-translate-y-1 hover:border-sky-300 hover:shadow-md active:scale-[0.98]"
+                    className="flex-1 cursor-pointer overflow-hidden rounded-[1.5rem] border border-[#E6DAC8] bg-white/90 shadow-sm backdrop-blur-xl transition-all hover:-translate-y-1 hover:border-[#D4A373] hover:shadow-md active:scale-[0.98]"
                   >
                     <div className="flex items-center gap-3 p-3 sm:p-4">
                       {place.image && (
-                        <div className="relative h-20 w-20 shrink-0 overflow-hidden rounded-2xl border border-slate-100 shadow-sm">
+                        <div className="relative h-20 w-20 shrink-0 overflow-hidden rounded-lg border border-[#E6DAC8] shadow-sm">
                           <Image
                             src={place.image}
                             alt={place.imageAlt || place.name}
@@ -377,14 +377,14 @@ function DailyMenu({ guides, trip, uiConfig, onSelectPlace }: { guides: DailyGui
                       )}
                       <div className="flex-1 min-w-0">
                         <div className="mb-1 flex items-center justify-between gap-2">
-                          <span className="truncate text-[9px] font-bold uppercase tracking-widest text-sky-500">
+                          <span className="truncate text-[9px] font-bold uppercase tracking-widest text-[#B98045]">
                             {place.category}
                           </span>
                         </div>
-                        <h3 className="mb-1 truncate font-serif text-base font-bold text-slate-900 transition-colors group-hover:text-sky-600">
+                        <h3 className="mb-1 truncate font-serif text-base font-semibold text-[#2D2D2D] transition-colors group-hover:text-[#1A434E]">
                           {place.name}
                         </h3>
-                        <p className="line-clamp-2 text-[11px] leading-relaxed text-slate-500">
+                        <p className="line-clamp-2 text-[11px] leading-relaxed text-[#6B6861]">
                           {place.description}
                         </p>
                       </div>
@@ -404,28 +404,28 @@ function DailyMenu({ guides, trip, uiConfig, onSelectPlace }: { guides: DailyGui
                 className="relative flex gap-3 pt-2"
               >
                 <div className="relative flex w-10 shrink-0 flex-col items-center pt-1">
-                  <span className="mb-2 block text-[9px] font-bold tracking-wider text-slate-400">
+                  <span className="mb-2 block text-[9px] font-bold tracking-wider text-[#8A8174]">
                     {guide.accommodation.checkIn ? "Check-in" : "Stay"}
                   </span>
-                  <div className="relative z-10 flex h-5 w-5 items-center justify-center rounded-full border-[2.5px] border-slate-50 bg-slate-800 shadow-sm transition-transform group-hover:scale-110">
+                  <div className="relative z-10 flex h-5 w-5 items-center justify-center rounded-full border-[2.5px] border-[#F9F7F2] bg-[#1A434E] shadow-sm transition-transform group-hover:scale-110">
                     <Hotel className="h-2.5 w-2.5 text-white" />
                   </div>
                 </div>
-                <div className="flex-1 rounded-3xl border border-slate-200 bg-white p-4 shadow-sm transition hover:border-slate-300 hover:shadow-md">
+                <div className="flex-1 rounded-[1.5rem] border border-[#E6DAC8] bg-white p-4 shadow-sm transition hover:border-[#D4A373] hover:shadow-md">
                   <div className="flex justify-between gap-3">
                     <div>
-                      <div className="mb-1 text-[9px] font-bold uppercase tracking-widest text-slate-400">
+                      <div className="mb-1 text-[9px] font-bold uppercase tracking-widest text-[#B98045]">
                         Basecamp
                       </div>
-                      <h3 className="mb-1 font-serif text-base font-bold leading-tight text-slate-900">
+                      <h3 className="mb-1 font-serif text-base font-semibold leading-tight text-[#2D2D2D]">
                         {guide.accommodation.name}
                       </h3>
-                      <p className="text-[11px] leading-relaxed text-slate-500 line-clamp-2">
+                      <p className="line-clamp-2 text-[11px] leading-relaxed text-[#6B6861]">
                         {guide.accommodation.address}
                       </p>
                     </div>
                     {guide.accommodation.googleMapsUrl && (
-                      <a href={guide.accommodation.googleMapsUrl} target="_blank" rel="noreferrer" className="shrink-0 flex h-8 w-8 items-center justify-center rounded-full bg-slate-50 text-sky-600 transition border border-slate-100 active:bg-slate-100 hover:bg-slate-200">
+                      <a href={guide.accommodation.googleMapsUrl} target="_blank" rel="noreferrer" className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-[#E6DAC8] bg-[#F9F7F2] text-[#1A434E] transition hover:bg-[#EFE8DB] active:bg-[#EFE8DB]">
                         <Navigation className="h-3.5 w-3.5" />
                       </a>
                     )}
@@ -445,7 +445,7 @@ function DailyMenu({ guides, trip, uiConfig, onSelectPlace }: { guides: DailyGui
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              className="fixed inset-0 z-50 bg-slate-900/40 backdrop-blur-sm"
+              className="fixed inset-0 z-50 bg-[#1A434E]/40 backdrop-blur-sm"
               onClick={() => setSelectedCityOverview(null)}
             />
             <motion.div
@@ -453,9 +453,9 @@ function DailyMenu({ guides, trip, uiConfig, onSelectPlace }: { guides: DailyGui
               animate={{ y: 0 }}
               exit={{ y: "100%" }}
               transition={{ type: "spring", damping: 25, stiffness: 200 }}
-              className="fixed bottom-0 left-0 right-0 z-50 flex max-h-[92dvh] min-h-[70dvh] flex-col overflow-y-auto rounded-t-3xl border-t border-slate-200 bg-white p-6 pb-12 shadow-[0_-10px_40px_rgba(0,0,0,0.1)]"
+              className="fixed bottom-0 left-0 right-0 z-50 flex max-h-[92dvh] min-h-[70dvh] flex-col overflow-y-auto rounded-t-[1.75rem] border-t border-[#E6DAC8] bg-white p-6 pb-12 shadow-[0_-10px_40px_rgba(45,45,45,0.12)]"
             >
-              <div className="mx-auto mb-6 h-1.5 w-12 rounded-full bg-slate-200" />
+              <div className="mx-auto mb-6 h-1.5 w-12 rounded-full bg-[#E6DAC8]" />
               <button
                 onClick={() => setSelectedCityOverview(null)}
                 className="absolute right-6 top-6 rounded-full bg-slate-50 p-2 text-slate-500 transition hover:bg-slate-100 hover:text-slate-800"

@@ -76,6 +76,7 @@ const CITY_COORDINATES: Record<string, { lat: number; lng: number }> = {
   Mdina: { lat: 35.8858, lng: 14.4031 },
   Mosta: { lat: 35.9097, lng: 14.4261 },
   Amalfi: { lat: 40.634, lng: 14.6027 },
+  Salerno: { lat: 40.6779, lng: 14.7659 },
   Naples: { lat: 40.8518, lng: 14.2681 },
   Napoli: { lat: 40.8518, lng: 14.2681 },
   Venice: { lat: 45.4408, lng: 12.3155 },
@@ -267,25 +268,25 @@ function splitOverviewTitle(title: string) {
 
 function TimelineItem({ tripId, item }: { tripId: string; item: SwissGuideData["masterTimeline"][0] }) {
   return (
-    <Link href={`/trips/${tripId}/day/${item.day}`} className="group flex h-full min-w-0 flex-col justify-between rounded-lg border border-slate-200 bg-white p-4 shadow-sm transition-all hover:-translate-y-1 hover:border-blue-300 hover:shadow-md sm:p-5 dark:border-slate-700 dark:bg-slate-800 dark:hover:border-blue-500">
+    <Link href={`/trips/${tripId}/day/${item.day}`} className="group flex h-full min-w-0 flex-col justify-between rounded-lg border border-[#E6DAC8] bg-white p-4 shadow-[0_12px_30px_rgba(45,45,45,0.07)] transition-all hover:-translate-y-1 hover:border-[#D4A373] hover:shadow-[0_18px_42px_rgba(45,45,45,0.11)] sm:p-5">
       <div className="min-w-0">
         <div className="mb-2 sm:mb-4 flex flex-col items-start gap-1 sm:flex-row sm:items-center sm:justify-between">
-          <span className="inline-flex items-center justify-center rounded-full bg-blue-50 px-2 py-0.5 sm:px-3 sm:py-1 text-[9px] sm:text-[10px] font-extrabold uppercase tracking-widest text-blue-600 dark:bg-blue-900/30 dark:text-blue-400">
+          <span className="inline-flex items-center justify-center rounded-full bg-[#E7F0EE] px-2 py-0.5 text-[9px] font-extrabold uppercase tracking-widest text-[#1A434E] sm:px-3 sm:py-1 sm:text-[10px]">
             Day {item.day}
           </span>
-          <span className="text-[9px] sm:text-[10px] font-bold uppercase text-slate-400">{item.dateLabel} <span className="hidden sm:inline">· {item.weekday}</span></span>
+          <span className="text-[9px] font-bold uppercase text-[#8A8174] sm:text-[10px]">{item.dateLabel} <span className="hidden sm:inline">· {item.weekday}</span></span>
         </div>
-        <h3 className="mb-1 break-words text-base font-bold leading-tight text-slate-900 transition-colors [overflow-wrap:anywhere] group-hover:text-blue-600 sm:mb-2 sm:text-lg dark:text-slate-100 dark:group-hover:text-blue-400">
+        <h3 className="mb-1 break-words font-serif text-lg font-semibold leading-tight text-[#2D2D2D] transition-colors [overflow-wrap:anywhere] group-hover:text-[#1A434E] sm:mb-2 sm:text-xl">
           {item.primaryRoute}
         </h3>
-        <p className="line-clamp-2 break-all text-xs leading-relaxed text-slate-500 sm:break-words dark:text-slate-400">
+        <p className="line-clamp-2 break-all text-xs font-medium leading-relaxed text-[#6B6861] sm:break-words">
           {item.note}
         </p>
       </div>
       {item.cities && item.cities.length > 0 && (
-         <div className="mt-3 sm:mt-5 flex flex-wrap gap-1 sm:gap-1.5 border-t border-slate-100 pt-3 sm:pt-4 dark:border-slate-700">
+         <div className="mt-3 flex flex-wrap gap-1 border-t border-[#E6DAC8] pt-3 sm:mt-5 sm:gap-1.5 sm:pt-4">
            {item.cities.map((city) => (
-             <span key={city} className="max-w-full break-words rounded-md bg-slate-50 px-1.5 py-0.5 text-[8.5px] font-bold leading-snug text-slate-600 [overflow-wrap:anywhere] sm:px-2 sm:py-1 sm:text-[9.5px] dark:bg-slate-700/50 dark:text-slate-300">
+             <span key={city} className="max-w-full break-words rounded-full bg-[#F9F7F2] px-2 py-1 text-[8.5px] font-bold leading-snug text-[#6B6861] [overflow-wrap:anywhere] sm:text-[9.5px]">
                {city}
              </span>
            ))}
@@ -361,6 +362,7 @@ export function TripOverview({ trip, uiConfig, appStructure }: { trip: Trip; uiC
     "catania airport": "Catania",
     "catania fontanarossa airport": "Catania",
     "messina ferry port": "Messina",
+    "salerno ferry port": "Salerno",
     "pompeii archaeological park": "Pompeii"
   };
 
@@ -416,13 +418,13 @@ export function TripOverview({ trip, uiConfig, appStructure }: { trip: Trip; uiC
     const lastCity = markers[markers.length - 1]?.city;
 
     return (
-      <div className="mt-3 rounded-lg border border-slate-200 bg-white/92 px-2.5 py-2 shadow-sm dark:border-slate-800 dark:bg-slate-900/80">
+      <div className="mt-3 rounded-lg border border-[#E6DAC8] bg-white/92 px-2.5 py-2 shadow-[0_10px_24px_rgba(45,45,45,0.07)]">
         <div className="mb-2 flex min-w-0 items-center gap-2">
-          <span className="shrink-0 text-[10px] font-extrabold uppercase tracking-[0.14em] text-slate-400">Route key</span>
-          <span className="min-w-0 truncate text-[11px] font-bold text-slate-500 dark:text-slate-400">
+          <span className="shrink-0 text-[10px] font-extrabold uppercase tracking-[0.14em] text-[#B98045]">Route key</span>
+          <span className="min-w-0 truncate text-[11px] font-bold text-[#6B6861]">
             {firstCity}{lastCity && lastCity !== firstCity ? ` → ${lastCity}` : ""}
           </span>
-          <span className="ml-auto shrink-0 rounded-full bg-slate-100 px-2 py-0.5 text-[10px] font-extrabold text-slate-500 dark:bg-slate-800 dark:text-slate-400">
+          <span className="ml-auto shrink-0 rounded-full bg-[#F9F7F2] px-2 py-0.5 text-[10px] font-extrabold text-[#1A434E]">
             {markers.length}
           </span>
         </div>
@@ -432,19 +434,19 @@ export function TripOverview({ trip, uiConfig, appStructure }: { trip: Trip; uiC
               key={m.city}
               href={`/trips/${trip.id}/day/${m.day}`}
               title={m.city}
-              className="group inline-flex max-w-full items-center gap-1 rounded-md border border-slate-200 bg-slate-50 px-1.5 py-1 text-[10px] font-bold transition hover:border-blue-300 hover:bg-blue-50 dark:border-slate-700 dark:bg-slate-800 dark:hover:border-blue-500"
+              className="group inline-flex max-w-full items-center gap-1 rounded-full border border-[#E6DAC8] bg-[#F9F7F2] px-1.5 py-1 text-[10px] font-bold transition hover:border-[#D4A373] hover:bg-[#FFFDF8]"
             >
-              <span className="flex h-4 w-4 shrink-0 items-center justify-center rounded-full bg-blue-600 text-[9px] font-bold text-white shadow-sm transition-colors group-hover:bg-blue-700 dark:bg-blue-500 dark:group-hover:bg-blue-400">
+              <span className="flex h-4 w-4 shrink-0 items-center justify-center rounded-full bg-[#1A434E] text-[9px] font-bold text-white shadow-sm transition-colors group-hover:bg-[#D4A373]">
                 {m.label}
               </span>
-              <span className="whitespace-nowrap text-slate-700 transition-colors group-hover:text-blue-600 dark:text-slate-300 dark:group-hover:text-blue-400">{m.city}</span>
+              <span className="whitespace-nowrap text-[#2D2D2D] transition-colors group-hover:text-[#1A434E]">{m.city}</span>
             </Link>
           ))}
           {markers.length > compactLimit && (
             <button
               type="button"
               onClick={() => setIsLegendExpanded((value) => !value)}
-              className="inline-flex items-center justify-center rounded-md border border-slate-200 bg-white px-2 py-1 text-[10px] font-extrabold text-slate-500 transition hover:border-blue-300 hover:text-blue-600 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-400"
+              className="inline-flex items-center justify-center rounded-full border border-[#E6DAC8] bg-white px-2 py-1 text-[10px] font-extrabold text-[#6B6861] transition hover:border-[#D4A373] hover:text-[#1A434E]"
             >
               {isLegendExpanded ? "Show less" : `+${hiddenCount} more`}
             </button>
@@ -481,7 +483,7 @@ export function TripOverview({ trip, uiConfig, appStructure }: { trip: Trip; uiC
           whileInView={{ opacity: 1, scale: 1 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6, ease: "easeOut" }}
-          className="relative h-[50vh] min-h-[350px] w-full overflow-hidden rounded-2xl border border-slate-200 shadow-sm dark:border-slate-800"
+          className="relative h-[50vh] min-h-[350px] w-full overflow-hidden rounded-lg border border-[#E6DAC8] shadow-[0_16px_36px_rgba(45,45,45,0.10)]"
         >
           <MultiOsmMap markers={markers} className="absolute inset-0 h-full w-full" />
         </motion.div>
@@ -492,13 +494,13 @@ export function TripOverview({ trip, uiConfig, appStructure }: { trip: Trip; uiC
   );
 
   return (
-    <div className="w-full max-w-[24rem] overflow-x-hidden px-3 pb-32 pt-4 sm:mx-auto sm:max-w-7xl sm:px-4 sm:pt-8">
+    <div className="w-full max-w-[24rem] overflow-x-hidden bg-[#F9F7F2] px-3 pb-32 pt-4 text-[#2D2D2D] sm:mx-auto sm:max-w-7xl sm:px-4 sm:pt-8">
       {/* 히어로 섹션 */}
-      <div className="relative mb-5 h-[22rem] min-w-0 overflow-hidden rounded-lg sm:mb-8 md:h-80">
+      <div className="relative mb-5 h-[22rem] min-w-0 overflow-hidden rounded-none bg-[#E6DAC8] shadow-[0_18px_42px_rgba(45,45,45,0.13)] sm:mb-8 md:h-80">
         <GuideImage src={trip.heroImage} alt={trip.title} className="h-full w-full" />
         <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent" />
         <div className="absolute inset-x-0 bottom-0 min-w-0 p-4 sm:p-6">
-          <h1 className="max-w-full text-3xl font-bold leading-tight text-white md:text-4xl">
+          <h1 className="max-w-full font-serif text-4xl font-semibold leading-tight text-white md:text-5xl">
             <span className="block break-words [overflow-wrap:anywhere]">{titleParts.name}</span>
             {titleParts.meta && (
               <span className="block break-words [overflow-wrap:anywhere]">{titleParts.meta}</span>
@@ -509,16 +511,17 @@ export function TripOverview({ trip, uiConfig, appStructure }: { trip: Trip; uiC
       </div>
 
       {/* 경로 요약 */}
-      <div className="mb-6 min-w-0 rounded-lg border border-gray-200 bg-white p-4 shadow-sm sm:mb-8 sm:p-6 dark:border-gray-700 dark:bg-gray-800/50">
-        <h2 className="mb-3 text-2xl font-semibold sm:mb-4">경로 요약</h2>
-        <p className="mb-4 break-all text-sm leading-7 text-gray-600 sm:break-words sm:text-base dark:text-gray-300">{trip.routeSummary}</p>
+      <div className="mb-6 min-w-0 rounded-lg border border-[#E6DAC8] bg-white p-4 shadow-[0_12px_30px_rgba(45,45,45,0.07)] sm:mb-8 sm:p-6">
+        <p className="mb-2 text-[10px] font-black uppercase tracking-[0.22em] text-[#B98045]">Route Summary</p>
+        <h2 className="mb-3 font-serif text-3xl font-semibold sm:mb-4">경로 요약</h2>
+        <p className="mb-4 break-all text-sm font-medium leading-7 text-[#6B6861] sm:break-words sm:text-base">{trip.routeSummary}</p>
         <div className="grid gap-3 text-sm sm:flex sm:flex-wrap sm:gap-4">
           <div className="flex min-w-0 items-center gap-2">
-            <Calendar className="h-4 w-4 text-gray-500" />
+            <Calendar className="h-4 w-4 text-[#1A434E]" />
             <span className="min-w-0 break-words">{trip.dateRange}</span>
           </div>
           <div className="flex min-w-0 items-center gap-2">
-            <Flag className="h-4 w-4 text-gray-500" />
+            <Flag className="h-4 w-4 text-[#D4A373]" />
             <span className="min-w-0 break-words">{trip.countries.join(", ")}</span>
           </div>
         </div>
@@ -526,7 +529,7 @@ export function TripOverview({ trip, uiConfig, appStructure }: { trip: Trip; uiC
 
       {/* 마스터 타임라인 */}
       <div>
-        <h2 className="mb-4 text-2xl font-semibold sm:mb-6">전체 일정</h2>
+        <h2 className="mb-4 font-serif text-3xl font-semibold sm:mb-6">전체 일정</h2>
         
         {/* 일반 타임라인 뷰일 때도 지도를 상단에 표시하여 경로를 한눈에 파악 가능하게 함 */}
         {overviewLayout !== "map-centric" && markers.length > 0 && (
@@ -536,7 +539,7 @@ export function TripOverview({ trip, uiConfig, appStructure }: { trip: Trip; uiC
               whileInView={{ opacity: 1, scale: 1 }}
               viewport={{ once: true }}
               transition={{ duration: 0.6, ease: "easeOut" }}
-              className="relative h-[35vh] min-h-[250px] w-full overflow-hidden rounded-xl border border-slate-200 shadow-sm dark:border-slate-800"
+              className="relative h-[35vh] min-h-[250px] w-full overflow-hidden rounded-lg border border-[#E6DAC8] shadow-[0_16px_36px_rgba(45,45,45,0.10)]"
             >
               <MultiOsmMap markers={markers} className="absolute inset-0 h-full w-full" />
             </motion.div>

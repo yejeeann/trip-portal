@@ -7,6 +7,8 @@ export type OsmMarker = {
   lat: number;
   lng: number;
   label: string;
+  variant?: "route" | "stay";
+  includeInRoute?: boolean;
   onClickUrl?: string;
   id?: string;
 };
@@ -17,6 +19,8 @@ type MultiOsmMapProps = {
   onMarkerClick?: (id: string) => void;
   fitPadding?: number;
   maxZoom?: number;
+  printOptimized?: boolean;
+  mapVariant?: "default" | "atlas" | "daily";
 };
 
 export function MultiOsmMap({
@@ -24,7 +28,9 @@ export function MultiOsmMap({
   className,
   onMarkerClick,
   fitPadding = 36,
-  maxZoom = 15
+  maxZoom = 15,
+  printOptimized = false,
+  mapVariant = "default"
 }: MultiOsmMapProps) {
   const router = useRouter();
   const googleMapsEmbedKey = process.env.NEXT_PUBLIC_GOOGLE_MAPS_EMBED_API_KEY;
@@ -80,12 +86,90 @@ export function MultiOsmMap({
   const isSingleMarker = markers.length === 1;
   const latRange = Math.max(rawMaxLat - rawMinLat, isSingleMarker ? 0.012 : 0.0025);
   const lngRange = Math.max(rawMaxLng - rawMinLng, isSingleMarker ? 0.012 : 0.0025);
-  const latPadding = Math.min(Math.max(latRange * 0.22, isSingleMarker ? 0.006 : 0.002), 0.35);
-  const lngPadding = Math.min(Math.max(lngRange * 0.22, isSingleMarker ? 0.006 : 0.002), 0.35);
+  const paddingRatio = printOptimized
+    ? mapVariant === "atlas"
+      ? 0.18
+      : 0.34
+    : 0.22;
+  const maxCoordinatePadding = printOptimized
+    ? mapVariant === "atlas"
+      ? 0.28
+      : 0.65
+    : 0.35;
+  const latPadding = Math.min(Math.max(latRange * paddingRatio, isSingleMarker ? 0.006 : 0.002), maxCoordinatePadding);
+  const lngPadding = Math.min(Math.max(lngRange * paddingRatio, isSingleMarker ? 0.006 : 0.002), maxCoordinatePadding);
   const minLat = rawMinLat - latPadding;
   const maxLat = rawMaxLat + latPadding;
   const minLng = rawMinLng - lngPadding;
   const maxLng = rawMaxLng + lngPadding;
+  const densePrintMap = printOptimized && markers.length >= 8;
+  const veryDensePrintMap = printOptimized && markers.length >= 20;
+  const dailyPrintMap = printOptimized && mapVariant === "daily";
+  const atlasPrintMap = printOptimized && mapVariant === "atlas";
+  const markerSize = printOptimized
+    ? atlasPrintMap
+      ? markers.length >= 20
+        ? 10
+        : 12
+      : dailyPrintMap
+      ? markers.length >= 10
+        ? 11
+        : 13
+      : veryDensePrintMap
+      ? 15
+      : densePrintMap
+        ? 18
+        : 30
+    : 24;
+  const markerAnchor = markerSize / 2;
+  const markerFontSize = printOptimized
+    ? atlasPrintMap
+      ? markers.length >= 20
+        ? 5
+        : 5.8
+      : dailyPrintMap
+      ? markers.length >= 10
+        ? 5.5
+        : 6.3
+      : veryDensePrintMap
+      ? 6.5
+      : densePrintMap
+        ? 7.5
+        : 12
+    : 12;
+  const markerBorder = printOptimized
+    ? atlasPrintMap
+      ? 0.85
+      : dailyPrintMap
+      ? 1
+      : veryDensePrintMap
+      ? 1.25
+      : densePrintMap
+        ? 1.5
+        : 2.5
+    : 2.5;
+  const routeWeight = printOptimized
+    ? atlasPrintMap
+      ? 1.6
+      : dailyPrintMap
+      ? 1.8
+      : veryDensePrintMap
+      ? 2.2
+      : densePrintMap
+        ? 2.7
+        : 4
+    : 4;
+  const routeOpacity = printOptimized ? 0.9 : 0.8;
+  const routeDash = printOptimized ? (veryDensePrintMap ? "5, 7" : "7, 8") : "6, 8";
+  const routeColor = printOptimized ? "#1A434E" : "#1A434E";
+  const markerColor = printOptimized ? "#D4A373" : "#D4A373";
+  const stayIconSvg = [
+    '<svg class="stay-icon" viewBox="0 0 24 24" aria-hidden="true">',
+    '<path d="M3.6 11.1 12 4.2l8.4 6.9" />',
+    '<path d="M6.2 10.1v9.1h11.6v-9.1" />',
+    '<path d="M10 19.2v-5.1h4v5.1" />',
+    '</svg>'
+  ].join("");
 
   const html = `
     <!DOCTYPE html>
@@ -100,28 +184,55 @@ export function MultiOsmMap({
           .custom-marker {
             color: #ffffff;
             font-weight: 800;
-            font-size: 12px;
+            font-size: ${markerFontSize}px;
             font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
             background: none;
             border: none;
           }
           .marker-content {
-            background-color: #0ea5e9; /* Tailwind sky-500 */
+            background-color: ${markerColor};
             border-radius: 50%;
-            width: 24px;
-            height: 24px;
-            border: 2.5px solid #ffffff;
-            box-shadow: 0 3px 6px rgba(0,0,0,0.3);
+            width: ${markerSize}px;
+            height: ${markerSize}px;
+            border: ${markerBorder}px solid #ffffff;
+            box-shadow: 0 4px 9px rgba(0,0,0,0.35);
             display: flex;
             align-items: center;
             justify-content: center;
             transition: transform 0.2s ease, background-color 0.2s ease;
             cursor: pointer;
           }
+          .marker-content.marker-stay {
+            background: #fffaf2;
+            border-color: ${printOptimized ? "#00464f" : "#0f766e"};
+            border-radius: ${printOptimized ? "9px" : "8px"};
+            color: ${printOptimized ? "#00464f" : "#0f766e"};
+          }
+          .stay-icon {
+            width: ${Math.round(markerSize * 0.64)}px;
+            height: ${Math.round(markerSize * 0.64)}px;
+            fill: none;
+            stroke: currentColor;
+            stroke-width: 2.8;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+          }
           .custom-marker:hover .marker-content {
             transform: scale(1.15);
-            background-color: #0284c7;
+            background-color: ${printOptimized ? "#9b442a" : "#0284c7"};
           }
+          .custom-marker:hover .marker-content.marker-stay {
+            background: #ffffff;
+          }
+          ${printOptimized ? `
+          .leaflet-control-attribution {
+            font-size: 8px;
+            opacity: 0.55;
+          }
+          .leaflet-control-zoom {
+            display: none;
+          }
+          ` : ""}
           /* 다크 모드일 때 지도를 어둡게 반전시키는 영리한 CSS 트릭 */
           @media (prefers-color-scheme: dark) {
             .leaflet-layer,
@@ -136,7 +247,11 @@ export function MultiOsmMap({
       <body>
         <div id="map"></div>
         <script>
-          var map = L.map('map');
+          var map = L.map('map', {
+            zoomControl: ${printOptimized ? "false" : "true"},
+            scrollWheelZoom: false,
+            dragging: ${printOptimized ? "false" : "true"}
+          });
           var bounds = L.latLngBounds([
             [${minLat}, ${minLng}],
             [${maxLat}, ${maxLng}]
@@ -153,12 +268,18 @@ export function MultiOsmMap({
           }).addTo(map);
 
           var latlngs = [];
-          ${markers.map((m, i) => `
+          ${markers.map((m, i) => {
+            const isStay = m.variant === "stay";
+            const markerHtml = isStay
+              ? `<div class="marker-content marker-stay">${stayIconSvg}</div>`
+              : `<div class="marker-content">${m.label}</div>`;
+
+            return `
             var icon_${i} = L.divIcon({
               className: 'custom-marker',
-              html: '<div class="marker-content">${m.label}</div>',
-              iconSize: [24, 24],
-              iconAnchor: [12, 12]
+              html: '${markerHtml}',
+              iconSize: [${markerSize}, ${markerSize}],
+              iconAnchor: [${markerAnchor}, ${markerAnchor}]
             });
             var marker_${i} = L.marker([${m.lat}, ${m.lng}], {icon: icon_${i}}).addTo(map);
         ${m.onClickUrl || m.id ? `
@@ -166,12 +287,12 @@ export function MultiOsmMap({
           window.parent.postMessage({ type: 'markerClick', url: '${m.onClickUrl || ""}', id: '${m.id || ""}' }, '*');
             });
             ` : ""}
-            latlngs.push([${m.lat}, ${m.lng}]);
-          `).join('\n')}
+            ${m.includeInRoute === false ? "" : `latlngs.push([${m.lat}, ${m.lng}]);`}
+          `;
+          }).join('\n')}
 
           if (latlngs.length > 1) {
-            /* 점선 및 하늘색(Sky-500) 여행 앱 스타일 경로선 적용 */
-            L.polyline(latlngs, {color: '#0ea5e9', weight: 4, dashArray: '6, 8', opacity: 0.8, lineCap: 'round', lineJoin: 'round'}).addTo(map);
+            L.polyline(latlngs, {color: '${routeColor}', weight: ${routeWeight}, dashArray: '${routeDash}', opacity: ${routeOpacity}, lineCap: 'round', lineJoin: 'round'}).addTo(map);
           }
         </script>
       </body>

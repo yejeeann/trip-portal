@@ -498,6 +498,7 @@ const CITY_COORDINATES: Record<string, { lat: number; lng: number }> = {
   Valletta: { lat: 35.8997, lng: 14.5147 },
   Gozo: { lat: 36.0443, lng: 14.2512 },
   Amalfi: { lat: 40.634, lng: 14.6027 },
+  Salerno: { lat: 40.6779, lng: 14.7659 },
   Naples: { lat: 40.8518, lng: 14.2681 },
   Napoli: { lat: 40.8518, lng: 14.2681 },
   Venice: { lat: 45.4408, lng: 12.3155 },
@@ -945,23 +946,23 @@ function GuideMap({
   const points = guide.places.map((place) => `${place.mapPosition.x},${place.mapPosition.y}`);
 
   return (
-    <section className="overflow-hidden rounded-2xl border border-slate-200 bg-slate-100 shadow-sm">
-      <div className="flex items-center justify-between border-b border-slate-200 bg-white px-5 py-4">
+    <section className="overflow-hidden rounded-lg border border-stone bg-[#EFE8DB] shadow-editorial">
+      <div className="flex items-center justify-between border-b border-stone bg-white px-5 py-4">
         <div>
-          <div className="text-[10px] font-bold uppercase tracking-widest text-sky-500">Map UI</div>
-          <h4 className="mt-1 font-serif text-xl font-bold text-slate-900">{guide.mapLabel}</h4>
+          <div className="text-[10px] font-bold uppercase tracking-widest text-clay">Map UI</div>
+          <h4 className="mt-1 font-serif text-xl font-semibold text-ink">{guide.mapLabel}</h4>
         </div>
-        <MapPinned className="h-5 w-5 text-sky-500" />
+        <MapPinned className="h-5 w-5 text-clay" />
       </div>
 
       <div className="relative aspect-[4/5] min-h-[520px] overflow-hidden">
-        <div className="absolute inset-0 bg-slate-100" />
+        <div className="absolute inset-0 bg-[#EFE8DB]" />
         <div className="absolute inset-0 opacity-50 [background-image:linear-gradient(30deg,rgba(15,23,42,0.04)_1px,transparent_1px),linear-gradient(120deg,rgba(15,23,42,0.04)_1px,transparent_1px)] [background-size:34px_34px]" />
         <svg className="absolute inset-0 h-full w-full" viewBox="0 0 100 100" aria-hidden="true">
           <polyline
             points={points.join(" ")}
             fill="none"
-            stroke="#0ea5e9"
+            stroke="#1A434E"
             strokeLinecap="round"
             strokeLinejoin="round"
             strokeWidth="1.2"
@@ -973,7 +974,7 @@ function GuideMap({
           <button
             key={place.id}
             onClick={() => onSelectPlace(place)}
-            className="absolute z-10 flex h-10 w-10 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full border-2 border-white bg-slate-900 text-sm font-bold text-white shadow-md transition hover:scale-110 hover:bg-sky-500 cursor-pointer"
+            className="absolute z-10 flex h-10 w-10 -translate-x-1/2 -translate-y-1/2 cursor-pointer items-center justify-center rounded-full border-2 border-white bg-ink text-sm font-bold text-white shadow-md transition hover:scale-110 hover:bg-clay"
             style={{ left: `${place.mapPosition.x}%`, top: `${place.mapPosition.y}%` }}
             aria-label={`${place.name} 상세 보기`}
             title={place.name}
@@ -982,16 +983,16 @@ function GuideMap({
           </button>
         ))}
 
-        <div className="absolute inset-x-4 bottom-4 rounded-xl border border-slate-200/50 bg-white/90 p-4 backdrop-blur shadow-sm">
+        <div className="absolute inset-x-4 bottom-4 rounded-lg border border-stone/70 bg-white/90 p-4 shadow-sm backdrop-blur">
           {guide.places.length ? (
             <ol className="space-y-2">
               {guide.places.slice(0, 5).map((place, placeIndex) => (
                 <li key={`${place.id}-map-index`}>
                   <button
                     onClick={() => onSelectPlace(place)}
-                    className="flex items-center gap-3 text-xs font-bold transition hover:text-sky-600 text-left w-full cursor-pointer text-slate-700"
+                    className="flex w-full cursor-pointer items-center gap-3 text-left text-xs font-bold text-ink transition hover:text-clay"
                   >
-                    <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-slate-100 text-slate-500">
+                    <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-[#F9F7F2] text-moss">
                       {placeIndex + 1}
                     </span>
                     <span className="truncate">{place.name}</span>
@@ -1000,7 +1001,7 @@ function GuideMap({
               ))}
             </ol>
           ) : (
-            <p className="text-sm leading-6 text-slate-500">
+            <p className="text-sm leading-6 text-moss">
               이 일자의 방문지 좌표가 아직 준비되지 않았습니다.
             </p>
           )}
@@ -1040,9 +1041,9 @@ function ActivityList({
 }) {
   return (
     <section>
-      <div className="mb-6 flex items-center justify-between border-b border-slate-200 pb-3">
-        <h4 className="font-serif text-2xl font-bold text-slate-900">Photo Feed</h4>
-        <Images className="h-5 w-5 text-sky-500" />
+      <div className="mb-6 flex items-center justify-between border-b border-stone pb-3">
+        <h4 className="font-serif text-2xl font-semibold text-ink">Photo Feed</h4>
+        <Images className="h-5 w-5 text-clay" />
       </div>
       {places.length ? (
         <div className="mx-auto max-w-md space-y-8">
@@ -1051,29 +1052,29 @@ function ActivityList({
             return (
               <div
                 key={place.id}
-                className="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm transition-all hover:shadow-md cursor-pointer"
+                className="cursor-pointer overflow-hidden rounded-lg border border-stone bg-white shadow-[0_12px_30px_rgba(45,45,45,0.08)] transition-all hover:-translate-y-0.5 hover:shadow-editorial"
                 onClick={() => onSelectPlace(place)}
               >
                 {/* Post Header */}
                 <div className="flex items-center gap-3 p-4">
-                  <div className="flex h-9 w-9 items-center justify-center rounded-full bg-gradient-to-tr from-amber-400 via-rose-500 to-fuchsia-600 p-[2px]">
+                  <div className="flex h-9 w-9 items-center justify-center rounded-full bg-[#D4A373] p-[2px]">
                     <div className="h-full w-full overflow-hidden rounded-full border-2 border-white bg-white">
                       <Image src={place.image} alt="profile" width={32} height={32} className="h-full w-full object-cover" />
                     </div>
                   </div>
                   <div className="flex-1">
-                    <h5 className="text-sm font-bold text-slate-900 leading-tight">
+                    <h5 className="text-sm font-bold leading-tight text-ink">
                       {place.name}
                     </h5>
-                    <p className="text-[11px] font-medium text-slate-500">
+                    <p className="text-[11px] font-medium text-moss">
                       {place.category} {place.timeLabel && `· ${place.timeLabel}`}
                     </p>
                   </div>
-                  <MoreHorizontal className="h-5 w-5 text-slate-400" />
+                  <MoreHorizontal className="h-5 w-5 text-moss" />
                 </div>
 
                 {/* Post Image */}
-                <div className="relative aspect-square w-full bg-slate-100">
+                <div className="relative aspect-square w-full bg-[#EFE8DB]">
                   <Image
                     src={place.image}
                     alt={place.imageAlt}
@@ -1086,20 +1087,20 @@ function ActivityList({
                 {/* Post Actions & Caption */}
                 <div className="p-4">
                   <div className="mb-3 flex items-center gap-4">
-                    <Heart className="h-6 w-6 text-slate-800 transition hover:text-rose-500" />
-                    <MessageCircle className="h-6 w-6 text-slate-800" />
-                    <Send className="h-6 w-6 text-slate-800" />
+                    <Heart className="h-6 w-6 text-ink transition hover:text-clay" />
+                    <MessageCircle className="h-6 w-6 text-ink" />
+                    <Send className="h-6 w-6 text-ink" />
                     <div className="flex-1" />
-                    <Bookmark className="h-6 w-6 text-slate-800" />
+                    <Bookmark className="h-6 w-6 text-ink" />
                   </div>
-                  <div className="mb-2 text-sm font-bold text-slate-900">
+                  <div className="mb-2 text-sm font-bold text-ink">
                     좋아요 {likes}개
                   </div>
-                  <div className="text-sm text-slate-800 line-clamp-2">
-                    <span className="mr-2 font-bold text-slate-900">guidedesk</span>
+                  <div className="line-clamp-2 text-sm text-ink">
+                    <span className="mr-2 font-bold text-ink">guidedesk</span>
                     {place.description}
                   </div>
-                  <div className="mt-2 text-[10px] font-medium uppercase text-slate-400">
+                  <div className="mt-2 text-[10px] font-medium uppercase text-clay">
                     View details
                   </div>
                 </div>
@@ -1108,7 +1109,7 @@ function ActivityList({
           })}
         </div>
       ) : (
-        <div className="rounded-xl border border-slate-200 bg-white p-8 text-center text-sm font-medium text-slate-500">
+        <div className="rounded-lg border border-stone bg-white p-8 text-center text-sm font-medium text-moss">
           아직 업로드된 사진이 없습니다.
         </div>
       )}

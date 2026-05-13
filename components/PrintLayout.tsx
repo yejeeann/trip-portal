@@ -1,171 +1,971 @@
 "use client";
 
-import { sicilyGuideData } from "@/lib/sicily-guide-data";
-import type { DailyGuide, DailyGuidePlace, FlightTicket } from "@/lib/swiss-guide-data";
-import type { TravelPayload } from "@/lib/types";
 import { useEffect } from "react";
-import { MultiOsmMap } from "./multi-osm-map";
+import { sicilyGuideData } from "@/lib/sicily-guide-data";
+import { staticPrintGuideDesign, type PrintGuideDesign } from "@/lib/print-guide-design";
+import type { DailyCityVisit, DailyGuide, DailyGuidePlace, FlightTicket, MasterTimelineItem, TimelineAccommodation } from "@/lib/swiss-guide-data";
+import type { TravelPayload } from "@/lib/types";
+import { MultiOsmMap, type OsmMarker } from "./multi-osm-map";
 
-const MagazineInfoBox = ({ title, items, colorClass }: { title: string; items: string[]; colorClass: string }) => {
-  if (!items || items.length === 0) return null;
-  return (
-    <div className={`avoid-break-inside ${colorClass}`}>
-      <h4 className="font-sans font-bold uppercase tracking-widest text-xs mb-2">{title}</h4>
-      <ul className="list-none space-y-1 text-sm font-sans text-stone-600">
-        {items.map((item, i) => (
-          <li key={i} className="pl-3 relative">
-            <span className="absolute left-0 top-0 text-current opacity-50">•</span>
-            {item}
-          </li>
-        ))}
-      </ul>
-    </div>
-  );
+type StayRow = TimelineAccommodation & {
+  key: string;
+  days: number[];
 };
 
-const PlaceCard = ({ place }: { place: DailyGuidePlace }) => (
-  <div className="avoid-break-inside mt-16 mb-16">
-    <h3 className="text-3xl text-[var(--print-theme)] mb-2">{place.name}</h3>
-    <div className="text-xs font-sans uppercase tracking-widest text-stone-400 mb-6 border-b border-stone-200 pb-3">
-      {place.category} | {place.duration}
-    </div>
-    
-    {place.image && (
-      <div className="mb-8 w-full h-[320px] overflow-hidden">
-        <img src={place.image} alt={place.imageAlt} className="w-full h-full object-cover grayscale-[15%]" />
+type PrintMapMarker = OsmMarker & {
+  name: string;
+};
+
+const modeLabels: Record<string, string> = {
+  flight: "Flight",
+  train: "Train",
+  "rental-car": "Rental car",
+  taxi: "Taxi",
+  ferry: "Ferry",
+  walk: "Walk",
+  transit: "Transit",
+  drive: "Drive"
+};
+
+function formatDate(value: string) {
+  const date = new Date(`${value}T00:00:00`);
+  if (Number.isNaN(date.getTime())) return value;
+  return date.toLocaleDateString("en-US", { month: "short", day: "numeric", weekday: "short" });
+}
+
+function modeLabel(value?: string) {
+  if (!value) return "Plan";
+  return modeLabels[value] ?? value;
+}
+
+function getUniqueStays(items: MasterTimelineItem[]): StayRow[] {
+  const stays = new Map<string, StayRow>();
+
+  items.forEach((item) => {
+    if (!item.accommodation) return;
+    const key = `${item.accommodation.name}-${item.accommodation.address}`;
+    const existing = stays.get(key);
+    if (existing) {
+      existing.days.push(item.day);
+      return;
+    }
+
+    stays.set(key, {
+      ...item.accommodation,
+      key,
+      days: [item.day]
+    });
+  });
+
+  return Array.from(stays.values());
+}
+
+function getDayTimelineItem(day: number) {
+  return sicilyGuideData.masterTimeline.find((item) => item.day === day);
+}
+
+function getPrimaryPlaces(guide: DailyGuide) {
+  const cityVisitPlaces = guide.cityVisits?.flatMap((visit) => visit.spots) ?? [];
+  return cityVisitPlaces.length ? cityVisitPlaces : guide.places;
+}
+
+function isTransitOrEndpointName(value: string) {
+  const normalized = value.toLowerCase();
+  return [
+    "seoul",
+    "incheon",
+    "helsinki",
+    "airport",
+    "fiumicino",
+    "icn",
+    "fco",
+    "hel",
+    "mla",
+    "cta",
+    "luqa",
+    "departure",
+    "arrival",
+    "return",
+    "출국",
+    "도착"
+  ].some((token) => normalized.includes(token));
+}
+
+function isActualTravelPoint(name: string) {
+  return !isTransitOrEndpointName(name);
+}
+
+function isLogisticsPlace(place: DailyGuidePlace) {
+  const text = `${place.name} ${place.category}`.toLowerCase();
+  if (text.includes("old harbour") || text.includes("old harbor")) return false;
+
+  return [
+    "airport",
+    "fiumicino",
+    "termini",
+    "centrale",
+    "station",
+    "train",
+    "terminal",
+    "ferry terminal",
+    "ferry port",
+    "port",
+    "harbor",
+    "harbour",
+    "parking",
+    "park-and-ride",
+    "luggage",
+    "storage",
+    "transfer",
+    "transit",
+    "metro",
+    "bus",
+    "taxi",
+    "rental",
+    "car pickup",
+    "overview",
+    "arrival",
+    "departure",
+    "공항",
+    "기차역",
+    "역",
+    "터미널",
+    "항구",
+    "페리",
+    "선착장",
+    "주차",
+    "짐",
+    "보관",
+    "환승",
+    "이동",
+    "도착",
+    "출발",
+    "도시 기준점"
+  ].some((token) => text.includes(token));
+}
+
+function isFoodBreakPlace(place: DailyGuidePlace) {
+  const text = `${place.name} ${place.category}`.toLowerCase();
+  return [
+    "restaurant",
+    "cafe",
+    "caffe",
+    "dolceria",
+    "bakery",
+    "market",
+    "lunch",
+    "dinner",
+    "dessert",
+    "gelato",
+    "sorbet",
+    "food",
+    "식사",
+    "점심",
+    "저녁",
+    "카페",
+    "디저트",
+    "시장",
+    "베이커리",
+    "초콜릿"
+  ].some((token) => text.includes(token));
+}
+
+const essentialStopKeywords = [
+  "villa romana",
+  "valley of the temples",
+  "kolymbethra",
+  "greek theatre",
+  "neapolis",
+  "ortigia",
+  "piazza duomo",
+  "duomo",
+  "cathedral",
+  "cattedrale",
+  "monreale",
+  "palatine chapel",
+  "santa caterina",
+  "segesta",
+  "temple",
+  "teatro",
+  "amphitheatre",
+  "archaeological",
+  "pompeii",
+  "valletta",
+  "st john",
+  "upper barrakka",
+  "blue grotto",
+  "citadel",
+  "erice",
+  "scopello",
+  "cefalu",
+  "chianalea",
+  "tropea",
+  "santa maria dell'isola",
+  "amalfi",
+  "pantheon",
+  "colosseum",
+  "roman forum",
+  "대성당",
+  "성당",
+  "신전",
+  "고고학",
+  "유적",
+  "극장",
+  "수도원",
+  "전망",
+  "성채",
+  "폼페이",
+  "몬레알레"
+];
+
+const essentialCategoryKeywords = [
+  "unesco",
+  "역사",
+  "유적",
+  "고고학",
+  "성당",
+  "대성당",
+  "전망",
+  "성채",
+  "temple",
+  "cathedral",
+  "archaeological",
+  "historic",
+  "view"
+];
+
+function getEssentialScore(place: DailyGuidePlace) {
+  const text = [
+    place.name,
+    place.category,
+    place.shortDescription,
+    place.description,
+    place.detailDescription,
+    ...(place.whyVisit ?? []),
+    ...(place.whatToSee ?? [])
+  ].join(" ").toLowerCase();
+
+  const nameText = place.name.toLowerCase();
+  const categoryText = place.category.toLowerCase();
+  const keywordScore = essentialStopKeywords.filter((keyword) => text.includes(keyword)).length;
+  const categoryScore = essentialCategoryKeywords.some((keyword) => categoryText.includes(keyword)) ? 1 : 0;
+  const namedLandmarkBonus = essentialStopKeywords.some((keyword) => nameText.includes(keyword)) ? 2 : 0;
+
+  return keywordScore + categoryScore + namedLandmarkBonus;
+}
+
+function splitGuidePlacesByPriority(places: DailyGuidePlace[]) {
+  const scoredPlaces = places.map((place, index) => ({
+    place,
+    index,
+    score: getEssentialScore(place)
+  }));
+  const essential = scoredPlaces
+    .filter((item) => item.score >= 3)
+    .sort((a, b) => b.score - a.score || a.index - b.index)
+    .map((item) => item.place);
+  const essentialIds = new Set(essential.map((place) => place.id));
+  const more = places.filter((place) => !essentialIds.has(place.id));
+
+  if (essential.length) {
+    return { essential, more };
+  }
+
+  const best = scoredPlaces
+    .filter((item) => item.score > 0)
+    .sort((a, b) => b.score - a.score || a.index - b.index)
+    .slice(0, 2)
+    .map((item) => item.place);
+  const bestIds = new Set(best.map((place) => place.id));
+
+  return {
+    essential: best,
+    more: places.filter((place) => !bestIds.has(place.id))
+  };
+}
+
+function truncateText(value: string | undefined, maxLength: number) {
+  if (!value) return "";
+  if (value.length <= maxLength) return value;
+  return `${value.slice(0, maxLength).trimEnd()}...`;
+}
+
+function getDayFocus(guide: DailyGuide, places: DailyGuidePlace[]) {
+  const categories = Array.from(new Set(places.map((place) => place.category).filter(Boolean))).slice(0, 3);
+  if (categories.length) return categories.join(" / ");
+  return guide.region;
+}
+
+function getDayPace(guide: DailyGuide, placeCount: number) {
+  const mode = guide.transportMode;
+  if (mode === "flight" || mode === "train" || mode === "ferry") return "이동 중심";
+  if (placeCount >= 8) return "촘촘한 탐방";
+  if (placeCount >= 5) return "균형 일정";
+  return "여유 일정";
+}
+
+function getDayTip(guide: DailyGuide, timeline?: MasterTimelineItem) {
+  const notes = guide.cityVisits?.flatMap((visit) => visit.practicalNotes ?? []) ?? [];
+  return truncateText(notes[0] ?? timeline?.note ?? guide.deck, 84);
+}
+
+function getPracticalNotes(guide: DailyGuide, timeline?: MasterTimelineItem) {
+  const notes = [
+    ...(timeline?.note ? [timeline.note] : []),
+    ...(guide.cityVisits?.flatMap((visit) => visit.practicalNotes ?? []) ?? [])
+  ];
+
+  return Array.from(new Set(notes)).filter(Boolean).slice(0, 7);
+}
+
+function uniqueMarkers(markers: PrintMapMarker[]) {
+  const seen = new Set<string>();
+  const unique = markers.filter((marker) => {
+    const key = `${marker.variant ?? "route"}-${marker.lat.toFixed(3)}-${marker.lng.toFixed(3)}`;
+    if (seen.has(key)) return false;
+    seen.add(key);
+    return true;
+  });
+
+  let routeIndex = 0;
+
+  return unique.map((marker) => {
+    if (marker.variant === "stay") {
+      return {
+        ...marker,
+        label: ""
+      };
+    }
+
+    routeIndex += 1;
+
+    return {
+      ...marker,
+      label: String(routeIndex)
+    };
+  });
+}
+
+function marker(name: string, lat: number, lng: number): PrintMapMarker {
+  return {
+    lat,
+    lng,
+    name,
+    label: ""
+  };
+}
+
+function getAllRouteMarkers() {
+  const majorRoute = [
+    marker("Rome", 41.9028, 12.4964),
+    marker("Catania", 37.5079, 15.083),
+    marker("Taormina", 37.8516, 15.2853),
+    marker("Syracuse", 37.0755, 15.2866),
+    marker("Noto", 36.8915, 15.0707),
+    marker("Ragusa / Modica", 36.9239, 14.7199),
+    marker("Valletta / Gzira", 35.8992, 14.5141),
+    marker("Gozo", 36.0443, 14.2512),
+    marker("Villa Romana del Casale", 37.3647, 14.3346),
+    marker("Agrigento / Realmonte", 37.2898, 13.5902),
+    marker("Trapani / Erice", 38.0174, 12.5364),
+    marker("Segesta / Scopello", 37.9414, 12.8324),
+    marker("Palermo / Monreale", 38.1157, 13.3615),
+    marker("Cefalu", 38.0394, 14.0228),
+    marker("Scilla / Calabria", 38.2536, 15.7152),
+    marker("Tropea / Pizzo", 38.6786, 15.8972),
+    marker("Salerno / Amalfi", 40.6779, 14.7659),
+    marker("Pompeii", 40.7484, 14.4847),
+    marker("Rome Final", 41.8832, 12.3482)
+  ];
+
+  return uniqueMarkers(majorRoute);
+}
+
+function parseGoogleMapsCoordinates(url?: string) {
+  if (!url) return null;
+
+  try {
+    const parsedUrl = new URL(url);
+    const query = parsedUrl.searchParams.get("query") ?? "";
+    const match = query.match(/^\s*(-?\d+(?:\.\d+)?)\s*,\s*(-?\d+(?:\.\d+)?)\s*$/);
+
+    if (!match) return null;
+
+    const lat = Number(match[1]);
+    const lng = Number(match[2]);
+
+    if (!Number.isFinite(lat) || !Number.isFinite(lng)) return null;
+
+    return { lat, lng };
+  } catch {
+    return null;
+  }
+}
+
+function getStayMarkers() {
+  return getUniqueStays(sicilyGuideData.masterTimeline).flatMap((stay) => {
+    const coordinates = parseGoogleMapsCoordinates(stay.googleMapsUrl);
+    if (!coordinates) return [];
+
+    return [{
+      ...coordinates,
+      name: `Stay: ${stay.name}`,
+      label: "",
+      variant: "stay" as const,
+      includeInRoute: false
+    }];
+  });
+}
+
+function getAtlasMarkers() {
+  return uniqueMarkers([
+    ...getAllRouteMarkers(),
+    ...getStayMarkers()
+  ]);
+}
+
+function getDailyMarkers(guide: DailyGuide) {
+  return uniqueMarkers(getPrimaryPlaces(guide)
+    .filter((place) => place.coordinates)
+    .filter((place) => isActualTravelPoint(place.name) && isActualTravelPoint(place.category))
+    .map((place, index) => ({
+      lat: place.coordinates!.lat,
+      lng: place.coordinates!.lng,
+      name: place.name,
+      label: String(index + 1)
+    })));
+}
+
+function getMapFit(markers: PrintMapMarker[], scope: "atlas" | "daily") {
+  if (scope === "atlas") {
+    return {
+      fitPadding: 28,
+      maxZoom: 7
+    };
+  }
+
+  if (markers.length >= 14) {
+    return {
+      fitPadding: 68,
+      maxZoom: 11
+    };
+  }
+
+  if (markers.length >= 8) {
+    return {
+      fitPadding: 62,
+      maxZoom: 12
+    };
+  }
+
+  if (markers.length >= 4) {
+    return {
+      fitPadding: 54,
+      maxZoom: 13
+    };
+  }
+
+  return {
+    fitPadding: 46,
+    maxZoom: 14
+  };
+}
+
+function CoverPage({ payload, design }: { payload: TravelPayload; design: PrintGuideDesign }) {
+  const coverImage = "/travel-photos/home-hero-taormina-bright-portrait.png";
+
+  return (
+    <section className="guide-cover">
+      <img className="cover-photo" src={coverImage} alt={payload.trip.title || design.title} />
+      <div className="cover-scrim" />
+      <div className="cover-topline">
+        <span>{design.coverLabel}</span>
+        <span>2026 Field Edition</span>
       </div>
-    )}
+      <div className="cover-copy">
+        <p className="guide-kicker">Sicily / Malta / Calabria / Amalfi / Rome</p>
+        <h1>{payload.trip.title || design.title}</h1>
+        <p className="guide-subtitle">{design.subtitle}</p>
+        <div className="cover-route">
+          <span>Sicily</span>
+          <span>Malta</span>
+          <span>Calabria</span>
+          <span>Campania</span>
+          <span>Rome</span>
+        </div>
+      </div>
+      <div className="guide-cover-grid">
+        <div>
+          <span>Route</span>
+          <strong>Ancient coastlines and slow-road cities</strong>
+        </div>
+        <div>
+          <span>Days</span>
+          <strong>{sicilyGuideData.masterTimeline.length}</strong>
+        </div>
+        <div>
+          <span>Dates</span>
+          <strong>{payload.trip.dateRange || "May 21 - Jun 08"}</strong>
+        </div>
+      </div>
+    </section>
+  );
+}
 
-    {/* 매거진 스타일 2단 텍스트 + Drop Cap */}
-    <div className="multi-column drop-cap mb-8 text-stone-800">
-      {place.detailDescription}
-    </div>
-    
-    {/* 3단 정보 박스 배열 */}
-    <div className="grid grid-cols-3 gap-8 pt-6 border-t border-stone-100">
-      <MagazineInfoBox title="Why Visit" items={place.whyVisit ?? []} colorClass="text-[var(--print-theme)]" />
-      <MagazineInfoBox title="What to See" items={place.whatToSee ?? []} colorClass="text-stone-700" />
-      <MagazineInfoBox title="Tips" items={place.tips ?? []} colorClass="text-stone-700" />
-    </div>
-  </div>
-);
+function GuideIntroPage({ payload, design }: { payload: TravelPayload; design: PrintGuideDesign }) {
+  const routeBlocks = [
+    {
+      label: "Arc 01",
+      title: "Eastern Sicily",
+      copy: "Catania, Etna, Taormina, Syracuse, Noto, Ragusa and Modica are arranged around driving load, parking friction, and the richest baroque layers."
+    },
+    {
+      label: "Arc 02",
+      title: "Malta Interlude",
+      copy: "Gzira works as the base: ferry into Valletta, boats toward Comino and Gozo, then a south-coast loop through Blue Grotto and Marsaxlokk."
+    },
+    {
+      label: "Arc 03",
+      title: "West to the Mainland",
+      copy: "Agrigento, Erice, Palermo, Monreale, Calabria, Salerno, Amalfi and Pompeii form the return spine toward the final Rome night."
+    }
+  ];
 
-export const PrintLayout = ({ payload }: { payload: TravelPayload }) => {
+  return (
+    <section className="guide-page guide-intro page-break-before">
+      <div className="intro-masthead">
+        <p className="guide-kicker">Offline Guidebook Source</p>
+        <h2>{payload.trip.title || design.title}</h2>
+        <p>{payload.trip.subtitle || design.subtitle}</p>
+      </div>
+
+      <div className="intro-grid">
+        <article className="intro-note">
+          <span>Editorial brief</span>
+          <p>
+            Built from the markdown guidebook source, confirmed transport, static attraction data, accommodations, route notes,
+            and the same warm Mediterranean visual system used in the mobile home screen. The layout is tuned for A4 reading,
+            quick daily scanning, and offline use.
+          </p>
+        </article>
+
+        <div className="intro-facts">
+          <div>
+            <span>Dates</span>
+            <strong>{payload.trip.dateRange || "May 21 - Jun 08, 2026"}</strong>
+          </div>
+          <div>
+            <span>Scope</span>
+            <strong>{sicilyGuideData.masterTimeline.length} travel days</strong>
+          </div>
+          <div>
+            <span>Mode</span>
+            <strong>Flights, train, ferries, rental car</strong>
+          </div>
+        </div>
+      </div>
+
+      <div className="route-editorial">
+        {routeBlocks.map((block) => (
+          <article key={block.label}>
+            <span>{block.label}</span>
+            <h3>{block.title}</h3>
+            <p>{block.copy}</p>
+          </article>
+        ))}
+      </div>
+    </section>
+  );
+}
+
+function SectionTitle({ eyebrow, title, note }: { eyebrow: string; title: string; note?: string }) {
+  return (
+    <header className="guide-section-title">
+      <p>{eyebrow}</p>
+      <h2>{title}</h2>
+      {note && <span>{note}</span>}
+    </header>
+  );
+}
+
+function FlightSummary({ tickets, title }: { tickets: FlightTicket[]; title: string }) {
+  if (!tickets.length) return null;
+
+  return (
+    <section className="guide-page">
+      <SectionTitle eyebrow="Before the Route" title={title} note="항공과 환승 흐름을 한눈에" />
+      <div className="guide-card-stack">
+        {tickets.map((ticket) => (
+          <article key={ticket.id} className="guide-box avoid-break-inside">
+            <div className="guide-box-header">
+              <div>
+                <p>{ticket.title}</p>
+                <h3>{ticket.routeLabel}</h3>
+              </div>
+              <strong>{ticket.dateLabel}</strong>
+            </div>
+            <div className="flight-segments">
+              {ticket.segments.map((segment) => (
+                <div key={`${ticket.id}-${segment.flightNo}`} className="flight-segment">
+                  <div>
+                    <strong>{segment.flightNo}</strong>
+                    <span>{segment.airlineName}</span>
+                  </div>
+                  <div>
+                    <b>{segment.from.code}</b>
+                    <span>{segment.from.time}</span>
+                  </div>
+                  <div className="flight-arrow">{segment.duration}</div>
+                  <div>
+                    <b>{segment.to.code}</b>
+                    <span>{segment.to.time}</span>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </article>
+        ))}
+      </div>
+    </section>
+  );
+}
+
+function RouteAtlas() {
+  const markers = getAtlasMarkers();
+  const mapFit = getMapFit(markers, "atlas");
+
+  if (!markers.length) return null;
+
+  return (
+    <section className="guide-page page-break-before">
+      <SectionTitle eyebrow="Route Overview" title="Route Atlas" note="주요 도시와 거점만 표시한 전체 동선" />
+      <div className="route-atlas-map avoid-break-inside">
+        <MultiOsmMap markers={markers} className="absolute inset-0 h-full w-full" fitPadding={mapFit.fitPadding} maxZoom={mapFit.maxZoom} printOptimized mapVariant="atlas" />
+      </div>
+      <div className="map-key-grid">
+        {markers.map((marker) => (
+          <div key={`marker-${marker.label}-${marker.name}`}>
+            <strong className={marker.variant === "stay" ? "map-key-stay" : undefined}>
+              {marker.variant === "stay" ? "⌂" : marker.label}
+            </strong>
+            <span>{marker.name}</span>
+          </div>
+        ))}
+      </div>
+    </section>
+  );
+}
+
+function RouteSchedule({ items, title }: { items: MasterTimelineItem[]; title: string }) {
+  return (
+    <section className="guide-page page-break-before">
+      <SectionTitle eyebrow="Trip Framework" title={title} note="날짜별 이동과 숙소 기준표" />
+      <table className="guide-table">
+        <thead>
+          <tr>
+            <th>Day</th>
+            <th>Date</th>
+            <th>Route</th>
+            <th>Mode</th>
+            <th>Stay</th>
+          </tr>
+        </thead>
+        <tbody>
+          {items.map((item) => (
+            <tr key={item.id}>
+              <td>{String(item.day).padStart(2, "0")}</td>
+              <td>{item.dateLabel}</td>
+              <td>{item.primaryRoute}</td>
+              <td>{modeLabel(item.transportMode)}</td>
+              <td>{item.accommodation?.name ?? "-"}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </section>
+  );
+}
+
+function StayDirectory({ stays, title }: { stays: StayRow[]; title: string }) {
+  if (!stays.length) return null;
+
+  return (
+    <section className="guide-page page-break-before">
+      <SectionTitle eyebrow="Bases & Check-ins" title={title} note="체크인과 주소 빠른 참조" />
+      <div className="stay-grid">
+        {stays.map((stay) => (
+          <article key={stay.key} className="guide-box avoid-break-inside">
+            <p className="stay-days">Days {stay.days.join(", ")}</p>
+            <h3>{stay.name}</h3>
+            <p>{stay.address}</p>
+            <dl className="mini-facts">
+              <div>
+                <dt>Check-in</dt>
+                <dd>{stay.checkIn ?? "-"}</dd>
+              </div>
+              <div>
+                <dt>Check-out</dt>
+                <dd>{stay.checkOut ?? "-"}</dd>
+              </div>
+            </dl>
+          </article>
+        ))}
+      </div>
+    </section>
+  );
+}
+
+function RouteOverview({ guide }: { guide: DailyGuide }) {
+  if (!guide.routeOverview?.length) return null;
+
+  return (
+    <section className="day-route-flow avoid-break-inside">
+      <div className="day-route-flow-title">
+        <span>Route Flow</span>
+        <strong>오늘의 동선</strong>
+      </div>
+      <div className="day-route-strip">
+        {guide.routeOverview.map((point, index) => (
+          <div key={point.id}>
+            <span>{index + 1}</span>
+            <strong>{point.name}</strong>
+            {point.detail && <p>{point.detail}</p>}
+          </div>
+        ))}
+      </div>
+    </section>
+  );
+}
+
+function CityVisitBox({ visit }: { visit: DailyCityVisit }) {
+  return (
+    <section className="city-visit avoid-break-inside">
+      <div className="city-visit-header">
+        <div>
+          <p>{modeLabel(visit.routeMode)} / {visit.stayDuration}</p>
+          <h4>{visit.city}</h4>
+        </div>
+        {visit.entryPoint && <span>{visit.entryPoint}</span>}
+      </div>
+      {visit.practicalNotes?.length > 0 && (
+        <ul className="compact-list">
+          {visit.practicalNotes.slice(0, 4).map((note) => (
+            <li key={note}>{note}</li>
+          ))}
+        </ul>
+      )}
+    </section>
+  );
+}
+
+function PlaceBrief({ place, index }: { place: DailyGuidePlace; index: number }) {
+  const seeItems = place.whatToSee?.slice(0, 2) ?? [];
+  const tipItems = place.tips?.slice(0, 1) ?? [];
+
+  return (
+    <article className="place-brief essential-place avoid-break-inside">
+      {place.image && (
+        <div className="place-thumb">
+          <img src={place.image} alt={place.imageAlt} />
+        </div>
+      )}
+      <div className="place-brief-body">
+        <div className="place-brief-top">
+          <div>
+            <p>Stop {String(index + 1).padStart(2, "0")}</p>
+            <h4>{place.name}</h4>
+          </div>
+          <span>{place.category}</span>
+        </div>
+        <p className="place-summary">{truncateText(place.detailDescription || place.shortDescription || place.description, 520)}</p>
+        {(seeItems.length > 0 || tipItems.length > 0) && (
+          <div className="place-columns">
+            {seeItems.length > 0 && (
+              <div>
+                <b>See</b>
+                <ul>
+                  {seeItems.map((item) => <li key={item}>{item}</li>)}
+                </ul>
+              </div>
+            )}
+            {tipItems.length > 0 && (
+              <div>
+                <b>Tip</b>
+                <ul>
+                  {tipItems.map((item) => <li key={item}>{item}</li>)}
+                </ul>
+              </div>
+            )}
+          </div>
+        )}
+      </div>
+    </article>
+  );
+}
+
+function MorePlaceCard({ place, index }: { place: DailyGuidePlace; index: number }) {
+  return (
+    <article className="more-place avoid-break-inside">
+      {place.image && <img src={place.image} alt={place.imageAlt} />}
+      <div>
+        <p>Stop {String(index + 1).padStart(2, "0")} / {place.category}</p>
+        <h4>{place.name}</h4>
+        <span>{truncateText(place.shortDescription || place.description, 150)}</span>
+      </div>
+    </article>
+  );
+}
+
+function FoodBreaks({ places }: { places: DailyGuidePlace[] }) {
+  if (!places.length) return null;
+
+  return (
+    <section className="daily-edit-section food-breaks avoid-break-inside">
+      <div className="daily-edit-title">
+        <span>Food & Breaks</span>
+        <strong>먹고 쉬는 포인트</strong>
+      </div>
+      <div className="food-break-grid">
+        {places.map((place, index) => (
+          <MorePlaceCard key={place.id} place={place} index={index} />
+        ))}
+      </div>
+    </section>
+  );
+}
+
+function PracticalNotes({ notes }: { notes: string[] }) {
+  if (!notes.length) return null;
+
+  return (
+    <section className="daily-edit-section practical-notes avoid-break-inside">
+      <div className="daily-edit-title">
+        <span>Practical Notes</span>
+        <strong>주차 / 이동 / 예약 메모</strong>
+      </div>
+      <ul>
+        {notes.map((note) => (
+          <li key={note}>{note}</li>
+        ))}
+      </ul>
+    </section>
+  );
+}
+
+function DailyGuidePage({ guide, sectionTitle }: { guide: DailyGuide; sectionTitle: string }) {
+  const timeline = getDayTimelineItem(guide.day);
+  const places = getPrimaryPlaces(guide);
+  const tourismPlaces = places.filter((place) => !isLogisticsPlace(place));
+  const foodPlaces = tourismPlaces.filter(isFoodBreakPlace);
+  const guidePlaces = tourismPlaces.filter((place) => !isFoodBreakPlace(place));
+  const { essential: essentialPlaces, more: morePlaces } = splitGuidePlacesByPriority(guidePlaces);
+  const dailyMarkers = getDailyMarkers(guide);
+  const mapFit = getMapFit(dailyMarkers, "daily");
+  const heroPlace = tourismPlaces.find((place) => place.image) ?? places.find((place) => place.image);
+  const daySummary = [
+    { label: "Route", value: timeline?.primaryRoute ?? guide.region },
+    { label: "Pace", value: getDayPace(guide, tourismPlaces.length) },
+    { label: "Focus", value: getDayFocus(guide, tourismPlaces) },
+    { label: "Key Tip", value: getDayTip(guide, timeline) }
+  ];
+  const practicalNotes = getPracticalNotes(guide, timeline);
+
+  return (
+    <section className="guide-page day-page page-break-before">
+      <header className="day-header">
+        <div className="day-badge">Day {String(guide.day).padStart(2, "0")}</div>
+        <div>
+          <p>{sectionTitle} / {formatDate(guide.date)} / {guide.region}</p>
+          <h2>{guide.title}</h2>
+        </div>
+      </header>
+
+      {(heroPlace?.image || dailyMarkers.length > 0) && (
+        <div className="day-visual-grid avoid-break-inside">
+          {heroPlace?.image && (
+            <div className="day-hero-image">
+              <img src={heroPlace.image} alt={heroPlace.imageAlt} />
+            </div>
+          )}
+          {dailyMarkers.length > 0 && (
+            <div className="day-mini-map">
+              <MultiOsmMap markers={dailyMarkers} className="absolute inset-0 h-full w-full" fitPadding={mapFit.fitPadding} maxZoom={mapFit.maxZoom} printOptimized mapVariant="daily" />
+            </div>
+          )}
+        </div>
+      )}
+
+      <div className="day-brief day-summary-grid">
+        {daySummary.map((item) => (
+          <div key={item.label}>
+            <span>{item.label}</span>
+            <strong>{item.value || "-"}</strong>
+          </div>
+        ))}
+      </div>
+      <p className="day-mood">{truncateText(guide.deck, 220)}</p>
+      <RouteOverview guide={guide} />
+
+      {essentialPlaces.length > 0 && (
+        <section className="daily-edit-section">
+          <div className="daily-edit-title">
+            <span>Essential Stops</span>
+            <strong>핵심 관광지</strong>
+          </div>
+          <div className="place-grid essential-grid">
+            {essentialPlaces.map((place, index) => <PlaceBrief key={place.id} place={place} index={index} />)}
+          </div>
+        </section>
+      )}
+
+      {morePlaces.length > 0 && (
+        <section className="daily-edit-section">
+          <div className="daily-edit-title">
+            <span>More Places</span>
+            <strong>함께 보는 장소</strong>
+          </div>
+          <div className="more-place-grid">
+            {morePlaces.map((place, index) => <MorePlaceCard key={place.id} place={place} index={essentialPlaces.length + index} />)}
+          </div>
+        </section>
+      )}
+
+      <FoodBreaks places={foodPlaces} />
+      <PracticalNotes notes={practicalNotes} />
+    </section>
+  );
+}
+
+export const PrintLayout = ({ payload, printDesign }: { payload: TravelPayload; printDesign?: PrintGuideDesign }) => {
   const guideData = sicilyGuideData;
-  const stitchThemeColor = payload.uiConfig?.themeColor || "#84947b";
+  const design = printDesign ?? staticPrintGuideDesign;
+  const stays = getUniqueStays(guideData.masterTimeline);
 
   useEffect(() => {
     document.body.classList.add("print-body");
     return () => document.body.classList.remove("print-body");
   }, []);
 
-  // 2단계: 전체 지도를 위한 모든 좌표 추출
-  const allMarkers = guideData.dailyGuides.flatMap(guide =>
-    guide.cityVisits?.flatMap(visit =>
-      visit.spots.filter(spot => spot.coordinates).map(spot => ({
-        lat: spot.coordinates!.lat,
-        lng: spot.coordinates!.lng,
-        label: spot.name
-      }))
-    ) || []
-  );
-
   return (
-    <div 
-      className="print-container max-w-4xl mx-auto p-8 bg-white"
-      style={{ "--print-theme": stitchThemeColor } as React.CSSProperties}
+    <main
+      className={`print-guide print-density-${design.layoutDensity}`}
+      style={{
+        "--print-theme": design.themeColor,
+        "--print-accent": design.accentColor,
+        "--print-ink": design.inkColor,
+        "--print-muted": design.mutedColor
+      } as React.CSSProperties}
     >
-      {/* 1. Cover Page */}
-      <section 
-        className="print-cover" 
-        style={{ backgroundImage: `url('/travel-photos/sicily-day10-12/valley-of-the-temples.jpg')` }}
-      >
-        <h1>{payload.trip.title || "Sicily & Malta Guidebook"}</h1>
-        <p className="mt-4">A Curated Journey • {payload.trip.dateRange || "May 21 – Jun 08"}</p>
-      </section>
-
-      {/* 2. Route Atlas & Overview */}
-      <section className="page-break-before py-12">
-        <h2 className="section-header">Route Atlas</h2>
-        <div className="w-full h-[500px] border border-stone-200 mb-8 p-1">
-           <div className="w-full h-full relative grayscale-[20%]">
-             <MultiOsmMap markers={allMarkers} className="absolute inset-0 h-full w-full" />
-           </div>
-        </div>
-        <div className="multi-column text-lg text-stone-700 italic font-serif leading-relaxed">
-          <p>이 지도는 앞으로 우리가 펼쳐나갈 19일간의 여정을 보여줍니다. 북유럽을 거쳐 로마에 닿고, 이내 야간열차를 타고 시칠리아의 화산과 마주합니다. 고대 그리스의 웅장한 신전부터 몰타 기사단의 성벽 도시, 그리고 바로크의 황금빛 골목까지 지중해의 깊은 시간 속으로 떠나는 기록입니다.</p>
-        </div>
-      </section>
-
-      {/* 3 & 4. Logistics & Accommodations */}
-      <section className="page-break-before py-12">
-        <h2 className="section-header">Accommodations</h2>
-        <table className="w-full text-left border-collapse magazine-table mb-16">
-            <thead>
-                <tr>
-                    <th className="w-1/3">Property</th>
-                    <th className="w-1/2">Address</th>
-                    <th className="w-1/6">Dates</th>
-                </tr>
-            </thead>
-            <tbody>
-                {guideData.masterTimeline.map(item => item.accommodation && (
-                    <tr key={item.id} className="avoid-break-inside">
-                        <td className="font-serif text-lg">{item.accommodation.name}</td>
-                        <td className="font-sans text-sm text-stone-500 pr-4">{item.accommodation.address}</td>
-                        <td className="font-sans text-sm">{item.accommodation.checkIn} — {item.accommodation.checkOut}</td>
-                    </tr>
-                ))}
-            </tbody>
-        </table>
-      </section>
-
-      {/* 5. Daily Guides */}
-      {guideData.dailyGuides.map((guide: DailyGuide) => (
-        <section key={guide.id} className="daily-guide page-break-before">
-          <header className="daily-guide-header">
-            <div className="day-number">Day {guide.day}</div>
-            <h2>{guide.title}</h2>
-            <p className="font-sans text-sm uppercase tracking-widest text-stone-500">
-              {new Date(guide.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric', weekday: 'long' })} &nbsp;•&nbsp; {guide.region}
-            </p>
-          </header>
-          
-          <p className="text-xl italic text-stone-600 mb-12 text-center max-w-2xl mx-auto leading-relaxed">
-            "{guide.deck}"
-          </p>
-
-          {(() => {
-            const dailyMarkers = guide.cityVisits?.flatMap(visit =>
-              visit.spots.filter(spot => spot.coordinates).map(spot => ({
-                lat: spot.coordinates!.lat,
-                lng: spot.coordinates!.lng,
-                label: spot.name
-              }))
-            ) || [];
-
-            if (dailyMarkers.length > 0) {
-              return (
-                <div className="avoid-break-inside relative z-0 h-[300px] w-full mb-12 p-1 border border-stone-200">
-                  <div className="w-full h-full relative grayscale-[20%]">
-                    <MultiOsmMap markers={dailyMarkers} className="absolute inset-0 h-full w-full" />
-                  </div>
-                </div>
-              );
-            }
-            return null;
-          })()}
-
-          {guide.cityVisits?.map(visit => (
-            <div key={visit.id} className="city-visit-section">
-              {visit.spots.map(spot => (
-                <PlaceCard key={spot.id} place={spot} />
-              ))}
-            </div>
-          ))}
-        </section>
+      <CoverPage payload={payload} design={design} />
+      <GuideIntroPage payload={payload} design={design} />
+      <FlightSummary tickets={guideData.flightTickets} title={design.sectionLabels.flights} />
+      <RouteAtlas />
+      <RouteSchedule items={guideData.masterTimeline} title={design.sectionLabels.schedule} />
+      <StayDirectory stays={stays} title={design.sectionLabels.stays} />
+      {guideData.dailyGuides.map((guide) => (
+        <DailyGuidePage key={guide.id} guide={guide} sectionTitle={design.sectionLabels.daily} />
       ))}
-    </div>
+    </main>
   );
 };
 

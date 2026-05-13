@@ -34,6 +34,32 @@ import { useTravelPayload } from "@/lib/travel-payload-client";
 import { useDailyMapMarkers } from "@/lib/daily-map-markers-client";
 import { calculateDistanceKm, estimateRouteTime, formatDistance } from "@/lib/route-math";
 
+const dailyTabLabels: Record<number, string> = {
+  1: "Seoul Departure",
+  2: "Rome",
+  3: "Catania / Etna",
+  4: "Taormina / Savoca",
+  5: "Syracuse / Ortigia",
+  6: "Noto / Ragusa",
+  7: "Valletta / Three Cities",
+  8: "Comino / Gozo",
+  9: "Blue Grotto / Mdina",
+  10: "Villa Romana / Agrigento",
+  11: "Agrigento",
+  12: "Trapani / Erice",
+  13: "Segesta / Scopello",
+  14: "Palermo / Monreale",
+  15: "Cefalu / Scilla",
+  16: "Tropea / Pizzo",
+  17: "Amalfi / Pompeii",
+  18: "Rome Departure",
+  19: "Seoul Arrival"
+};
+
+function getDailyTabLabel(guide: DailyGuide) {
+  return dailyTabLabels[guide.day] ?? guide.region?.split(" / ")[0] ?? `Day ${guide.day}`;
+}
+
 export function DailyDetail({ tripId, dayId }: { tripId: string; dayId: string }) {
   const { payload, isLoading } = useTravelPayload();
 
@@ -74,21 +100,21 @@ export function DailyDetail({ tripId, dayId }: { tripId: string; dayId: string }
 
   if (isLoading) {
     return (
-      <div className="flex min-h-screen items-center justify-center bg-slate-50">
-        <div className="h-8 w-8 animate-spin rounded-full border-4 border-slate-200 border-t-sky-600"></div>
+      <div className="flex min-h-screen items-center justify-center bg-field-surface">
+        <div className="h-8 w-8 animate-spin rounded-full border-4 border-field-line border-t-field-teal"></div>
       </div>
     );
   }
 
   if (!trip || !guide) {
     return (
-      <main className="flex min-h-screen items-center justify-center bg-slate-50 px-6 text-slate-900">
+      <main className="flex min-h-screen items-center justify-center bg-field-surface px-6 text-field-ink">
         <div className="max-w-md text-center">
-          <p className="text-xs font-bold uppercase text-slate-500">Day unavailable</p>
+          <p className="text-xs font-bold uppercase tracking-[0.18em] text-field-brass">Day unavailable</p>
           <h1 className="mt-3 font-serif text-3xl font-semibold">No matching day found.</h1>
           <Link
             href={`/trips/${tripId}`}
-            className="mt-8 inline-flex items-center gap-2 rounded-lg bg-slate-900 px-5 py-3 text-sm font-bold text-white transition hover:bg-slate-800"
+            className="mt-8 inline-flex items-center gap-2 rounded-full bg-field-teal px-5 py-3 text-sm font-bold text-white transition hover:bg-field-brass"
           >
             <ArrowLeft className="h-4 w-4" />
             Back to Overview
@@ -424,7 +450,7 @@ function DailyTimeline({
         >
           {dailyGuides.map((item) => {
             const isActive = item.day === guide.day;
-            const label = item.region?.split(" / ")[0] || `Day ${item.day}`;
+            const label = getDailyTabLabel(item);
 
             return (
               <Link
