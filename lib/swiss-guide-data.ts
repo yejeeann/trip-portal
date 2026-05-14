@@ -31,6 +31,10 @@ export type FlightTicket = {
 export type TimelineAccommodation = {
   name: string;
   address: string;
+  coordinates?: {
+    lat: number;
+    lng: number;
+  };
   checkIn?: string;
   checkOut?: string;
   googleMapsUrl?: string;

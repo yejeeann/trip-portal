@@ -16,6 +16,13 @@ type PrintMapMarker = OsmMarker & {
   name: string;
 };
 
+type CityGuideDefinition = {
+  eyebrow: string;
+  title: string;
+  subtitle: string;
+  keywords: string[];
+};
+
 const modeLabels: Record<string, string> = {
   flight: "Flight",
   train: "Train",
@@ -355,6 +362,10 @@ function marker(name: string, lat: number, lng: number): PrintMapMarker {
   };
 }
 
+function normalizePrintPlaceKey(name: string) {
+  return name.toLowerCase().replace(/[^a-z0-9가-힣]+/g, " ").trim();
+}
+
 const PRINT_TILE_SIZE = 256;
 const MAX_MERCATOR_LAT = 85.05112878;
 
@@ -587,6 +598,127 @@ function getDailyMarkers(guide: DailyGuide) {
     })));
 }
 
+function getDailyRouteMarkers(guide: DailyGuide) {
+  if (guide.routeOverview?.length) {
+    return uniqueMarkers(guide.routeOverview.map((point, index) => ({
+      lat: point.coordinates.lat,
+      lng: point.coordinates.lng,
+      name: point.name,
+      label: String(index + 1)
+    })));
+  }
+
+  return uniqueMarkers(getPrimaryPlaces(guide)
+    .filter((place) => place.coordinates)
+    .map((place, index) => ({
+      lat: place.coordinates!.lat,
+      lng: place.coordinates!.lng,
+      name: place.name,
+      label: String(index + 1)
+    })));
+}
+
+function getDailySightMarkers(guide: DailyGuide) {
+  return uniqueMarkers(getPrimaryPlaces(guide)
+    .filter((place) => place.coordinates)
+    .filter((place) => !isLogisticsPlace(place))
+    .map((place, index) => ({
+      lat: place.coordinates!.lat,
+      lng: place.coordinates!.lng,
+      name: place.name,
+      label: String(index + 1)
+    })));
+}
+
+function placesToMapMarkers(places: DailyGuidePlace[]) {
+  return uniqueMarkers(places
+    .filter((place) => place.coordinates)
+    .map((place, index) => ({
+      lat: place.coordinates!.lat,
+      lng: place.coordinates!.lng,
+      name: place.name,
+      label: String(index + 1)
+    })));
+}
+
+function chunkArray<T>(items: T[], size: number) {
+  const chunks: T[][] = [];
+
+  for (let index = 0; index < items.length; index += size) {
+    chunks.push(items.slice(index, index + size));
+  }
+
+  return chunks;
+}
+
+const cityGuideDefinitions: CityGuideDefinition[] = [
+  {
+    eyebrow: "Eastern Sicily",
+    title: "Taormina & The Etna Coast",
+    subtitle: "Cliffside theatre views, volcanic towns, fishing villages, and the first true Mediterranean rhythm of the trip.",
+    keywords: ["taormina", "etna", "savoca", "aci trezza", "isola bella", "greek theatre"]
+  },
+  {
+    eyebrow: "Syracuse",
+    title: "Ortigia & Ancient Syracuse",
+    subtitle: "A compact island city where Greek, Roman, Christian, baroque, and seaside layers can be read in one walk.",
+    keywords: ["syracuse", "siracusa", "ortigia", "neapolis", "duomo", "arethusa", "maniace", "dionysius"]
+  },
+  {
+    eyebrow: "Malta",
+    title: "Valletta, Gozo & The Three Cities",
+    subtitle: "Fortified harbours, knights' churches, blue water crossings, and quieter island archaeology.",
+    keywords: ["valletta", "barrakka", "st john", "birgu", "senglea", "bormla", "gozo", "cittadella", "ggantija", "blue lagoon"]
+  },
+  {
+    eyebrow: "Southern Sicily",
+    title: "Agrigento & The Southern Coast",
+    subtitle: "Temple valleys, Roman mosaics, pale cliffs, and the slower inland-to-sea turn across the island.",
+    keywords: ["agrigento", "temple", "temples", "kolymbethra", "scala", "realmonte", "villa romana"]
+  },
+  {
+    eyebrow: "Western Sicily",
+    title: "Palermo, Monreale & The West",
+    subtitle: "Arab-Norman chapels, mountain towns, fishing coves, and the denser cultural weave of western Sicily.",
+    keywords: ["palermo", "monreale", "palatine", "segesta", "scopello", "erice", "cefalu"]
+  },
+  {
+    eyebrow: "Mainland Return",
+    title: "Amalfi, Pompeii & Rome",
+    subtitle: "The mainland finale shifts from coast road drama to Roman ruins, a compact ending with a much larger historical frame.",
+    keywords: ["amalfi", "pompeii", "rome", "colosseum", "pantheon", "forum", "tropea", "scilla"]
+  }
+];
+
+function getAllGuidePlaces() {
+  const places = sicilyGuideData.dailyGuides.flatMap((guide) => getPrimaryPlaces(guide));
+  const seen = new Set<string>();
+
+  return places.filter((place) => {
+    if (isLogisticsPlace(place)) return false;
+    const key = normalizePrintPlaceKey(place.name);
+    if (seen.has(key)) return false;
+    seen.add(key);
+    return true;
+  });
+}
+
+function getCityGuidePlaces(definition: CityGuideDefinition) {
+  const places = getAllGuidePlaces();
+
+  return places
+    .map((place, index) => {
+      const text = `${place.name} ${place.category} ${place.shortDescription ?? ""} ${place.description}`.toLowerCase();
+      const matchScore = definition.keywords.reduce((score, keyword) => score + (text.includes(keyword) ? 1 : 0), 0);
+      const essentialScore = getEssentialScore(place);
+
+      return { place, index, score: matchScore * 4 + essentialScore };
+    })
+    .filter((item) => item.score > 0)
+    .sort((a, b) => b.score - a.score || a.index - b.index)
+    .map((item) => item.place);
+}
+
 function CoverPage({ payload, design }: { payload: TravelPayload; design: PrintGuideDesign }) {
   const coverImage = "/travel-photos/home-hero-taormina-bright-portrait.png";
 
@@ -694,6 +826,125 @@ function GuideIntroPage({ payload, design }: { payload: TravelPayload; design: P
   );
 }
 
+function ChapterOpener({
+  eyebrow,
+  title,
+  copy,
+  meta
+}: {
+  eyebrow: string;
+  title: string;
+  copy: string;
+  meta: string[];
+}) {
+  return (
+    <section className="guide-page chapter-opener page-break-before">
+      <div>
+        <p className="guide-kicker">{eyebrow}</p>
+        <h2>{title}</h2>
+        <p>{copy}</p>
+      </div>
+      <div className="chapter-meta">
+        {meta.map((item) => (
+          <span key={item}>{item}</span>
+        ))}
+      </div>
+    </section>
+  );
+}
+
+function CityGuidePage({ definition }: { definition: CityGuideDefinition }) {
+  const places = getCityGuidePlaces(definition);
+  const heroPlace = places.find((place) => place.image);
+  const mapMarkers = placesToMapMarkers(places);
+  const firstPlaces = places.slice(0, 2);
+  const remainingPlacePages = chunkArray(places.slice(2), 8);
+
+  if (!places.length) return null;
+
+  return (
+    <>
+      <section className="guide-page city-guide-page page-break-before">
+        <header className="city-guide-hero">
+          <div>
+            <p className="guide-kicker">{definition.eyebrow}</p>
+            <h2>{definition.title}</h2>
+            <p>{definition.subtitle}</p>
+          </div>
+          {heroPlace?.image && (
+            <figure>
+              <img src={heroPlace.image} alt={heroPlace.imageAlt} />
+              <figcaption>{heroPlace.name}</figcaption>
+            </figure>
+          )}
+        </header>
+
+        <div className="city-guide-body">
+          <article className="city-guide-feature">
+            <span>Guidebook Note</span>
+            <p>{truncateText(heroPlace?.detailDescription || heroPlace?.description || definition.subtitle, 300)}</p>
+          </article>
+          <div className="city-guide-map">
+            <PrintTileMap markers={mapMarkers} scope="daily" />
+            <div className="day-map-caption">
+              <span>City Map</span>
+              <strong>{mapMarkers.length} sights</strong>
+            </div>
+          </div>
+        </div>
+
+        <div className="city-guide-place-list city-guide-place-list-featured">
+          {firstPlaces.map((place, index) => (
+            <article key={place.id} className="city-guide-place">
+              <strong>{String(index + 1).padStart(2, "0")}</strong>
+              <div>
+                <p>{place.category}</p>
+                <h3>{place.name}</h3>
+                <span>{truncateText(place.shortDescription || place.description, 150)}</span>
+              </div>
+            </article>
+          ))}
+        </div>
+
+        <div className="city-guide-tip-grid">
+          {places.slice(0, 2).map((place) => (
+            <article key={`${place.id}-tip`}>
+              <span>{place.name}</span>
+              <p>{truncateText(place.tips?.[0] || place.whatToSee?.[0] || place.whyVisit?.[0] || place.description, 120)}</p>
+            </article>
+          ))}
+        </div>
+      </section>
+
+      {remainingPlacePages.map((pagePlaces, pageIndex) => (
+        <section key={`${definition.title}-directory-${pageIndex}`} className="guide-page city-guide-more-page page-break-before">
+          <SectionTitle
+            eyebrow={definition.eyebrow}
+            title={`${definition.title} Places`}
+            note={`${places.length}개 관광지 전체 보기 ${pageIndex + 1}/${remainingPlacePages.length}`}
+          />
+          <div className="city-guide-place-directory">
+            {pagePlaces.map((place, index) => {
+              const absoluteIndex = firstPlaces.length + pageIndex * 8 + index;
+
+              return (
+                <article key={place.id} className="city-guide-place">
+                  <strong>{String(absoluteIndex + 1).padStart(2, "0")}</strong>
+                  <div>
+                    <p>{place.category}</p>
+                    <h3>{place.name}</h3>
+                    <span>{truncateText(place.shortDescription || place.description, 170)}</span>
+                  </div>
+                </article>
+              );
+            })}
+          </div>
+        </section>
+        ))}
+    </>
+  );
+}
+
 function getRouteArcLabel(day: number) {
   if (day <= 6) return "Eastern Sicily";
   if (day <= 9) return "Malta";
@@ -749,10 +1000,10 @@ function FlightSummary({ tickets, title }: { tickets: FlightTicket[]; title: str
   if (!tickets.length) return null;
 
   return (
-    <section className="guide-page">
-      <SectionTitle eyebrow="Before the Route" title={title} note="항공과 환승 흐름을 한눈에" />
-      <div className="guide-card-stack">
-        {tickets.map((ticket) => (
+    <>
+      {tickets.map((ticket, index) => (
+        <section key={ticket.id} className={index === 0 ? "guide-page" : "guide-page page-break-before"}>
+          <SectionTitle eyebrow="Before the Route" title={title} note="항공과 환승 흐름을 한눈에" />
           <article key={ticket.id} className="guide-box avoid-break-inside">
             <div className="guide-box-header">
               <div>
@@ -781,9 +1032,9 @@ function FlightSummary({ tickets, title }: { tickets: FlightTicket[]; title: str
               ))}
             </div>
           </article>
-        ))}
-      </div>
-    </section>
+        </section>
+      ))}
+    </>
   );
 }
 
@@ -813,32 +1064,45 @@ function RouteAtlas() {
 }
 
 function RouteSchedule({ items, title }: { items: MasterTimelineItem[]; title: string }) {
+  const schedulePages = Array.from(
+    { length: Math.ceil(items.length / 10) },
+    (_, index) => items.slice(index * 10, index * 10 + 10)
+  );
+
   return (
-    <section className="guide-page page-break-before">
-      <SectionTitle eyebrow="Trip Framework" title={title} note="날짜별 이동과 숙소 기준표" />
-      <table className="guide-table">
-        <thead>
-          <tr>
-            <th>Day</th>
-            <th>Date</th>
-            <th>Route</th>
-            <th>Mode</th>
-            <th>Stay</th>
-          </tr>
-        </thead>
-        <tbody>
-          {items.map((item) => (
-            <tr key={item.id}>
-              <td>{String(item.day).padStart(2, "0")}</td>
-              <td>{item.dateLabel}</td>
-              <td>{item.primaryRoute}</td>
-              <td>{modeLabel(item.transportMode)}</td>
-              <td>{item.accommodation?.name ?? "-"}</td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-    </section>
+    <>
+      {schedulePages.map((pageItems, pageIndex) => (
+        <section key={`schedule-${pageIndex}`} className="guide-page page-break-before">
+          <SectionTitle
+            eyebrow="Trip Framework"
+            title={pageIndex === 0 ? title : `${title} Continued`}
+            note="날짜별 이동과 숙소 기준표"
+          />
+          <table className="guide-table">
+            <thead>
+              <tr>
+                <th>Day</th>
+                <th>Date</th>
+                <th>Route</th>
+                <th>Mode</th>
+                <th>Stay</th>
+              </tr>
+            </thead>
+            <tbody>
+              {pageItems.map((item) => (
+                <tr key={item.id}>
+                  <td>{String(item.day).padStart(2, "0")}</td>
+                  <td>{item.dateLabel}</td>
+                  <td>{item.primaryRoute}</td>
+                  <td>{modeLabel(item.transportMode)}</td>
+                  <td>{item.accommodation?.name ?? "-"}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </section>
+      ))}
+    </>
   );
 }
 
@@ -881,7 +1145,7 @@ function RouteOverview({ guide }: { guide: DailyGuide }) {
         <strong>오늘의 동선</strong>
       </div>
       <div className="day-route-strip">
-        {guide.routeOverview.map((point, index) => (
+        {guide.routeOverview.slice(0, 6).map((point, index) => (
           <div key={point.id}>
             <span>{index + 1}</span>
             <strong>{point.name}</strong>
@@ -889,6 +1153,131 @@ function RouteOverview({ guide }: { guide: DailyGuide }) {
           </div>
         ))}
       </div>
+    </section>
+  );
+}
+
+function MapPanel({
+  title,
+  caption,
+  markers,
+  emptyLabel
+}: {
+  title: string;
+  caption: string;
+  markers: PrintMapMarker[];
+  emptyLabel: string;
+}) {
+  return (
+    <section className="map-panel avoid-break-inside">
+      <div className="map-panel-heading">
+        <span>{title}</span>
+        <strong>{caption}</strong>
+      </div>
+      <div className="map-panel-map">
+        {markers.length > 0 ? <PrintTileMap markers={markers} scope="daily" /> : <div className="print-tile-map print-tile-map-empty">{emptyLabel}</div>}
+      </div>
+      {markers.length > 0 && (
+        <div className="map-panel-key">
+          {markers.slice(0, 10).map((item) => (
+            <div key={`${title}-${item.name}-${item.label}`}>
+              <b>{item.label}</b>
+              <span>{item.name}</span>
+            </div>
+          ))}
+        </div>
+      )}
+    </section>
+  );
+}
+
+function NightTrainCard({ visit }: { visit: DailyCityVisit }) {
+  const trainInfo = visit.trainInfo;
+  if (!trainInfo) return null;
+
+  return (
+    <article className="night-train-card avoid-break-inside">
+      <div>
+        <p>Overnight Train</p>
+        <h3>{trainInfo.title}</h3>
+        <span>{trainInfo.cabinType}</span>
+      </div>
+      {trainInfo.image && <img src={trainInfo.image} alt={trainInfo.imageAlt} />}
+      <dl>
+        <div>
+          <dt>Route</dt>
+          <dd>{trainInfo.routeLabel}</dd>
+        </div>
+        <div>
+          <dt>Depart</dt>
+          <dd>{trainInfo.departureLabel}</dd>
+        </div>
+        <div>
+          <dt>Arrive</dt>
+          <dd>{trainInfo.arrivalLabel}</dd>
+        </div>
+        <div>
+          <dt>Duration</dt>
+          <dd>{trainInfo.durationLabel}</dd>
+        </div>
+      </dl>
+      <ul>
+        {trainInfo.highlights.slice(0, 3).map((item) => (
+          <li key={item}>{item}</li>
+        ))}
+      </ul>
+    </article>
+  );
+}
+
+function DailyMapPage({ guide, sectionTitle }: { guide: DailyGuide; sectionTitle: string }) {
+  const routeMarkers = getDailyRouteMarkers(guide);
+  const sightMarkers = getDailySightMarkers(guide);
+  const trainVisits = guide.cityVisits?.filter((visit) => visit.displayMode === "train" || visit.trainInfo) ?? [];
+  const routePoints = guide.routeOverview ?? [];
+
+  if (!routeMarkers.length && !sightMarkers.length && !trainVisits.length) return null;
+
+  return (
+    <section className="guide-page daily-map-page page-break-before">
+      <SectionTitle
+        eyebrow={sectionTitle}
+        title={`Day ${String(guide.day).padStart(2, "0")} Maps & Movement`}
+        note={`${formatDate(guide.date)} / ${guide.region}`}
+      />
+
+      <div className="daily-map-grid">
+        <MapPanel
+          title="City Movement"
+          caption="도시 이동 경로"
+          markers={routeMarkers}
+          emptyLabel="이동 경로 좌표가 부족합니다."
+        />
+        <MapPanel
+          title="Sightseeing Map"
+          caption="관광지 지도"
+          markers={sightMarkers}
+          emptyLabel="관광지 좌표가 부족합니다."
+        />
+      </div>
+
+      {routePoints.length > 0 && (
+        <div className="daily-route-directory">
+          {routePoints.map((point, index) => (
+            <article key={point.id}>
+              <strong>{String(index + 1).padStart(2, "0")}</strong>
+              <div>
+                <h3>{point.name}</h3>
+                <p>{point.detail}</p>
+              </div>
+            </article>
+          ))}
+        </div>
+      )}
+
+      {trainVisits.map((visit) => (
+        <NightTrainCard key={visit.id} visit={visit} />
+      ))}
     </section>
   );
 }
@@ -915,9 +1304,9 @@ function CityVisitBox({ visit }: { visit: DailyCityVisit }) {
 }
 
 function PlaceBrief({ place, index }: { place: DailyGuidePlace; index: number }) {
-  const seeItems = place.whatToSee?.slice(0, 2) ?? [];
+  const seeItems = place.whatToSee?.slice(0, 1) ?? [];
   const tipItems = place.tips?.slice(0, 1) ?? [];
-  const summary = truncateText(place.detailDescription || place.shortDescription || place.description, 460);
+  const summary = truncateText(place.detailDescription || place.shortDescription || place.description, 180);
 
   return (
     <article className="place-brief essential-place avoid-break-inside">
@@ -967,7 +1356,7 @@ function MorePlaceCard({ place, index }: { place: DailyGuidePlace; index: number
       <div>
         <p>Stop {String(index + 1).padStart(2, "0")} / {place.category}</p>
         <h4>{place.name}</h4>
-        <span>{truncateText(place.shortDescription || place.description, 180)}</span>
+        <span>{truncateText(place.shortDescription || place.description, 120)}</span>
       </div>
     </article>
   );
@@ -1009,6 +1398,38 @@ function PracticalNotes({ notes }: { notes: string[] }) {
   );
 }
 
+function DailyFieldNotes({
+  guide,
+  timeline,
+  compact = false
+}: {
+  guide: DailyGuide;
+  timeline?: MasterTimelineItem;
+  compact?: boolean;
+}) {
+  const notes = Array.from(new Set([
+    ...(guide.editorial ?? []),
+    guide.deck,
+    timeline?.note
+  ].filter(Boolean)));
+
+  if (!notes.length) return null;
+
+  return (
+    <section className="daily-edit-section daily-field-notes avoid-break-inside">
+      <div className="daily-edit-title">
+        <span>Field Notes</span>
+        <strong>읽는 여행 메모</strong>
+      </div>
+      <div className="field-note-list">
+        {notes.slice(0, compact ? 1 : 3).map((note, index) => (
+          <p key={`${guide.id}-field-note-${index}`}>{truncateText(note, compact ? 150 : 240)}</p>
+        ))}
+      </div>
+    </section>
+  );
+}
+
 function DailyGuidePage({ guide, sectionTitle }: { guide: DailyGuide; sectionTitle: string }) {
   const timeline = getDayTimelineItem(guide.day);
   const places = getPrimaryPlaces(guide);
@@ -1016,7 +1437,10 @@ function DailyGuidePage({ guide, sectionTitle }: { guide: DailyGuide; sectionTit
   const foodPlaces = tourismPlaces.filter(isFoodBreakPlace);
   const guidePlaces = tourismPlaces.filter((place) => !isFoodBreakPlace(place));
   const { essential: essentialPlaces, more: morePlaces } = splitGuidePlacesByPriority(guidePlaces);
-  const dailyMarkers = getDailyMarkers(guide);
+  const featuredPlaces = essentialPlaces.slice(0, 1);
+  const secondaryPlaces = [...essentialPlaces.slice(1), ...morePlaces].slice(0, 1);
+  const dailyFoodPlaces = secondaryPlaces.length === 0 ? foodPlaces.slice(0, 1) : [];
+  const dailyMarkers = getDailySightMarkers(guide);
   const heroPlace = tourismPlaces.find((place) => place.image) ?? places.find((place) => place.image);
   const daySummary = [
     { label: "Route", value: timeline?.primaryRoute ?? guide.region },
@@ -1027,76 +1451,91 @@ function DailyGuidePage({ guide, sectionTitle }: { guide: DailyGuide; sectionTit
   const practicalNotes = getPracticalNotes(guide, timeline);
 
   return (
-    <section className="guide-page day-page page-break-before">
-      <header className="day-header">
-        <div className="day-badge">Day {String(guide.day).padStart(2, "0")}</div>
-        <div>
-          <p>{sectionTitle} / {formatDate(guide.date)} / {guide.region}</p>
-          <h2>{guide.title}</h2>
-        </div>
-      </header>
+    <>
+      <section className="guide-page day-page page-break-before">
+        <header className="day-header">
+          <div className="day-badge">Day {String(guide.day).padStart(2, "0")}</div>
+          <div>
+            <p>{sectionTitle} / {formatDate(guide.date)} / {guide.region}</p>
+            <h2>{guide.title}</h2>
+          </div>
+        </header>
 
-      {(heroPlace?.image || dailyMarkers.length > 0) && (
-        <div className="day-visual-grid avoid-break-inside">
-          {heroPlace?.image && (
-            <figure className="day-hero-image">
-              <img src={heroPlace.image} alt={heroPlace.imageAlt} />
-              <figcaption>Featured stop / {heroPlace.name}</figcaption>
-            </figure>
-          )}
-          {dailyMarkers.length > 0 && (
-            <div className="day-mini-map">
-              <PrintTileMap markers={dailyMarkers} scope="daily" />
-              <div className="day-map-caption">
-                <span>Daily Map</span>
-                <strong>{dailyMarkers.length} mapped stops</strong>
+        {(heroPlace?.image || dailyMarkers.length > 0) && (
+          <div className="day-visual-grid avoid-break-inside">
+            {heroPlace?.image && (
+              <figure className="day-hero-image">
+                <img src={heroPlace.image} alt={heroPlace.imageAlt} />
+                <figcaption>Featured stop / {heroPlace.name}</figcaption>
+              </figure>
+            )}
+            {dailyMarkers.length > 0 && (
+              <div className="day-mini-map">
+                <PrintTileMap markers={dailyMarkers} scope="daily" />
+                <div className="day-map-caption">
+                  <span>Sight Map</span>
+                  <strong>{dailyMarkers.length} mapped stops</strong>
+                </div>
               </div>
+            )}
+          </div>
+        )}
+
+        <div className="day-brief day-summary-grid">
+          {daySummary.map((item) => (
+            <div key={item.label}>
+              <span>{item.label}</span>
+              <strong>{item.value || "-"}</strong>
             </div>
-          )}
+          ))}
         </div>
-      )}
+        <p className="day-mood">{truncateText(guide.deck, 220)}</p>
+        <RouteOverview guide={guide} />
 
-      <div className="day-brief day-summary-grid">
-        {daySummary.map((item) => (
-          <div key={item.label}>
-            <span>{item.label}</span>
-            <strong>{item.value || "-"}</strong>
+        <div className="daily-book-grid">
+          <div>
+            {featuredPlaces.length > 0 && (
+              <section className="daily-edit-section">
+                <div className="daily-edit-title">
+                  <span>Editor's Picks</span>
+                  <strong>오늘 꼭 볼 장소</strong>
+                </div>
+                <div className="place-grid essential-grid">
+                  {featuredPlaces.map((place, index) => <PlaceBrief key={place.id} place={place} index={index} />)}
+                </div>
+              </section>
+            )}
+            {featuredPlaces.length === 0 && (
+              <DailyFieldNotes guide={guide} timeline={timeline} />
+            )}
+            {featuredPlaces.length > 0 && secondaryPlaces.length === 0 && dailyFoodPlaces.length === 0 && (
+              <DailyFieldNotes guide={guide} timeline={timeline} compact />
+            )}
           </div>
-        ))}
-      </div>
-      <p className="day-mood">{truncateText(guide.deck, 220)}</p>
-      <RouteOverview guide={guide} />
+          <aside className="daily-side-notes">
+            {secondaryPlaces.length > 0 && (
+              <section className="daily-edit-section">
+                <div className="daily-edit-title">
+                  <span>Nearby Notes</span>
+                  <strong>함께 보는 장소</strong>
+                </div>
+                <div className="more-place-grid">
+                  {secondaryPlaces.map((place, index) => (
+                    <MorePlaceCard key={place.id} place={place} index={featuredPlaces.length + index} />
+                  ))}
+                </div>
+              </section>
+            )}
 
-      {essentialPlaces.length > 0 && (
-        <section className="daily-edit-section">
-          <div className="daily-edit-title">
-            <span>Essential Stops</span>
-            <strong>핵심 관광지</strong>
-          </div>
-          <div className="place-grid essential-grid">
-            {essentialPlaces.map((place, index) => <PlaceBrief key={place.id} place={place} index={index} />)}
-          </div>
-        </section>
-      )}
-
-      {morePlaces.length > 0 && (
-        <section className="daily-edit-section">
-          <div className="daily-edit-title">
-            <span>More Places</span>
-            <strong>함께 보는 장소</strong>
-          </div>
-          <div className="more-place-grid">
-            {morePlaces.map((place, index) => <MorePlaceCard key={place.id} place={place} index={essentialPlaces.length + index} />)}
-          </div>
-        </section>
-      )}
-
-      <FoodBreaks places={foodPlaces} />
-      <PracticalNotes notes={practicalNotes} />
-    </section>
+            <FoodBreaks places={dailyFoodPlaces} />
+            <PracticalNotes notes={practicalNotes.slice(0, 1)} />
+          </aside>
+        </div>
+      </section>
+      <DailyMapPage guide={guide} sectionTitle={sectionTitle} />
+    </>
   );
 }
-
 export const PrintLayout = ({ payload, printDesign }: { payload: TravelPayload; printDesign?: PrintGuideDesign }) => {
   const guideData = sicilyGuideData;
   const design = printDesign ?? staticPrintGuideDesign;
@@ -1120,10 +1559,31 @@ export const PrintLayout = ({ payload, printDesign }: { payload: TravelPayload; 
       <CoverPage payload={payload} design={design} />
       <GuideIntroPage payload={payload} design={design} />
       <GuideIndexPage items={guideData.masterTimeline} />
+      <ChapterOpener
+        eyebrow="Part One"
+        title="Essentials Before Departure"
+        copy="Flights, route structure, accommodation anchors, and the wide map view are grouped first so the PDF works as an offline travel book rather than a loose itinerary dump."
+        meta={["Flights", "Route Atlas", "Stay Directory", "Journey Planner"]}
+      />
       <FlightSummary tickets={guideData.flightTickets} title={design.sectionLabels.flights} />
       <RouteAtlas />
       <RouteSchedule items={guideData.masterTimeline} title={design.sectionLabels.schedule} />
       <StayDirectory stays={stays} title={design.sectionLabels.stays} />
+      <ChapterOpener
+        eyebrow="Part Two"
+        title="City & Place Guide"
+        copy="The richest background notes are separated from the daily execution pages, so the guide can be read like a travel book before or during the trip."
+        meta={["City Essays", "Essential Sights", "History Notes", "Reading Pages"]}
+      />
+      {cityGuideDefinitions.map((definition) => (
+        <CityGuidePage key={definition.title} definition={definition} />
+      ))}
+      <ChapterOpener
+        eyebrow="Part Three"
+        title="Daily Field Guide"
+        copy="Each day is edited like a guidebook spread: a visual anchor, a readable route flow, key stops, nearby notes, food breaks, and practical reminders."
+        meta={["Daily Maps", "Editor's Picks", "Practical Notes", "Offline Reading"]}
+      />
       {guideData.dailyGuides.map((guide) => (
         <DailyGuidePage key={guide.id} guide={guide} sectionTitle={design.sectionLabels.daily} />
       ))}

@@ -3,21 +3,24 @@
 import type { AppStructureConfig } from "@/lib/types";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Bed, Compass, Map, Heart, User, LayoutGrid, CalendarDays } from "lucide-react";
+import { BookOpen, Calendar, Compass, Heart, House, LayoutGrid, MapPin, User } from "lucide-react";
 
 // Stitch가 반환한 iconType 문자열을 실제 Lucide 아이콘 컴포넌트로 매핑
 const IconMap: Record<string, React.ElementType> = {
   home: Compass,
   compass: Compass,
-  map: Map,
+  map: MapPin,
   heart: Heart,
   user: User,
-  calendar: CalendarDays,
-  daily: CalendarDays,
-  overview: Map,
-  hotel: Bed,
-  stays: Bed,
-  accommodations: Bed,
+  calendar: Calendar,
+  daily: Calendar,
+  overview: MapPin,
+  places: BookOpen,
+  guidebook: BookOpen,
+  print: BookOpen,
+  hotel: House,
+  stays: House,
+  accommodations: House,
 };
 
 export function AppNavigation({

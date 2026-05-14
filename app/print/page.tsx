@@ -7,12 +7,13 @@ import { PrintButton } from "@/components/print-button";
 export default function PrintPage() {
   return (
     <>
-      <div className="no-print bg-[#1A434E] p-4 text-center text-white">
-        <p>
-          여행 데이터: 정적 가이드 / 디자인: 메인 홈과 통일된 Mediterranean Travel Guide 테마.
-          브라우저 인쇄 기능으로 PDF 저장하세요. (Ctrl+P 또는 Cmd+P)
+      <div className="no-print sticky top-0 z-50 border-b border-white/10 bg-[#1A434E] px-4 py-3 text-white shadow-[0_10px_30px_rgba(26,67,78,0.18)]">
+        <p className="mx-auto mb-2 max-w-3xl text-center text-xs font-semibold text-white/80">
+          PDF 저장 창이 열리면 대상에서 PDF 저장을 선택하세요. 기본 파일명은 sicily-malta-rome-travel-guidebook으로 설정됩니다.
         </p>
-        <PrintButton />
+        <div className="flex justify-center">
+          <PrintButton />
+        </div>
       </div>
       <PrintLayout payload={fallbackTravelPayload} printDesign={staticPrintGuideDesign} />
     </>

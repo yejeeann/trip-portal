@@ -409,8 +409,8 @@ function RouteStory({ snapshot, design }: { snapshot: TripSnapshot; design: Desi
 function QuickActions({ snapshot, design }: { snapshot: TripSnapshot; design: DesignTokens }) {
   const { trip, focusItem } = snapshot;
   const actions = [
+    { href: `/trips/${trip.id}`, label: "Overview", icon: MapPin, tone: "#1A434E", iconClass: "h-[1.8rem] w-[1.8rem]" },
     { href: `/trips/${trip.id}/day/${focusItem.day}`, label: "Daily", icon: Calendar, tone: design.coral, iconClass: "h-[1.55rem] w-[1.55rem]" },
-    { href: `/trips/${trip.id}`, label: "Map", icon: MapPin, tone: "#1A434E", iconClass: "h-[1.8rem] w-[1.8rem]" },
     { href: "/print", label: "Guidebook", icon: BookOpen, tone: "#1A434E", iconClass: "h-[1.62rem] w-[1.62rem]" },
     { href: `/trips/${trip.id}/stays`, label: "Stays", icon: House, tone: "#C8795A", iconClass: "h-[1.62rem] w-[1.62rem]" }
   ];

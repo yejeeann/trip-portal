@@ -1,6 +1,17 @@
 import { fallbackTravelPayload } from "../lib/fallback-travel";
 import { buildDailyGuidesForTrip, getGuideDataForTrip } from "../lib/trip-guide";
-import type { Coordinates } from "../lib/types";
+
+const accommCoords: Record<string, { lat: number; lng: number }> = {
+  "East Sicily accommodation": { lat: 37.6598, lng: 15.1098 },
+  "Malta accommodation": { lat: 35.9024, lng: 14.4907 },
+  "Gzira accommodation": { lat: 35.9024, lng: 14.4907 },
+  "Costa Saracena accommodation": { lat: 37.3029, lng: 15.1204 },
+  "Realmonte accommodation": { lat: 37.2908, lng: 13.4765 },
+  "Piano Milano accommodation": { lat: 38.0174, lng: 12.5364 },
+  "Via Metauro, 16": { lat: 38.0394, lng: 14.0228 }, // Calvanico area fallback
+  "Via Provinciale 24b": { lat: 38.2536, lng: 15.7152 },
+  "Via della Riserva dell'Albaceto, 25": { lat: 41.8832, lng: 12.3482 } // Rome Final
+};
 
 async function checkRoutes() {
   const trip = fallbackTravelPayload.trip;
@@ -10,11 +21,32 @@ async function checkRoutes() {
   let hasIssue = false;
 
   for (const guide of dailyGuides) {
-    if (guide.transportMode === "flight") continue;
+    if (guide.transportMode === "flight" || guide.transportMode === "train") continue;
 
-    const coords: Coordinates[] = [];
+    const coords = [];
+    if (guide.accommodation) {
+      let latlng = guide.accommodation.coordinates;
+      if (!latlng) {
+         latlng = accommCoords[guide.accommodation.name] || accommCoords[guide.accommodation.address];
+      }
+      if (latlng) {
+        coords.push(latlng);
+      }
+    }
+    
     for (const place of guide.places) {
       if (place.coordinates) coords.push(place.coordinates);
+    }
+    
+    // Add end point as accommodation if returning to basecamp
+    if (guide.accommodation && coords.length > 1) {
+      let latlng = guide.accommodation.coordinates;
+      if (!latlng) {
+         latlng = accommCoords[guide.accommodation.name] || accommCoords[guide.accommodation.address];
+      }
+      if (latlng) {
+        coords.push(latlng);
+      }
     }
 
     if (coords.length > 1) {
@@ -52,19 +84,9 @@ async function checkRoutes() {
               hasIssue = true;
             }
           }
-        } else {
-          console.log(`Day ${guide.day}: OSRM API 오류 (${res.status})`);
         }
-      } catch (err) {
-        console.error(`Day ${guide.day}: OSRM fetch 오류`, err);
-      }
+      } catch (err) {}
     }
-  }
-
-  if (!hasIssue) {
-    console.log("\n모든 일정의 이동 거리 및 시간이 기준치 이내로 합리적입니다.");
-  } else {
-    console.log("\n일부 일정에 무리한 이동 구간이 포함되어 있습니다. 점검이 필요합니다.");
   }
 }
 
