@@ -1,7 +1,7 @@
 import Link from "next/link";
 import type { AppDesignConfig, ItineraryDay, TravelPayload, Trip } from "@/lib/types";
 import { getGuideDataForTrip, type SwissGuideData } from "@/lib/trip-guide";
-import { ArrowRight, Bed, Bell, BookOpen, CalendarDays, CloudDrizzle, CloudFog, CloudLightning, CloudRain, CloudSnow, CloudSun, Cloudy, Compass, Map, MapPin, Menu, Route, Sparkles, Sun, TrainFront } from "lucide-react";
+import { ArrowRight, BookOpen, Calendar, CloudDrizzle, CloudFog, CloudLightning, CloudRain, CloudSnow, CloudSun, Cloudy, Compass, House, MapPin, Route, Sparkles, Sun } from "lucide-react";
 import { GuideImage } from "./guide-image";
 
 type DesignTokens = {
@@ -108,24 +108,24 @@ function formatTripState(trip: Trip) {
   return "Recent";
 }
 
-function formatTripCountdown(trip: Trip) {
-  const today = startOfToday();
-  const start = getTripStart(trip);
-  const end = getTripEnd(trip);
-  const oneDay = 1000 * 60 * 60 * 24;
+function formatTripDateRange(trip: Trip) {
+  const first = trip.itinerary[0]?.date;
+  const last = trip.itinerary[trip.itinerary.length - 1]?.date;
+  if (!first || !last) return "";
 
-  if (start <= today && end >= today) {
-    const day = Math.floor((today.getTime() - start.getTime()) / oneDay) + 1;
-    return `Travel day ${day}`;
-  }
+  const start = parseDate(first);
+  const end = parseDate(last);
+  if (!start || !end) return `${first} - ${last}`;
 
-  if (start > today) {
-    const days = Math.ceil((start.getTime() - today.getTime()) / oneDay);
-    return days === 1 ? "Tomorrow" : `D-${days}`;
-  }
+  const sameYear = start.getFullYear() === end.getFullYear();
+  const startLabel = start.toLocaleDateString("en-US", {
+    month: "short",
+    day: "numeric",
+    ...(sameYear ? {} : { year: "numeric" })
+  });
+  const endLabel = end.toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" });
 
-  const days = Math.ceil((today.getTime() - end.getTime()) / oneDay);
-  return `${days} days ago`;
+  return `${startLabel} - ${endLabel}`;
 }
 
 function getFocusItem(guideData: SwissGuideData) {
@@ -297,10 +297,10 @@ function WeatherTimeline({
   const hasForecast = trip.itinerary.some((day) => day.weather.source === "forecast");
 
   return (
-    <div className={`mt-5 rounded-lg ${design.soft} p-2.5 sm:p-3`}>
+    <div className="mt-4 rounded-none bg-transparent">
       <div className="mb-3 flex items-center justify-between gap-3">
         <div className="min-w-0">
-          <p className="text-xs font-extrabold uppercase tracking-[0.14em]" style={{ color: design.accent }}>
+          <p className="text-[10px] font-extrabold uppercase tracking-[0.16em]" style={{ color: design.accent }}>
             {hasForecast ? "Live forecast" : "Seasonal estimate"}
           </p>
           <p className={`mt-1 truncate text-xs font-bold ${design.muted}`}>
@@ -321,7 +321,7 @@ function WeatherTimeline({
               className={`grid min-h-[5.8rem] w-[5.85rem] shrink-0 content-between rounded-md border p-2 transition sm:w-[6.6rem] ${
                 isActive
                   ? "border-transparent text-white"
-                  : "border-black/10 bg-white text-[#17201D] hover:border-black/20"
+                  : "border-[#E6DAC8] bg-white/84 text-[#17201D] shadow-[0_10px_22px_rgba(45,45,45,0.05)] hover:border-[#D4A373]/70"
               }`}
               style={isActive ? { backgroundColor: design.accent } : undefined}
             >
@@ -350,87 +350,29 @@ function WeatherTimeline({
   );
 }
 
-function MainTripHero({ snapshot, design }: { snapshot: TripSnapshot; design: DesignTokens }) {
-  const { trip, focusItem, focusDay } = snapshot;
-  const rawStops = (focusDay.highlights?.length ? focusDay.highlights : splitRouteNames(focusItem.primaryRoute)).slice(0, 3);
-  const timelineStops = [
-    { time: "9:00", label: rawStops[0] ?? "Morning train", icon: TrainFront },
-    { time: "10:30", label: rawStops[1] ?? focusDay.city, icon: MapPin },
-    { time: "12:00", label: rawStops[2] ?? "Old town lunch", icon: Route }
-  ];
+function MainTripHero({ snapshot }: { snapshot: TripSnapshot }) {
+  const { trip } = snapshot;
+  const tripDateRange = formatTripDateRange(trip);
 
   return (
-    <section className="relative pb-[8.9rem]">
-      <Link href={`/trips/${trip.id}`} className="group relative block aspect-[9/14] min-h-[34rem] overflow-hidden bg-[#D8D0C4] shadow-[0_24px_62px_rgba(45,45,45,0.16)] sm:aspect-[9/13] sm:min-h-[41rem]">
+    <section className="relative pb-2">
+      <Link href={`/trips/${trip.id}`} className="group relative block h-[24.5rem] overflow-hidden bg-[#D8D0C4] shadow-[0_18px_42px_rgba(45,45,45,0.13)] sm:h-[30rem]">
         <img
           src={homePhotos.heroPhoto}
           alt="Sicily Malta Rome guidebook cover"
-          className="absolute inset-0 h-full w-full object-cover object-center transition duration-700 group-hover:scale-[1.025]"
+          className="absolute inset-0 h-full w-full object-cover object-[58%_44%] transition duration-700 group-hover:scale-[1.025]"
         />
         <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(24,43,44,0.66),rgba(24,43,44,0.24)_54%,rgba(24,43,44,0.02)_80%),linear-gradient(180deg,rgba(20,30,28,0.20),rgba(20,30,28,0.05)_35%,rgba(20,24,22,0.40)_82%)]" />
         <div className="absolute inset-0 bg-[#D4A373]/[0.10] mix-blend-soft-light" />
-        <div className="absolute left-6 right-6 top-6 flex items-center justify-between gap-3 text-[#1A434E] sm:left-8 sm:right-8 sm:top-8">
-          <span className="inline-flex h-10 w-10 items-center justify-center rounded-full bg-[#F9F7F2]/82 shadow-sm backdrop-blur-md">
-            <Menu className="h-6 w-6 stroke-[1.8]" />
-          </span>
-          <span className="relative inline-flex h-10 w-10 items-center justify-center rounded-full bg-[#F9F7F2]/82 shadow-sm backdrop-blur-md">
-            <Bell className="h-5 w-5 stroke-[1.8]" />
-            <span className="absolute right-2 top-1.5 h-2.5 w-2.5 rounded-full bg-[#D4A373]" />
-          </span>
-        </div>
-        <div className="absolute left-7 right-7 top-24 text-white sm:left-10 sm:right-10 sm:top-32">
-          <h1 className="max-w-xs font-serif text-[4.75rem] font-semibold leading-[0.88] tracking-normal drop-shadow-[0_8px_26px_rgba(0,0,0,0.22)] sm:max-w-md sm:text-8xl">Sicily<br />&amp; Malta</h1>
-          <p className="mt-5 max-w-[18rem] text-[0.82rem] font-extrabold uppercase leading-[1.65] tracking-[0.24em] text-white/90 sm:max-w-none sm:text-base sm:tracking-[0.32em]">Catania · Syracuse · Valletta</p>
-          <span className="mt-7 inline-flex items-center gap-3 rounded-full bg-[#1A434E]/95 px-5 py-3 text-[11px] font-black uppercase tracking-[0.18em] text-white shadow-[0_16px_34px_rgba(0,0,0,0.22)]">
-            <span className="h-2.5 w-2.5 rounded-full bg-[#D4A373]" />
-            ON TRIP · {formatTripCountdown(trip)}
+        <div className="absolute left-7 right-7 top-16 text-white sm:left-10 sm:right-10 sm:top-20">
+          <h1 className="max-w-xs font-serif text-[3.45rem] font-semibold leading-[0.9] tracking-normal drop-shadow-[0_8px_22px_rgba(0,0,0,0.22)] sm:max-w-md sm:text-7xl">Sicily<br />&amp; Malta</h1>
+          <p className="mt-3 max-w-[18rem] text-[0.68rem] font-extrabold uppercase leading-[1.55] tracking-[0.20em] text-white/90 sm:max-w-none sm:text-sm sm:tracking-[0.28em]">Catania · Syracuse · Valletta</p>
+          <span className="mt-4 inline-flex items-center gap-2.5 rounded-full bg-[#1A434E]/95 px-4 py-2 text-[9.5px] font-black uppercase tracking-[0.14em] text-white shadow-[0_12px_24px_rgba(0,0,0,0.20)]">
+            <span className="h-2 w-2 rounded-full bg-[#D4A373]" />
+            {tripDateRange}
           </span>
         </div>
       </Link>
-
-      <div className="absolute bottom-0 left-5 right-5 z-10 rounded-[1.75rem] border border-white/90 bg-white p-5 shadow-[0_26px_64px_rgba(45,45,45,0.16)] backdrop-blur sm:left-10 sm:right-10 sm:p-7">
-        <div className="flex min-w-0 items-start justify-between gap-4">
-          <div className="min-w-0">
-            <p className="text-[10px] font-black uppercase tracking-[0.28em] text-[#B98045]">Today's Itinerary</p>
-            <h2 className="mt-2 truncate font-serif text-[1.85rem] font-semibold leading-[1.05] text-[#2D2D2D] sm:text-4xl">Day {focusItem.day} · {focusDay.city}</h2>
-            <p className={`mt-2 truncate text-sm font-semibold ${design.muted}`}>{formatDateLabel(focusItem.date)} · {focusDay.title}</p>
-          </div>
-          <span className="mt-1 inline-flex shrink-0 items-center rounded-full bg-[#F9F7F2] px-3 py-1.5 text-[10px] font-black uppercase tracking-[0.12em] text-[#1A434E]">
-            ON TRIP
-          </span>
-        </div>
-
-        <div className="relative mt-7 px-1 pb-1 pt-2">
-          <div className="absolute left-[14%] right-[14%] top-6 h-px bg-[#D4A373]/70" />
-          <div className="grid grid-cols-3 items-start gap-0">
-          {timelineStops.map((stop, index) => {
-            const Icon = stop.icon;
-            return (
-            <div key={`${stop.time}-${stop.label}`} className="relative min-w-0 text-center">
-              <span className={`relative z-10 mx-auto flex h-8 w-8 items-center justify-center rounded-full border bg-white shadow-[0_7px_16px_rgba(45,45,45,0.10)] ${
-                index === 1 ? "border-[#1A434E] text-[#1A434E]" : "border-[#D4A373] text-[#B98045]"
-              }`}>
-                <Icon className="h-4 w-4 stroke-[1.65]" />
-              </span>
-              <p className="mt-3 text-[11px] font-black uppercase tracking-[0.08em] text-[#1A434E]">{stop.time}</p>
-              <p className="mx-auto mt-1 max-w-[6.3rem] truncate text-[12px] font-semibold leading-snug text-[#6B6861]">{stop.label}</p>
-            </div>
-            );
-          })}
-          </div>
-        </div>
-
-        <div className="mt-7 grid grid-cols-2 gap-3">
-          <Link href={`/trips/${trip.id}/day/${focusItem.day}`} className="inline-flex min-h-14 items-center justify-center gap-2 rounded-full text-xs font-black uppercase tracking-[0.16em] text-white shadow-[0_14px_28px_rgba(26,67,78,0.22)] transition hover:-translate-y-0.5" style={{ backgroundColor: design.accent }}>
-            <Map className="h-5 w-5" />
-            View plan
-          </Link>
-          <Link href={`/trips/${trip.id}/day/${focusItem.day}`} className="inline-flex min-h-14 items-center justify-center gap-2 rounded-full border border-[#D4A373] bg-white text-xs font-black uppercase tracking-[0.16em] text-[#B98045] transition hover:-translate-y-0.5">
-            <Compass className="h-5 w-5" />
-            Next up
-          </Link>
-        </div>
-      </div>
     </section>
   );
 }
@@ -467,25 +409,38 @@ function RouteStory({ snapshot, design }: { snapshot: TripSnapshot; design: Desi
 function QuickActions({ snapshot, design }: { snapshot: TripSnapshot; design: DesignTokens }) {
   const { trip, focusItem } = snapshot;
   const actions = [
-    { href: `/trips/${trip.id}/day/${focusItem.day}`, label: "Daily", icon: CalendarDays, tone: design.accent },
-    { href: `/trips/${trip.id}`, label: "Map", icon: Map, tone: "#1A434E" },
-    { href: "/print", label: "Guidebook", icon: BookOpen, tone: design.coral },
-    { href: `/trips/${trip.id}/stays`, label: "Stays", icon: Bed, tone: "#2D2D2D" }
+    { href: `/trips/${trip.id}/day/${focusItem.day}`, label: "Daily", icon: Calendar, tone: design.coral, iconClass: "h-[1.55rem] w-[1.55rem]" },
+    { href: `/trips/${trip.id}`, label: "Map", icon: MapPin, tone: "#1A434E", iconClass: "h-[1.8rem] w-[1.8rem]" },
+    { href: "/print", label: "Guidebook", icon: BookOpen, tone: "#1A434E", iconClass: "h-[1.62rem] w-[1.62rem]" },
+    { href: `/trips/${trip.id}/stays`, label: "Stays", icon: House, tone: "#C8795A", iconClass: "h-[1.62rem] w-[1.62rem]" }
   ];
 
   return (
-    <section className="mx-5 -mt-1 grid grid-cols-4 divide-x divide-[#E6DAC8] rounded-none bg-transparent py-3 sm:mx-10">
-      {actions.map((action) => {
-        const Icon = action.icon;
-        return (
-          <Link key={action.label} href={action.href} className="group grid min-h-[5.8rem] place-items-center px-1 text-center transition hover:-translate-y-0.5">
-            <span className="flex h-11 w-11 items-center justify-center" style={{ color: action.tone }}>
-              <Icon className="h-8 w-8 stroke-[1.5]" />
-            </span>
-            <p className="mt-2 text-[10px] font-black uppercase leading-tight tracking-[0.16em] text-[#2D2D2D] sm:text-[11px]">{action.label}</p>
-          </Link>
-        );
-      })}
+    <section className="mx-5 max-w-full overflow-hidden border-y border-[#E6DAC8] bg-[#F9F7F2]/70 sm:mx-10">
+      <div className="grid w-full min-w-0 divide-x divide-[#E6DAC8]" style={{ gridTemplateColumns: "repeat(4, minmax(0, 1fr))" }}>
+        {actions.map((action) => {
+          const Icon = action.icon;
+
+          return (
+            <Link
+              key={action.label}
+              href={action.href}
+              style={{ minWidth: 0 }}
+              className="group relative grid min-h-[5.55rem] min-w-0 place-items-center overflow-hidden px-1 py-3 text-center transition hover:bg-white/45"
+            >
+              <span
+                className="flex h-10 w-10 items-center justify-center transition duration-300 group-hover:-translate-y-0.5"
+                style={{ color: action.tone }}
+              >
+                <Icon className={`${action.iconClass} stroke-[1.38]`} />
+              </span>
+              <p className="mt-2 max-w-full truncate text-[8.5px] font-black uppercase leading-tight tracking-[0.13em] text-[#2D2D2D]">
+                {action.label}
+              </p>
+            </Link>
+          );
+        })}
+      </div>
     </section>
   );
 }
@@ -592,14 +547,8 @@ function TripLibrary({ snapshots, mainTripId, design }: { snapshots: TripSnapsho
 
 function WeatherSection({ snapshot, design }: { snapshot: TripSnapshot; design: DesignTokens }) {
   return (
-    <section className={`rounded-lg border ${design.border} ${design.surface} p-4 ${design.shadow} sm:p-5`}>
-      <div className="mb-1 flex items-center justify-between gap-4">
-        <div>
-          <p className={`text-xs font-black uppercase tracking-[0.14em] ${design.muted}`}>Weather strip</p>
-          <h2 className="mt-1 text-2xl font-black tracking-normal">날짜별 감각 확인</h2>
-        </div>
-        <CloudSun className="hidden h-7 w-7 sm:block" style={{ color: design.coral }} />
-      </div>
+    <section className="px-5 sm:px-10">
+      <div className="border-t border-[#E6DAC8] pt-5" />
       <WeatherTimeline trip={snapshot.trip} activeDay={snapshot.focusItem.day} design={design} />
     </section>
   );
@@ -624,8 +573,9 @@ export function TravelHome({ payload }: { payload: TravelPayload }) {
   return (
     <div className={`min-h-screen w-full overflow-x-hidden pb-10 ${design.font} ${design.page}`}>
       <main className="mx-auto grid w-full max-w-full grid-cols-[minmax(0,1fr)] gap-6 overflow-hidden pb-8 sm:max-w-xl">
-        <MainTripHero snapshot={mainSnapshot} design={design} />
+        <MainTripHero snapshot={mainSnapshot} />
         <QuickActions snapshot={mainSnapshot} design={design} />
+        <WeatherSection snapshot={mainSnapshot} design={design} />
         <HighlightGrid snapshot={mainSnapshot} design={design} />
       </main>
     </div>

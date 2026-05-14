@@ -2,7 +2,7 @@
 
 @page {
   size: A4;
-  margin: 24mm;
+  margin: 14mm;
 }
 
 .no-print {
@@ -40,7 +40,7 @@ body.print-body * {
 .guide-cover,
 .guide-page {
   min-height: 265mm;
-  padding: 17mm 15mm;
+  padding: 18mm 17mm;
   background: var(--guide-surface);
 }
 
@@ -229,13 +229,77 @@ body.print-body * {
   gap: 12px;
 }
 
+.guide-index-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.guide-index-block {
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.72);
+  box-shadow: inset 0 0 0 1px rgba(222, 210, 195, 0.76);
+  padding: 13px;
+}
+
+.guide-index-block > p {
+  margin: 0 0 9px;
+  color: var(--guide-accent);
+  font-size: 9px;
+  font-weight: 900;
+  text-transform: uppercase;
+}
+
+.guide-index-row {
+  display: grid;
+  grid-template-columns: 24px minmax(0, 1fr);
+  gap: 8px;
+  border-top: 1px solid rgba(222, 210, 195, 0.78);
+  padding: 7px 0;
+}
+
+.guide-index-row:first-child {
+  border-top: 0;
+  padding-top: 0;
+}
+
+.guide-index-row strong {
+  display: inline-flex;
+  width: 22px;
+  height: 22px;
+  align-items: center;
+  justify-content: center;
+  border-radius: 999px;
+  background: var(--guide-theme);
+  color: #ffffff;
+  font-size: 9px;
+  font-weight: 900;
+}
+
+.guide-index-row span {
+  display: block;
+  color: var(--guide-ink);
+  font-size: 10.6px;
+  font-weight: 760;
+  line-height: 1.28;
+  overflow-wrap: anywhere;
+}
+
+.guide-index-row b {
+  display: block;
+  color: var(--guide-muted);
+  font-size: 8.6px;
+  font-weight: 900;
+  text-transform: uppercase;
+}
+
 .guide-box,
 .place-brief,
 .city-visit,
 .more-place {
   border: 0;
   border-radius: 8px;
-  background: rgba(255, 255, 255, 0.58);
+  background: rgba(255, 255, 255, 0.74);
   box-shadow: inset 0 0 0 1px rgba(222, 210, 195, 0.72);
   padding: 13px;
 }
@@ -267,7 +331,7 @@ body.print-body * {
 .city-visit h4 {
   margin: 0;
   color: var(--guide-ink);
-  font-size: 14px;
+  font-size: 15px;
   font-weight: 800;
   line-height: 1.2;
 }
@@ -294,7 +358,7 @@ body.print-body * {
 .guide-table td,
 .stay-grid p {
   color: var(--guide-muted);
-  font-size: 10.5px;
+  font-size: 11.5px;
 }
 
 .flight-segment b {
@@ -367,6 +431,86 @@ body.print-body * {
   overflow-wrap: anywhere;
 }
 
+.print-tile-map {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  border-radius: inherit;
+  background: var(--guide-soft);
+}
+
+.print-tile-map img {
+  position: absolute;
+  display: block;
+  max-width: none;
+  object-fit: fill;
+}
+
+.print-tile-route {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  width: 100%;
+  height: 100%;
+}
+
+.print-tile-route polyline {
+  stroke: var(--guide-theme);
+  stroke-width: 1.45;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-dasharray: 3 2;
+  opacity: 0.92;
+  vector-effect: non-scaling-stroke;
+}
+
+.print-tile-pin {
+  position: absolute;
+  z-index: 3;
+  display: inline-flex;
+  width: 15px;
+  height: 15px;
+  transform: translate(-50%, -50%);
+  align-items: center;
+  justify-content: center;
+  border: 1.4px solid #ffffff;
+  border-radius: 999px;
+  background: var(--guide-accent);
+  box-shadow: 0 2px 6px rgba(26, 67, 78, 0.26);
+  color: #ffffff;
+  font-size: 7.5px;
+  font-weight: 950;
+  line-height: 1;
+}
+
+.print-tile-pin-stay {
+  border-color: var(--guide-theme);
+  border-radius: 5px;
+  background: #fffaf2;
+  color: var(--guide-theme);
+  font-size: 8px;
+}
+
+.print-tile-map-atlas .print-tile-pin {
+  width: 12px;
+  height: 12px;
+  font-size: 6.6px;
+}
+
+.print-tile-map-atlas .print-tile-route polyline {
+  stroke-width: 1.1;
+  stroke-dasharray: 2.5 2;
+}
+
+.print-tile-map-empty {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--guide-muted);
+  font-size: 10px;
+  font-weight: 800;
+}
+
 .guide-table {
   width: 100%;
   border-collapse: separate;
@@ -415,7 +559,7 @@ body.print-body * {
 }
 
 .daily-edit-section {
-  margin-top: 12px;
+  margin-top: 16px;
 }
 
 .daily-edit-title {
@@ -423,9 +567,9 @@ body.print-body * {
   align-items: baseline;
   justify-content: space-between;
   gap: 8px;
-  margin-bottom: 7px;
+  margin-bottom: 9px;
   border-top: 1px solid color-mix(in srgb, var(--guide-theme) 24%, transparent);
-  padding-top: 8px;
+  padding-top: 11px;
 }
 
 .daily-edit-title span {
@@ -438,7 +582,7 @@ body.print-body * {
 
 .daily-edit-title strong {
   color: var(--guide-ink);
-  font-size: 13px;
+  font-size: 15px;
   font-weight: 900;
 }
 
@@ -471,18 +615,18 @@ body.print-body * {
 }
 
 .day-header {
-  align-items: center;
+  align-items: flex-start;
   border-bottom: 1px solid color-mix(in srgb, var(--guide-accent) 30%, transparent);
-  padding-bottom: 12px;
-  margin-bottom: 14px;
+  padding-bottom: 14px;
+  margin-bottom: 16px;
 }
 
 .day-header h2 {
   margin: 0;
-  font-size: 28px;
+  font-size: 34px;
   font-family: "Playfair Display", Georgia, serif;
   font-weight: 700;
-  line-height: 1.1;
+  line-height: 1.05;
 }
 
 .day-badge {
@@ -499,20 +643,36 @@ body.print-body * {
 
 .day-visual-grid {
   display: grid;
-  grid-template-columns: 1.05fr 0.95fr;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 10px;
-  margin-bottom: 12px;
+  margin-bottom: 14px;
+  align-items: stretch;
+}
+
+.day-visual-grid > :only-child {
+  grid-column: 1 / -1;
 }
 
 .day-hero-image,
 .day-mini-map {
   position: relative;
-  height: 62mm;
+  height: 60mm;
+  min-height: 60mm;
   overflow: hidden;
   border: 0;
-  border-radius: 22px;
+  border-radius: 10px;
   background: var(--guide-soft);
-  box-shadow: 0 14px 32px rgba(35, 32, 29, 0.08);
+  box-shadow: 0 10px 24px rgba(35, 32, 29, 0.07);
+}
+
+.day-mini-map {
+  align-self: stretch;
+}
+
+.day-mini-map iframe {
+  display: block;
+  width: 100%;
+  height: 100%;
 }
 
 .day-hero-image img,
@@ -523,33 +683,68 @@ body.print-body * {
   display: block;
 }
 
+.day-hero-image {
+  margin: 0;
+}
+
+.day-hero-image figcaption,
+.day-map-caption {
+  position: absolute;
+  left: 8px;
+  right: 8px;
+  bottom: 8px;
+  z-index: 4;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  border-radius: 999px;
+  background: rgba(249, 247, 242, 0.86);
+  padding: 5px 8px;
+  color: var(--guide-theme);
+  font-size: 8.2px;
+  font-weight: 900;
+  line-height: 1;
+  text-transform: uppercase;
+}
+
+.day-map-caption span {
+  color: var(--guide-accent);
+}
+
+.day-map-caption strong {
+  color: var(--guide-theme);
+  font-size: 8.2px;
+}
+
 .day-brief {
   display: grid;
-  grid-template-columns: 1.35fr 0.7fr 1fr 1.35fr;
-  gap: 6px;
-  margin-bottom: 10px;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 7px;
+  margin-bottom: 12px;
 }
 
 .day-summary-grid div {
-  min-height: 50px;
+  min-height: 46px;
   border-left: 3px solid color-mix(in srgb, var(--guide-accent) 72%, white);
+  padding: 9px 10px;
 }
 
 .day-summary-grid strong {
-  font-size: 10.5px;
-  line-height: 1.22;
+  font-size: 11.5px;
+  line-height: 1.32;
   overflow-wrap: anywhere;
 }
 
 .day-mood {
-  margin: 0 0 10px;
+  margin: 0 0 13px;
   border-left: 4px solid var(--guide-accent);
-  padding: 1px 0 1px 10px;
+  padding: 2px 0 2px 12px;
   color: var(--guide-ink);
   font-family: "Playfair Display", Georgia, serif;
-  font-size: 13.5px;
+  font-size: 16px;
   font-weight: 620;
-  line-height: 1.35;
+  line-height: 1.42;
 }
 
 .day-deck {
@@ -563,11 +758,11 @@ body.print-body * {
 }
 
 .day-route-flow {
-  margin-bottom: 10px;
-  border-radius: 18px;
+  margin-bottom: 14px;
+  border-radius: 10px;
   background: rgba(255, 255, 255, 0.48);
   box-shadow: inset 0 0 0 1px rgba(222, 210, 195, 0.68);
-  padding: 10px;
+  padding: 11px;
 }
 
 .day-route-flow-title {
@@ -594,24 +789,23 @@ body.print-body * {
 
 .day-route-strip {
   display: grid;
-  gap: 6px;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 7px;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
 }
 
 .day-route-strip div {
   position: relative;
-  border-top: 1px solid color-mix(in srgb, var(--guide-accent) 24%, transparent);
-  background: transparent;
-  padding: 7px 0;
+  display: grid;
+  grid-template-columns: 22px minmax(0, 1fr);
+  column-gap: 7px;
+  border-top: 0;
+  border-radius: 8px;
+  background: rgba(249, 247, 242, 0.7);
+  padding: 8px;
 }
 
 .day-route-strip div::after {
-  content: "";
-  position: absolute;
-  top: 16px;
-  left: 22px;
-  right: -6px;
-  border-top: 1px dashed color-mix(in srgb, var(--guide-theme) 36%, transparent);
+  display: none;
 }
 
 .day-route-strip div:last-child::after {
@@ -622,8 +816,9 @@ body.print-body * {
   position: relative;
   z-index: 1;
   display: inline-flex;
-  width: 18px;
-  height: 18px;
+  grid-row: 1 / span 2;
+  width: 20px;
+  height: 20px;
   align-items: center;
   justify-content: center;
   border-radius: 999px;
@@ -635,16 +830,16 @@ body.print-body * {
 
 .day-route-strip strong {
   display: block;
-  margin-top: 5px;
-  font-size: 10.5px;
-  line-height: 1.2;
+  margin-top: 0;
+  font-size: 11.5px;
+  line-height: 1.25;
 }
 
 .day-route-strip p {
   margin: 3px 0 0;
   color: var(--guide-muted);
-  font-size: 9px;
-  line-height: 1.25;
+  font-size: 10px;
+  line-height: 1.35;
 }
 
 .city-grid {
@@ -654,9 +849,9 @@ body.print-body * {
 .city-visit-header span,
 .place-brief-top span {
   flex: 0 0 auto;
-  max-width: 34mm;
+  max-width: 44mm;
   color: var(--guide-theme);
-  font-size: 9px;
+  font-size: 9.8px;
   font-weight: 900;
   text-align: right;
   text-transform: uppercase;
@@ -681,10 +876,10 @@ body.print-body * {
 
 .essential-place {
   display: grid;
-  grid-template-columns: 45mm minmax(0, 1fr);
+  grid-template-columns: 48mm minmax(0, 1fr);
   gap: 12px;
   align-items: stretch;
-  padding: 10px;
+  padding: 12px;
 }
 
 .place-brief-body {
@@ -694,8 +889,9 @@ body.print-body * {
 }
 
 .place-thumb {
-  height: 100%;
+  height: 42mm;
   min-height: 42mm;
+  max-height: 48mm;
   align-self: stretch;
   margin: 0;
   overflow: hidden;
@@ -705,16 +901,21 @@ body.print-body * {
 }
 
 .place-summary {
+  display: -webkit-box;
   margin: 7px 0 0;
-  line-height: 1.45;
+  font-size: 11.3px;
+  line-height: 1.5;
   text-align: left;
   overflow-wrap: anywhere;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 6;
+  overflow: hidden;
 }
 
 .place-columns {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 8px;
+  gap: 9px;
   border-top: 1px solid var(--guide-line);
   margin-top: 8px;
   padding-top: 7px;
@@ -722,33 +923,38 @@ body.print-body * {
 
 .place-columns b {
   color: var(--guide-ink);
-  font-size: 9px;
+  font-size: 9.8px;
   letter-spacing: 0;
   text-transform: uppercase;
 }
 
 .place-columns ul {
-  margin: 4px 0 0;
+  margin: 3px 0 0;
   padding-left: 13px;
+}
+
+.place-columns li {
+  font-size: 10.2px;
+  line-height: 1.38;
 }
 
 .more-place-grid,
 .food-break-grid {
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-template-columns: 1fr;
   gap: 7px;
 }
 
 .more-place {
   display: grid;
-  grid-template-columns: 20mm minmax(0, 1fr);
-  gap: 8px;
-  padding: 7px;
+  grid-template-columns: 25mm minmax(0, 1fr);
+  gap: 9px;
+  padding: 8px;
 }
 
 .more-place img {
-  width: 20mm;
-  height: 20mm;
+  width: 25mm;
+  height: 22mm;
   border-radius: 5px;
   object-fit: cover;
 }
@@ -756,7 +962,7 @@ body.print-body * {
 .more-place p {
   margin: 0 0 2px;
   color: var(--guide-theme);
-  font-size: 8px;
+  font-size: 8.8px;
   font-weight: 900;
   text-transform: uppercase;
 }
@@ -764,17 +970,20 @@ body.print-body * {
 .more-place h4 {
   margin: 0;
   color: var(--guide-ink);
-  font-size: 10.5px;
+  font-size: 12px;
   font-weight: 900;
   line-height: 1.16;
 }
 
 .more-place span {
-  display: block;
+  display: -webkit-box;
   margin-top: 3px;
   color: var(--guide-muted);
-  font-size: 9px;
-  line-height: 1.28;
+  font-size: 10.2px;
+  line-height: 1.38;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;
+  overflow: hidden;
 }
 
 .food-breaks {
@@ -798,8 +1007,8 @@ body.print-body * {
 
 .practical-notes li {
   color: var(--guide-muted);
-  font-size: 9.8px;
-  line-height: 1.35;
+  font-size: 11px;
+  line-height: 1.48;
 }
 
 @media print {
@@ -815,11 +1024,26 @@ body.print-body * {
   .guide-cover,
   .guide-page {
     min-height: auto;
-    padding: 0;
+    padding: 8mm 7mm;
+  }
+
+  .guide-cover {
+    min-height: 269mm;
   }
 
   .route-atlas-map,
   .day-mini-map {
     print-color-adjust: exact;
+  }
+
+  .day-visual-grid {
+    break-inside: avoid;
+    page-break-inside: avoid;
+  }
+
+  .place-brief,
+  .more-place {
+    break-inside: avoid;
+    page-break-inside: avoid;
   }
 }

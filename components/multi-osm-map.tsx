@@ -67,7 +67,7 @@ export function MultiOsmMap({
         width="100%"
         height="100%"
         style={{ border: 0, minHeight: "100%", minWidth: "100%" }}
-        loading="lazy"
+        loading={printOptimized ? "eager" : "lazy"}
         allowFullScreen
         referrerPolicy="no-referrer-when-downgrade"
         src={src}
@@ -305,7 +305,7 @@ export function MultiOsmMap({
       width="100%"
       height="100%"
       style={{ border: 0, minHeight: "100%", minWidth: "100%" }}
-      loading="lazy"
+      loading={printOptimized ? "eager" : "lazy"}
       allowFullScreen
       srcDoc={html}
     />

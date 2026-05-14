@@ -21,7 +21,7 @@ import {
   X
 } from "lucide-react";
 import { getGuideDataForTrip, buildDailyGuidesForTrip } from "@/lib/trip-guide";
-import type { Trip, AppDesignConfig, AppStructureConfig } from "@/lib/types";
+import type { Trip, AppDesignConfig, AppStructureConfig, Coordinates } from "@/lib/types";
 import { OsmMap } from "./osm-map";
 import { MultiOsmMap } from "./multi-osm-map";
 import { optimizeRouteAction, generateMapLinkAction } from "@/lib/mcp-actions";
@@ -32,7 +32,7 @@ import { GuideImage } from "./guide-image";
 import { AirlineLogo } from "./airline-logo";
 import { useTravelPayload } from "@/lib/travel-payload-client";
 import { useDailyMapMarkers } from "@/lib/daily-map-markers-client";
-import { calculateDistanceKm, estimateRouteTime, formatDistance } from "@/lib/route-math";
+import { calculateDistanceKm, estimateRouteTime, formatDistance, fetchOsrmRouteMetrics, formatDuration } from "@/lib/route-math";
 
 const dailyTabLabels: Record<number, string> = {
   1: "Seoul Departure",
@@ -148,6 +148,7 @@ function DailyTimeline({
   const [isOverviewMapCollapsed, setIsOverviewMapCollapsed] = useState(false);
   const [isOptimizing, setIsOptimizing] = useState(false);
   const [isMapLoading, setIsMapLoading] = useState(false);
+  const [routeMetrics, setRouteMetrics] = useState<Record<string, { distanceKm: number; durationStr: string }>>({});
   const dayTabsRef = useRef<HTMLDivElement | null>(null);
   const { markers, isLoading: isMapMarkersLoading, isSmartFill } = useDailyMapMarkers({
     guide,
@@ -158,6 +159,77 @@ function DailyTimeline({
   const markerById = useMemo(() => {
     return new Map(markers.filter((marker) => marker.id).map((marker) => [marker.id, marker]));
   }, [markers]);
+
+  useEffect(() => {
+    const fetchMetrics = async () => {
+      // 1. 주요 동선 (routeStops 기준) 추출
+      const mainCoords: Coordinates[] = [];
+      const coordKeys: string[] = [];
+
+      if (guide.accommodation) {
+        const coords = markerById.get("accommodation");
+        if (coords) mainCoords.push({ lat: coords.lat, lng: coords.lng });
+      }
+
+      for (const place of guide.places) {
+        const markerCoords = markerById.get(place.id);
+        const coordinates = place.coordinates ?? (markerCoords ? { lat: markerCoords.lat, lng: markerCoords.lng } : undefined);
+        if (coordinates) mainCoords.push(coordinates);
+      }
+
+      // 2. Overview 동선 추출
+      const overviewCoords: Coordinates[] = [];
+      if (guide.routeOverview?.length) {
+        for (const point of guide.routeOverview) {
+          overviewCoords.push(point.coordinates);
+        }
+      }
+
+      const requests = [];
+      const mode = guide.transportMode === "walk" ? "foot" : "driving";
+
+      if (mainCoords.length > 1) {
+        for (let i = 0; i < mainCoords.length - 1; i++) {
+          coordKeys.push(`${mainCoords[i].lat},${mainCoords[i].lng}-${mainCoords[i+1].lat},${mainCoords[i+1].lng}`);
+        }
+        requests.push(fetchOsrmRouteMetrics(mainCoords, mode).then(legs => ({ legs, startIdx: 0 })));
+      }
+
+      if (overviewCoords.length > 1) {
+        const startIdx = coordKeys.length;
+        for (let i = 0; i < overviewCoords.length - 1; i++) {
+          coordKeys.push(`${overviewCoords[i].lat},${overviewCoords[i].lng}-${overviewCoords[i+1].lat},${overviewCoords[i+1].lng}`);
+        }
+        requests.push(fetchOsrmRouteMetrics(overviewCoords, "driving").then(legs => ({ legs, startIdx })));
+      }
+
+      const results = await Promise.all(requests);
+
+      let hasUpdates = false;
+      const nextMetrics: Record<string, { distanceKm: number; durationStr: string }> = {};
+
+      for (const { legs, startIdx } of results) {
+        if (legs) {
+          hasUpdates = true;
+          legs.forEach((leg, i) => {
+            const key = coordKeys[startIdx + i];
+            if (key) {
+              nextMetrics[key] = {
+                distanceKm: leg.distance / 1000,
+                durationStr: formatDuration(leg.duration)
+              };
+            }
+          });
+        }
+      }
+
+      if (hasUpdates) {
+        setRouteMetrics(prev => ({ ...prev, ...nextMetrics }));
+      }
+    };
+
+    fetchMetrics();
+  }, [guide.accommodation, guide.places, guide.routeOverview, markerById, guide.transportMode]);
 
   const routeStops = useMemo(() => {
     const stops: {
@@ -193,18 +265,26 @@ function DailyTimeline({
 
     return stops.map((stop, index) => {
       const previous = stops[index - 1];
-      const distanceKm =
-        previous?.coordinates && stop.coordinates
-          ? calculateDistanceKm(previous.coordinates, stop.coordinates)
-          : null;
+      let distanceKm = previous?.coordinates && stop.coordinates
+        ? calculateDistanceKm(previous.coordinates, stop.coordinates)
+        : null;
+      let timeLabel = distanceKm === null ? "시간 확인 필요" : estimateRouteTime(distanceKm);
+
+      if (previous?.coordinates && stop.coordinates) {
+        const key = `${previous.coordinates.lat},${previous.coordinates.lng}-${stop.coordinates.lat},${stop.coordinates.lng}`;
+        if (routeMetrics[key]) {
+          distanceKm = routeMetrics[key].distanceKm;
+          timeLabel = routeMetrics[key].durationStr;
+        }
+      }
 
       return {
         ...stop,
         legDistanceKm: distanceKm,
-        legTimeLabel: distanceKm === null ? "시간 확인 필요" : estimateRouteTime(distanceKm)
+        legTimeLabel: timeLabel
       };
     });
-  }, [guide.accommodation, guide.places, markerById]);
+  }, [guide.accommodation, guide.places, markerById, routeMetrics]);
 
   const citySegments = useMemo(() => {
     if (guide.cityVisits?.length) {
@@ -262,9 +342,18 @@ function DailyTimeline({
 
     return guide.routeOverview.map((point, index, all) => {
       const previous = all[index - 1];
-      const distanceKm = previous
+      let distanceKm = previous
         ? calculateDistanceKm(previous.coordinates, point.coordinates)
         : null;
+      let timeLabel = distanceKm === null ? "출발" : estimateRouteTime(distanceKm);
+
+      if (previous) {
+        const key = `${previous.coordinates.lat},${previous.coordinates.lng}-${point.coordinates.lat},${point.coordinates.lng}`;
+        if (routeMetrics[key]) {
+          distanceKm = routeMetrics[key].distanceKm;
+          timeLabel = routeMetrics[key].durationStr;
+        }
+      }
 
       return {
         id: `route-overview-${point.id}`,
@@ -272,11 +361,11 @@ function DailyTimeline({
         name: point.name,
         detail: point.detail ?? "",
         legDistanceKm: distanceKm,
-        legTimeLabel: distanceKm === null ? "출발" : estimateRouteTime(distanceKm),
+        legTimeLabel: timeLabel,
         kind: "city" as const
       };
     });
-  }, [guide.routeOverview]);
+  }, [guide.routeOverview, routeMetrics]);
 
   const compactRouteStops = useMemo(
     () => explicitRouteOverviewStops.length
@@ -1376,6 +1465,32 @@ function CitySightseeingTimeline({
   onSelectPlace: (place: DailyGuidePlace) => void;
 }) {
   const timelinePlaces = places;
+  const [metrics, setMetrics] = useState<Record<string, { distanceKm: number; durationStr: string }>>({});
+
+  useEffect(() => {
+    const coords: Coordinates[] = [];
+    const keys: string[] = [];
+    for (const p of timelinePlaces) {
+      if (p.coordinates) coords.push(p.coordinates);
+    }
+
+    if (coords.length > 1) {
+      for (let i = 0; i < coords.length - 1; i++) {
+        keys.push(`${coords[i].lat},${coords[i].lng}-${coords[i+1].lat},${coords[i+1].lng}`);
+      }
+      fetchOsrmRouteMetrics(coords, "foot").then((legs) => {
+        if (legs) {
+          const next: Record<string, { distanceKm: number; durationStr: string }> = {};
+          legs.forEach((leg, i) => {
+            if (keys[i]) {
+              next[keys[i]] = { distanceKm: leg.distance / 1000, durationStr: formatDuration(leg.duration) };
+            }
+          });
+          setMetrics(next);
+        }
+      });
+    }
+  }, [timelinePlaces]);
 
   if (timelinePlaces.length === 0) return null;
 
@@ -1394,10 +1509,19 @@ function CitySightseeingTimeline({
       <ol className="flex max-w-full snap-x gap-2 overflow-x-auto overscroll-x-contain pb-3 [scrollbar-color:#2f7f7b_#eef4f1] [scrollbar-width:thin]">
         {timelinePlaces.map((place, index) => {
           const next = timelinePlaces[index + 1];
-          const distanceKm =
+          let distanceKm =
             place.coordinates && next?.coordinates
               ? calculateDistanceKm(place.coordinates, next.coordinates)
               : null;
+          let timeLabel = distanceKm === null ? "거리 확인" : `${formatDistance(distanceKm)} · ${estimateRouteTime(distanceKm)}`;
+
+          if (place.coordinates && next?.coordinates) {
+            const key = `${place.coordinates.lat},${place.coordinates.lng}-${next.coordinates.lat},${next.coordinates.lng}`;
+            if (metrics[key]) {
+              distanceKm = metrics[key].distanceKm;
+              timeLabel = `${formatDistance(distanceKm)} · ${metrics[key].durationStr}`;
+            }
+          }
 
           return (
             <li

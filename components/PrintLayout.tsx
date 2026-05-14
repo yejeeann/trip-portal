@@ -5,7 +5,7 @@ import { sicilyGuideData } from "@/lib/sicily-guide-data";
 import { staticPrintGuideDesign, type PrintGuideDesign } from "@/lib/print-guide-design";
 import type { DailyCityVisit, DailyGuide, DailyGuidePlace, FlightTicket, MasterTimelineItem, TimelineAccommodation } from "@/lib/swiss-guide-data";
 import type { TravelPayload } from "@/lib/types";
-import { MultiOsmMap, type OsmMarker } from "./multi-osm-map";
+import type { OsmMarker } from "./multi-osm-map";
 
 type StayRow = TimelineAccommodation & {
   key: string;
@@ -355,6 +355,157 @@ function marker(name: string, lat: number, lng: number): PrintMapMarker {
   };
 }
 
+const PRINT_TILE_SIZE = 256;
+const MAX_MERCATOR_LAT = 85.05112878;
+
+type ProjectedPrintMarker = PrintMapMarker & {
+  x: number;
+  y: number;
+  index: number;
+};
+
+function clamp(value: number, min: number, max: number) {
+  return Math.min(max, Math.max(min, value));
+}
+
+function lonToWorldX(lng: number, zoom: number) {
+  return ((lng + 180) / 360) * PRINT_TILE_SIZE * 2 ** zoom;
+}
+
+function latToWorldY(lat: number, zoom: number) {
+  const safeLat = clamp(lat, -MAX_MERCATOR_LAT, MAX_MERCATOR_LAT);
+  const sinLat = Math.sin((safeLat * Math.PI) / 180);
+  return (0.5 - Math.log((1 + sinLat) / (1 - sinLat)) / (4 * Math.PI)) * PRINT_TILE_SIZE * 2 ** zoom;
+}
+
+function getPrintMapZoom(markers: PrintMapMarker[], scope: "atlas" | "daily") {
+  if (scope === "atlas") return 5;
+
+  const lats = markers.map((item) => item.lat);
+  const lngs = markers.map((item) => item.lng);
+  const latRange = Math.max(...lats) - Math.min(...lats);
+  const lngRange = Math.max(...lngs) - Math.min(...lngs);
+  const range = Math.max(latRange, lngRange);
+
+  if (range > 1.4) return 8;
+  if (range > 0.55) return 9;
+  if (range > 0.2) return 11;
+  if (range > 0.08) return 12;
+  return 13;
+}
+
+function getTileUrl(x: number, y: number, zoom: number) {
+  const subdomains = ["a", "b", "c"];
+  const subdomain = subdomains[Math.abs(x + y) % subdomains.length];
+  return `https://${subdomain}.basemaps.cartocdn.com/rastertiles/voyager/${zoom}/${x}/${y}.png`;
+}
+
+function getTileMapLayout(markers: PrintMapMarker[], scope: "atlas" | "daily") {
+  const zoom = getPrintMapZoom(markers, scope);
+  const worldSize = PRINT_TILE_SIZE * 2 ** zoom;
+  const rawPoints = markers.map((markerItem, index) => ({
+    marker: markerItem,
+    index,
+    worldX: lonToWorldX(markerItem.lng, zoom),
+    worldY: latToWorldY(markerItem.lat, zoom)
+  }));
+  const rawMinX = Math.min(...rawPoints.map((item) => item.worldX));
+  const rawMaxX = Math.max(...rawPoints.map((item) => item.worldX));
+  const rawMinY = Math.min(...rawPoints.map((item) => item.worldY));
+  const rawMaxY = Math.max(...rawPoints.map((item) => item.worldY));
+  const rawWidth = Math.max(rawMaxX - rawMinX, scope === "atlas" ? PRINT_TILE_SIZE * 0.82 : PRINT_TILE_SIZE * 0.45);
+  const rawHeight = Math.max(rawMaxY - rawMinY, scope === "atlas" ? PRINT_TILE_SIZE * 0.64 : PRINT_TILE_SIZE * 0.38);
+  const paddingX = Math.max(rawWidth * (scope === "atlas" ? 0.12 : 0.28), PRINT_TILE_SIZE * 0.16);
+  const paddingY = Math.max(rawHeight * (scope === "atlas" ? 0.16 : 0.24), PRINT_TILE_SIZE * 0.14);
+  const minX = clamp(rawMinX - paddingX, 0, worldSize - PRINT_TILE_SIZE);
+  const maxX = clamp(rawMaxX + paddingX, PRINT_TILE_SIZE, worldSize);
+  const minY = clamp(rawMinY - paddingY, 0, worldSize - PRINT_TILE_SIZE);
+  const maxY = clamp(rawMaxY + paddingY, PRINT_TILE_SIZE, worldSize);
+  const width = Math.max(maxX - minX, PRINT_TILE_SIZE);
+  const height = Math.max(maxY - minY, PRINT_TILE_SIZE);
+  const minTileX = Math.floor(minX / PRINT_TILE_SIZE);
+  const maxTileX = Math.floor(maxX / PRINT_TILE_SIZE);
+  const minTileY = Math.floor(minY / PRINT_TILE_SIZE);
+  const maxTileY = Math.floor(maxY / PRINT_TILE_SIZE);
+  const maxTile = 2 ** zoom - 1;
+  const tiles = [];
+
+  for (let tileX = clamp(minTileX, 0, maxTile); tileX <= clamp(maxTileX, 0, maxTile); tileX += 1) {
+    for (let tileY = clamp(minTileY, 0, maxTile); tileY <= clamp(maxTileY, 0, maxTile); tileY += 1) {
+      tiles.push({
+        key: `${zoom}-${tileX}-${tileY}`,
+        src: getTileUrl(tileX, tileY, zoom),
+        left: ((tileX * PRINT_TILE_SIZE - minX) / width) * 100,
+        top: ((tileY * PRINT_TILE_SIZE - minY) / height) * 100,
+        width: (PRINT_TILE_SIZE / width) * 100,
+        height: (PRINT_TILE_SIZE / height) * 100
+      });
+    }
+  }
+
+  const projectedMarkers: ProjectedPrintMarker[] = rawPoints.map((item) => ({
+    ...item.marker,
+    index: item.index,
+    x: ((item.worldX - minX) / width) * 100,
+    y: ((item.worldY - minY) / height) * 100
+  }));
+
+  return {
+    tiles,
+    markers: projectedMarkers.map((item) => ({
+      ...item,
+      x: clamp(item.x, 4, 96),
+      y: clamp(item.y, 4, 96)
+    }))
+  };
+}
+
+function PrintTileMap({ markers, scope }: { markers: PrintMapMarker[]; scope: "atlas" | "daily" }) {
+  if (!markers.length) return <div className="print-tile-map print-tile-map-empty">지도 데이터가 부족합니다.</div>;
+
+  const layout = getTileMapLayout(markers, scope);
+  const routePoints = layout.markers.filter((item) => item.includeInRoute !== false);
+  const routePolyline = routePoints.map((item) => `${item.x},${item.y}`).join(" ");
+
+  return (
+    <div className={`print-tile-map print-tile-map-${scope}`}>
+      {layout.tiles.map((tile) => (
+        <img
+          key={tile.key}
+          src={tile.src}
+          alt=""
+          loading="eager"
+          decoding="sync"
+          referrerPolicy="no-referrer"
+          onError={(event) => {
+            event.currentTarget.style.display = "none";
+          }}
+          style={{
+            left: `${tile.left}%`,
+            top: `${tile.top}%`,
+            width: `${tile.width}%`,
+            height: `${tile.height}%`
+          }}
+        />
+      ))}
+      {routePolyline && (
+        <svg className="print-tile-route" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
+          <polyline points={routePolyline} fill="none" />
+        </svg>
+      )}
+      {layout.markers.map((markerItem) => (
+        <span
+          key={`${markerItem.name}-${markerItem.index}`}
+          className={`print-tile-pin ${markerItem.variant === "stay" ? "print-tile-pin-stay" : ""}`}
+          style={{ left: `${markerItem.x}%`, top: `${markerItem.y}%` }}
+        >
+          {markerItem.variant === "stay" ? "H" : markerItem.label}
+        </span>
+      ))}
+    </div>
+  );
+}
+
 function getAllRouteMarkers() {
   const majorRoute = [
     marker("Rome", 41.9028, 12.4964),
@@ -434,41 +585,6 @@ function getDailyMarkers(guide: DailyGuide) {
       name: place.name,
       label: String(index + 1)
     })));
-}
-
-function getMapFit(markers: PrintMapMarker[], scope: "atlas" | "daily") {
-  if (scope === "atlas") {
-    return {
-      fitPadding: 28,
-      maxZoom: 7
-    };
-  }
-
-  if (markers.length >= 14) {
-    return {
-      fitPadding: 68,
-      maxZoom: 11
-    };
-  }
-
-  if (markers.length >= 8) {
-    return {
-      fitPadding: 62,
-      maxZoom: 12
-    };
-  }
-
-  if (markers.length >= 4) {
-    return {
-      fitPadding: 54,
-      maxZoom: 13
-    };
-  }
-
-  return {
-    fitPadding: 46,
-    maxZoom: 14
-  };
 }
 
 function CoverPage({ payload, design }: { payload: TravelPayload; design: PrintGuideDesign }) {
@@ -578,6 +694,47 @@ function GuideIntroPage({ payload, design }: { payload: TravelPayload; design: P
   );
 }
 
+function getRouteArcLabel(day: number) {
+  if (day <= 6) return "Eastern Sicily";
+  if (day <= 9) return "Malta";
+  if (day <= 15) return "Western Sicily";
+  if (day <= 18) return "Mainland Coast";
+  return "Rome";
+}
+
+function GuideIndexPage({ items }: { items: MasterTimelineItem[] }) {
+  const grouped = items.reduce<Record<string, MasterTimelineItem[]>>((acc, item) => {
+    const label = getRouteArcLabel(item.day);
+    acc[label] = acc[label] ?? [];
+    acc[label].push(item);
+    return acc;
+  }, {});
+
+  return (
+    <section className="guide-page guide-index page-break-before">
+      <SectionTitle eyebrow="Guide Index" title="Day Finder" note="오프라인에서 빠르게 찾는 날짜별 목차" />
+      <div className="guide-index-grid">
+        {Object.entries(grouped).map(([label, days]) => (
+          <article key={label} className="guide-index-block avoid-break-inside">
+            <p>{label}</p>
+            <div>
+              {days.map((item) => (
+                <div key={item.id} className="guide-index-row">
+                  <strong>{String(item.day).padStart(2, "0")}</strong>
+                  <span>
+                    <b>{item.dateLabel}</b>
+                    {item.primaryRoute}
+                  </span>
+                </div>
+              ))}
+            </div>
+          </article>
+        ))}
+      </div>
+    </section>
+  );
+}
+
 function SectionTitle({ eyebrow, title, note }: { eyebrow: string; title: string; note?: string }) {
   return (
     <header className="guide-section-title">
@@ -632,7 +789,6 @@ function FlightSummary({ tickets, title }: { tickets: FlightTicket[]; title: str
 
 function RouteAtlas() {
   const markers = getAtlasMarkers();
-  const mapFit = getMapFit(markers, "atlas");
 
   if (!markers.length) return null;
 
@@ -640,7 +796,7 @@ function RouteAtlas() {
     <section className="guide-page page-break-before">
       <SectionTitle eyebrow="Route Overview" title="Route Atlas" note="주요 도시와 거점만 표시한 전체 동선" />
       <div className="route-atlas-map avoid-break-inside">
-        <MultiOsmMap markers={markers} className="absolute inset-0 h-full w-full" fitPadding={mapFit.fitPadding} maxZoom={mapFit.maxZoom} printOptimized mapVariant="atlas" />
+        <PrintTileMap markers={markers} scope="atlas" />
       </div>
       <div className="map-key-grid">
         {markers.map((marker) => (
@@ -761,6 +917,7 @@ function CityVisitBox({ visit }: { visit: DailyCityVisit }) {
 function PlaceBrief({ place, index }: { place: DailyGuidePlace; index: number }) {
   const seeItems = place.whatToSee?.slice(0, 2) ?? [];
   const tipItems = place.tips?.slice(0, 1) ?? [];
+  const summary = truncateText(place.detailDescription || place.shortDescription || place.description, 460);
 
   return (
     <article className="place-brief essential-place avoid-break-inside">
@@ -777,28 +934,28 @@ function PlaceBrief({ place, index }: { place: DailyGuidePlace; index: number })
           </div>
           <span>{place.category}</span>
         </div>
-        <p className="place-summary">{truncateText(place.detailDescription || place.shortDescription || place.description, 520)}</p>
-        {(seeItems.length > 0 || tipItems.length > 0) && (
-          <div className="place-columns">
-            {seeItems.length > 0 && (
-              <div>
-                <b>See</b>
-                <ul>
-                  {seeItems.map((item) => <li key={item}>{item}</li>)}
-                </ul>
-              </div>
-            )}
-            {tipItems.length > 0 && (
-              <div>
-                <b>Tip</b>
-                <ul>
-                  {tipItems.map((item) => <li key={item}>{item}</li>)}
-                </ul>
-              </div>
-            )}
-          </div>
-        )}
+        <p className="place-summary">{summary}</p>
       </div>
+      {(seeItems.length > 0 || tipItems.length > 0) && (
+        <div className="place-columns">
+          {seeItems.length > 0 && (
+            <div>
+              <b>See</b>
+              <ul>
+                {seeItems.map((item) => <li key={item}>{item}</li>)}
+              </ul>
+            </div>
+          )}
+          {tipItems.length > 0 && (
+            <div>
+              <b>Tip</b>
+              <ul>
+                {tipItems.map((item) => <li key={item}>{item}</li>)}
+              </ul>
+            </div>
+          )}
+        </div>
+      )}
     </article>
   );
 }
@@ -810,7 +967,7 @@ function MorePlaceCard({ place, index }: { place: DailyGuidePlace; index: number
       <div>
         <p>Stop {String(index + 1).padStart(2, "0")} / {place.category}</p>
         <h4>{place.name}</h4>
-        <span>{truncateText(place.shortDescription || place.description, 150)}</span>
+        <span>{truncateText(place.shortDescription || place.description, 180)}</span>
       </div>
     </article>
   );
@@ -860,7 +1017,6 @@ function DailyGuidePage({ guide, sectionTitle }: { guide: DailyGuide; sectionTit
   const guidePlaces = tourismPlaces.filter((place) => !isFoodBreakPlace(place));
   const { essential: essentialPlaces, more: morePlaces } = splitGuidePlacesByPriority(guidePlaces);
   const dailyMarkers = getDailyMarkers(guide);
-  const mapFit = getMapFit(dailyMarkers, "daily");
   const heroPlace = tourismPlaces.find((place) => place.image) ?? places.find((place) => place.image);
   const daySummary = [
     { label: "Route", value: timeline?.primaryRoute ?? guide.region },
@@ -883,13 +1039,18 @@ function DailyGuidePage({ guide, sectionTitle }: { guide: DailyGuide; sectionTit
       {(heroPlace?.image || dailyMarkers.length > 0) && (
         <div className="day-visual-grid avoid-break-inside">
           {heroPlace?.image && (
-            <div className="day-hero-image">
+            <figure className="day-hero-image">
               <img src={heroPlace.image} alt={heroPlace.imageAlt} />
-            </div>
+              <figcaption>Featured stop / {heroPlace.name}</figcaption>
+            </figure>
           )}
           {dailyMarkers.length > 0 && (
             <div className="day-mini-map">
-              <MultiOsmMap markers={dailyMarkers} className="absolute inset-0 h-full w-full" fitPadding={mapFit.fitPadding} maxZoom={mapFit.maxZoom} printOptimized mapVariant="daily" />
+              <PrintTileMap markers={dailyMarkers} scope="daily" />
+              <div className="day-map-caption">
+                <span>Daily Map</span>
+                <strong>{dailyMarkers.length} mapped stops</strong>
+              </div>
             </div>
           )}
         </div>
@@ -958,6 +1119,7 @@ export const PrintLayout = ({ payload, printDesign }: { payload: TravelPayload; 
     >
       <CoverPage payload={payload} design={design} />
       <GuideIntroPage payload={payload} design={design} />
+      <GuideIndexPage items={guideData.masterTimeline} />
       <FlightSummary tickets={guideData.flightTickets} title={design.sectionLabels.flights} />
       <RouteAtlas />
       <RouteSchedule items={guideData.masterTimeline} title={design.sectionLabels.schedule} />
