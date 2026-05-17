@@ -2144,6 +2144,24 @@ body.print-body * {
   min-height: 0;
 }
 
+.daily-book-grid-dense {
+  grid-template-columns: minmax(0, 1fr) minmax(32mm, 0.56fr);
+  gap: 8px;
+}
+
+.daily-book-grid-dense .daily-main-notes {
+  display: none;
+}
+
+.daily-book-grid-dense .key-stops-grid {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 5px;
+}
+
+.daily-book-grid-dense .daily-side-notes {
+  gap: 6px;
+}
+
 .daily-overview-page {
   display: grid;
   grid-template-rows: auto auto auto minmax(0, 1fr);
@@ -2357,6 +2375,7 @@ body.print-body * {
   display: grid;
   grid-template-rows: auto auto minmax(0, 1fr);
   gap: 7px;
+  height: var(--book-height);
 }
 
 .daily-places-page-continued {
@@ -2847,10 +2866,38 @@ body.print-body * {
   overflow-wrap: anywhere;
 }
 
+.more-place-compact {
+  grid-template-columns: 15mm minmax(0, 1fr);
+  gap: 5px;
+  padding: 5px;
+}
+
+.more-place-compact img {
+  width: 15mm;
+  height: 13mm;
+}
+
+.more-place-compact p {
+  margin-bottom: 1px;
+  font-size: 7.4px;
+  line-height: 1.05;
+}
+
+.more-place-compact h4 {
+  font-size: 8.7px;
+  line-height: 1.08;
+}
+
+.more-place-compact span {
+  margin-top: 2px;
+  font-size: 7.2px;
+  line-height: 1.16;
+}
+
 .food-breaks {
   border-radius: 8px;
   background: color-mix(in srgb, var(--guide-accent) 8%, white);
-  padding: 9px;
+  padding: 7px;
 }
 
 .practical-notes {

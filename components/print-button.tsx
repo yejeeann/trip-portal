@@ -20,9 +20,11 @@ export function PrintButton() {
     <button
       type="button"
       onClick={handleDownload}
-      className="inline-flex items-center justify-center gap-2 rounded-full bg-[#D4A373] px-5 py-2.5 text-sm font-black uppercase tracking-[0.08em] text-[#1A434E] shadow-[0_12px_28px_rgba(20,36,36,0.18)] transition hover:bg-[#e2b986] focus:outline-none focus:ring-2 focus:ring-white/70"
+      className="group inline-flex h-10 items-center justify-center gap-2 rounded-full border border-[#d8c5ae] bg-white/72 px-3.5 pr-4 text-[12px] font-extrabold text-[#1A434E] shadow-[0_8px_20px_rgba(55,42,32,0.08)] transition hover:-translate-y-0.5 hover:border-[#c99a68] hover:bg-white hover:shadow-[0_14px_26px_rgba(55,42,32,0.12)] focus:outline-none focus:ring-2 focus:ring-[#d4a373]/45"
     >
-      <Download className="h-4 w-4" aria-hidden="true" />
+      <span className="flex h-6 w-6 items-center justify-center rounded-full bg-[#1A434E] text-[#F7F1E8] transition group-hover:bg-[#9B6B43]">
+        <Download className="h-3.5 w-3.5" aria-hidden="true" />
+      </span>
       PDF 다운로드
     </button>
   );

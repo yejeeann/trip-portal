@@ -144,6 +144,7 @@ function isLogisticsText(name: string, category = "") {
     "station",
     "train",
     "terminal",
+    "ferry",
     "ferry terminal",
     "ferry port",
     "port",
@@ -1359,17 +1360,17 @@ function CityGuidePage({ definition }: { definition: CityGuideDefinition }) {
 
         <div className="city-guide-body">
           <article className="city-guide-feature">
-            <span>Story Scope</span>
+            <span>Chapter Route</span>
             <p>
-              {definition.title} 권역은 일정 순서대로 {cityNames.join(" / ")}의 장소를 묶어 읽습니다.
-              각 story block은 Daily Page B에서 줄인 장소 배경을 확장하고, 이미지가 확인된 관광지만 개별 카드로 싣습니다.
+              {definition.title} 장은 실제 여정의 흐름을 따라 {cityNames.join(" / ")}의 장소를 이어 읽도록 구성했습니다.
+              하루 일정 카드에서 짧게 다룬 배경을 넓혀, 현장에서 기억하면 좋은 역사와 풍경, 관람 포인트를 장소별 이야기로 정리했습니다.
             </p>
           </article>
           <div className="city-guide-map">
             <PrintTileMap markers={mapMarkers} scope="daily" />
             <div className="day-map-caption">
               <span>City Map</span>
-              <strong>{mapMarkers.length} story places</strong>
+              <strong>{mapMarkers.length} detailed places</strong>
             </div>
           </div>
         </div>
@@ -2238,14 +2239,22 @@ function KeyStopCard({ place, stopNumber, hideImage }: { place: DailyGuidePlace;
   );
 }
 
-function MorePlaceCard({ place, stopNumber }: { place: DailyGuidePlace; stopNumber: string }) {
+function MorePlaceCard({
+  place,
+  stopNumber,
+  compact = false
+}: {
+  place: DailyGuidePlace;
+  stopNumber: string;
+  compact?: boolean;
+}) {
   return (
-    <article className="more-place avoid-break-inside">
+    <article className={`more-place ${compact ? "more-place-compact" : ""} avoid-break-inside`}>
       {place.image && <img src={place.image} alt={place.imageAlt} />}
       <div>
         <p>Stop {stopNumber} / {place.category}</p>
         <h4>{place.name}</h4>
-        <span>{pageCardText(place.shortDescription || place.description, 145)}</span>
+        <span>{pageCardText(place.shortDescription || place.description, compact ? 86 : 145)}</span>
       </div>
     </article>
   );
@@ -2300,7 +2309,7 @@ function FoodBreaks({ places, getStopNumber }: { places: DailyGuidePlace[]; getS
       </div>
       <div className="food-break-grid">
         {places.map((place) => (
-          <MorePlaceCard key={place.id} place={place} stopNumber={getStopNumber(place.id)} />
+          <MorePlaceCard key={place.id} place={place} stopNumber={getStopNumber(place.id)} compact />
         ))}
       </div>
     </section>
@@ -2395,6 +2404,7 @@ function DailyGuidePage({ guide, sectionTitle }: { guide: DailyGuide; sectionTit
     { label: "Key Tip", value: getDayTip(guide, timeline) }
   ];
   const practicalNotes = getPracticalNotes(guide, timeline);
+  const compactFirstPageGrid = keyPlaces.length > 0 && secondaryPlaces.length === 0;
 
   const getStopNumber = (placeId: string) => {
     const idx = tourismPlaces.findIndex(p => p.id === placeId);
@@ -2453,7 +2463,7 @@ function DailyGuidePage({ guide, sectionTitle }: { guide: DailyGuide; sectionTit
           </article>
         )}
 
-        <div className="daily-book-grid">
+        <div className={`daily-book-grid ${compactFirstPageGrid ? "daily-book-grid-dense" : ""}`}>
           {keyPlaces.length > 0 && (
             <section className="daily-edit-section key-stops-section">
               <div className="daily-edit-title">
