@@ -400,7 +400,7 @@ PDF 메모:
 
 ##### Gżira
 
-- 이미지: `/travel-photos/sicily-day7-9/valletta-grand-harbour.jpg`
+- 이미지: `/travel-photos/sicily-day7-9/gzira-harbour.jpg`
 - 상세설명: Gzira는 발레타 북서쪽 Marsamxett Harbour를 마주 보는 숙소 거점입니다. 몰타의 중세 수도나 기사단 도시처럼 강한 랜드마크를 가진 곳은 아니지만, Sliema와 Msida 사이에 있어 택시·페리·버스 동선이 편하고 짧은 체류에서 짐을 두고 움직이기에 안정적입니다. 맞은편 Manoel Island와 발레타 성벽 방향의 항구 풍경이 있어 저녁 산책을 붙이기도 좋습니다. Day 7~9에서는 관광 카드라기보다 몰타 섬 안팎을 오가는 베이스캠프로 두는 것이 정확하며, 발레타, Cirkewwa, Mdina, 공항으로 이동 시간을 판단하는 기준점입니다. PDF에서는 체크인/체크아웃, Airbnb 링크, 짐 보관 여부, 이른 출발 준비 메모를 함께 배치하면 유용합니다. 숙소 거점 설명을 넣어두면 각 관광지의 출발·귀환 시간이 더 현실적으로 읽힙니다.
 
 ##### Valletta
@@ -448,7 +448,7 @@ PDF 메모:
 
 ##### Cirkewwa Ferry Terminal
 
-- 이미지: `/travel-photos/sicily-day7-9/mgarr-harbour-gozo.jpg`
+- 이미지: `/travel-photos/sicily-day7-9/cirkewwa-ferry-terminal.jpg`
 - 상세설명: Cirkewwa Ferry Terminal은 몰타 본섬 북서쪽 끝에서 Gozo와 Comino 보트 동선이 갈라지는 기준점입니다. Day 8에서는 Gozo 직행보다 Blue Lagoon 혼잡을 줄이기 위해 Cirkewwa에서 Comino로 먼저 들어간 뒤, 늦은 오전 Mgarr Harbour로 넘어가는 흐름이 더 안정적입니다. 관광 명소 자체라기보다 섬 이동의 성공 여부를 결정하는 물류 지점이므로, Gzira에서 45~60분 이동해 도착하면 보트 체크인, 귀환 시간, Mgarr 연결 가능 여부를 먼저 확인해야 합니다. Comino는 날씨와 대기열 변수, Blue Lagoon 방문 인원 관리 영향을 받을 수 있어 첫 보트를 앞당기는 것이 좋습니다. PDF에서는 이동 박스로 분리해 택시 45~60분, Comino 보트 약 20분, Comino->Mgarr 연결, 귀환편 확인을 명시하는 편이 좋습니다.
 
 ##### Mgarr Harbour Gozo
@@ -511,7 +511,7 @@ PDF 메모:
 
 ##### Contrada San Calogero
 
-- 이미지: `/travel-photos/sicily-day6/catania-fontanarossa-airport.jpg`
+- 이미지: `/travel-photos/sicily-day7-9/contrada-san-calogero.jpg`
 - 상세설명: Contrada San Calogero는 5/29 밤 Catania로 돌아온 뒤 하루를 마무리하는 Costa Saracena - Castelluccio 권역의 숙소 기준점입니다. 이 카드는 관광지라기보다 항공 도착 후 늦은 체크인, 주차, 열쇠 수령, 다음날 Realmonte/Agrigento 방향 이동 준비를 관리하는 실용 정보 카드입니다. 몰타에서 돌아오는 FR395편은 21:30 Catania 도착이라 실제 숙소 도착은 밤 시간이 되기 쉽고, 이때는 새로운 관광을 넣기보다 안전한 이동과 휴식이 중요합니다. 오프라인 가이드북에서는 숙소 주소, Airbnb 링크, 체크인 안내, 다음날 출발 준비를 함께 확인하는 기준점으로 쓰면 좋습니다. PDF에는 관광 설명보다 도착 후 할 일, 주차, 열쇠, 다음날 운전 준비를 체크리스트처럼 넣는 편이 실용적입니다.
 
 ## Day 10 - Villa Romana del Casale and Valley of the Temples
@@ -607,7 +607,7 @@ MCP 참조: `data/generated/sicily-day10-12-mcp.json`
 
 ##### Saline di Trapani e Paceco
 
-- 이미지: `/travel-photos/sicily-day10-12/trapani-port.jpg`
+- 이미지: `/travel-photos/sicily-day10-12/saline-di-trapani.jpg`
 - 상세설명: Saline di Trapani e Paceco는 Trapani 외곽의 염전과 옛 풍차가 이어지는 서부 시칠리아 대표 풍경입니다. 소금밭의 낮은 수면과 바람, 풍차 실루엣이 어우러져 항구 도시 Trapani가 단순한 해안 도시가 아니라 소금 생산과 해상 교역의 지형 위에 자리했다는 점을 보여줍니다. 해 질 녘에는 물빛이 분홍빛으로 변해 가장 아름답지만, Day 12는 Realmonte에서 Balestrate로 넘어가는 장거리 이동일이므로 점심 전 짧은 정차 또는 Erice 후 석양 정차 중 하나로 선택합니다. 날씨가 맑으면 Erice와 Balio Gardens에서 내려다보는 서부 해안 풍경과도 자연스럽게 연결됩니다.
 
 ##### Trapani Old Town
@@ -627,7 +627,7 @@ MCP 참조: `data/generated/sicily-day10-12-mcp.json`
 
 ##### Maria Grammatico
 
-- 이미지: `/travel-photos/sicily-day10-12/erice-panorama.jpg`
+- 이미지: `/travel-photos/sicily-day10-12/maria-grammatico.jpg`
 - 상세설명: Maria Grammatico는 Erice에서 전통 과자를 맛보는 대표 정차지입니다. 특히 따뜻한 크림 필링이 들어간 Genovesi는 산 위 마을 산책 중 짧게 넣기 좋은 간식으로, 4인 일행이 하나씩 들고 Balio Gardens 쪽으로 걸으면 동선의 분위기가 부드럽게 살아납니다. 이 장소는 긴 식사보다 15~25분 정도의 달콤한 휴식으로 잡는 편이 좋고, Trapani에서 올라온 뒤 기온이 낮아지는 Erice의 돌길과 잘 어울립니다.
 
 ##### Church of San Giuliano, Erice
@@ -736,7 +736,7 @@ MCP 참조: `data/generated/sicily-day13-15-mcp.json`
 
 ##### Monastero di Santa Caterina
 
-- 이미지: `/travel-photos/sicily-day13-15/fontana-pretoria-palermo.jpg`
+- 이미지: `/travel-photos/sicily-day13-15/monastero-santa-caterina.jpg`
 - 상세설명: Monastero di Santa Caterina는 Fontana Pretoria와 매우 가까운 위치에 있어 Palermo 도보 루프에 자연스럽게 붙는 성당·수도원 정차지입니다. 내부 장식도 아름답지만, 이 일정에서는 전통 방식의 수녀원 과자를 파는 베이커리와 카놀리 휴식 포인트로 특히 유용합니다. Ballaro 시장으로 바로 넘어가기 전 20~30분 정도 들르면 팔레르모의 종교 건축과 디저트 문화가 한 장면으로 연결됩니다. 단, Cappella Palatina 예약 시간이 있다면 디저트 휴식은 짧게 관리하고, 운영 시간은 당일 확인이 필요합니다.
 
 ##### Mercato Ballaro
@@ -835,7 +835,7 @@ MCP 참조: `data/generated/sicily-day16-19-mcp.json`
 
 ##### Tartufo di Pizzo / Piazza della Repubblica
 
-- 이미지: `/travel-photos/sicily-day16-19/castello-murat-pizzo.jpg`
+- 이미지: `/travel-photos/sicily-day16-19/tartufo-di-pizzo.jpg`
 - 상세설명: Tartufo di Pizzo는 Calabria를 대표하는 디저트로, 초콜릿과 헤이즐넛 젤라토 안에 초코 시럽이 들어간 진한 아이스크림입니다. Pizzo 중심부 Piazza della Repubblica 주변 카페에서 짧은 점심 후 디저트로 넣으면 Piedigrotta와 Castello Murat 중심의 문화 정차에 지역의 맛이 더해집니다. Calvanico까지 긴 이동이 남아 있으므로 카페 체류는 20~30분 안에서 끊고, 포장이나 빠른 테이블 이용이 가능한 곳을 당일 상황에 맞춰 고릅니다.
 
 ## Day 17 - Salerno Ferry, Amalfi, Pompeii and Rome Final Night
@@ -935,24 +935,20 @@ PDF 메모:
 
 1. 표지
 2. 전체 루트 요약 지도
-3. 항공권과 야간열차: 확정 항공편과 장거리 야간열차를 모은 이동 전용 페이지
-4. Accommodations: 숙소 전체 요약과 체크인/out 빠른 참조
-5. Day 1~19 일자별 가이드: PDF의 핵심 본문
-6. 장소별 상세 설명 부록: Daily 본문에서 줄인 긴 역사/배경 설명만 선별
+3. 항공권과 야간열차
+4. Accommodations
+5. Day 1~19 일자별 가이드
+6. 장소별 상세 설명 부록
 7. 오프라인 체크리스트
-
-구성 제외 기준:
-
-- `GuideIntro`, `GuideIndex`, `RouteSchedule`, 전면 `City & Place Guide`처럼 Daily 본문과 중복되거나 공백이 큰 섹션은 기본 PDF에 넣지 않는다.
-- 항공권과 야간열차는 이동 전용 페이지에서 요약하고, Daily Page A/B에는 같은 대형 카드를 반복하지 않는다.
-- 장소별 상세 설명 부록은 모든 장소를 다시 반복하는 장이 아니라 핵심 역사/문화/배경 설명이 긴 장소만 선별하는 텍스트 중심 부록이다.
 
 일자별 페이지 기본 템플릿:
 
 - Page A `Maps & Movement`: 날짜, 요일, 지역, 숙소, Mode/Pace/Base/Key Tip
 - Page A `Movement Map`: 도시/지역 이동, 공항, 역, 페리, 숙소 이동 기준점만 표시
 - Page A `Local Sight Map`: 도시 내부 관광지, 전망대, 성당, 유적, 광장, 해변 등 실제 관광지 핀만 표시
-- Page A `Movement Route / Sight Route`: 지도 핀과 같은 순서로 이동 흐름과 관광지 순서를 표시
+- Page A `Movement Route / Sight Route`: 지도 핀과 같은 순서로 번호와 장소명만 간결하게 표시
+- Movement Route는 번호와 이동 기준점명을 기본으로 하고, 항공권/야간열차/확정 페리처럼 티켓 시간이 있는 구간만 `편명/열차명 · 출발→도착 · 소요시간`을 한 줄로 추가한다. 장소 설명, 방문 이유, 긴 detail 문장은 넣지 않는다.
+- Sight Route는 번호와 관광지명만 표시한다. 도시명, entry point, stayDuration, routeMode, 장소 설명은 넣지 않는다.
 - Page B `Places & Practical`: 대표 이미지, Key Stops, Secondary Stops, Practical Notes, 특수 교통 카드
 - Page B 디자인: 출판형 editorial layout. 상단 대표 랜드마크 리드 스토리, 본문 Key Stops 랜드마크 인덱스, 오른쪽 사이드 레일의 Secondary Stops/Practical Notes/특수 교통 카드로 구성
 - Page B `Key Stops`: 하루의 랜드마크 인덱스. 대표 도시/핵심 관광지/필수 랜드마크를 모두 포함

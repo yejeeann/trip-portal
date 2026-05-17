@@ -457,6 +457,7 @@ function RouteOverviewMap({ trip, items }: { trip: Trip; items: MasterTimelineIt
             <MultiOsmMap
               markers={routeStops.map(stop => ({ lat: stop.lat, lng: stop.lng, label: stop.city, onClickUrl: `/trips/${trip.id}/day/${stop.day}` }))}
               className="min-h-[560px]"
+              mapVariant="atlas"
             />
           ) : (
             <div className="flex h-full min-h-[560px] items-center justify-center p-6 text-center text-sm font-bold text-moss">

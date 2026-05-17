@@ -36,7 +36,7 @@ export default function ExplorePage() {
 
       {/* 전체 화면 지도 영역 */}
       <main className="relative z-0 flex-1 w-full bg-[#E9E0D1] dark:bg-gray-900">
-        <MultiOsmMap markers={markers} className="absolute inset-0 h-full w-full" />
+        <MultiOsmMap markers={markers} className="absolute inset-0 h-full w-full" mapVariant="atlas" />
       </main>
 
       {/* 공통 하단 네비게이션 탭바 */}

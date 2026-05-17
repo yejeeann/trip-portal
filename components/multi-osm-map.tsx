@@ -20,19 +20,49 @@ type MultiOsmMapProps = {
   fitPadding?: number;
   maxZoom?: number;
   printOptimized?: boolean;
-  mapVariant?: "default" | "atlas" | "daily";
+  mapVariant?: "default" | "atlas" | "daily" | "stay";
 };
+
+const MAP_SCALE_STANDARDS = {
+  default: {
+    fitPadding: 50,
+    maxZoom: 15,
+    coordinatePaddingRatio: 0.24,
+    maxCoordinatePadding: 0.38
+  },
+  atlas: {
+    fitPadding: 54,
+    maxZoom: 8,
+    coordinatePaddingRatio: 0.18,
+    maxCoordinatePadding: 0.28
+  },
+  daily: {
+    fitPadding: 50,
+    maxZoom: 15,
+    coordinatePaddingRatio: 0.3,
+    maxCoordinatePadding: 0.62
+  },
+  stay: {
+    fitPadding: 56,
+    maxZoom: 12,
+    coordinatePaddingRatio: 0.26,
+    maxCoordinatePadding: 0.52
+  }
+} as const;
 
 export function MultiOsmMap({
   markers,
   className,
   onMarkerClick,
-  fitPadding = 36,
-  maxZoom = 15,
+  fitPadding,
+  maxZoom,
   printOptimized = false,
   mapVariant = "default"
 }: MultiOsmMapProps) {
   const router = useRouter();
+  const scaleStandard = MAP_SCALE_STANDARDS[mapVariant];
+  const resolvedFitPadding = fitPadding ?? scaleStandard.fitPadding;
+  const resolvedMaxZoom = maxZoom ?? scaleStandard.maxZoom;
   const googleMapsEmbedKey = process.env.NEXT_PUBLIC_GOOGLE_MAPS_EMBED_API_KEY;
   const useGoogleEmbed = process.env.NEXT_PUBLIC_ENABLE_GOOGLE_EMBED_MAPS === "true";
 
@@ -89,13 +119,17 @@ export function MultiOsmMap({
   const paddingRatio = printOptimized
     ? mapVariant === "atlas"
       ? 0.18
+      : mapVariant === "stay"
+      ? 0.28
       : 0.34
-    : 0.22;
+    : scaleStandard.coordinatePaddingRatio;
   const maxCoordinatePadding = printOptimized
     ? mapVariant === "atlas"
       ? 0.28
+      : mapVariant === "stay"
+      ? 0.52
       : 0.65
-    : 0.35;
+    : scaleStandard.maxCoordinatePadding;
   const latPadding = Math.min(Math.max(latRange * paddingRatio, isSingleMarker ? 0.006 : 0.002), maxCoordinatePadding);
   const lngPadding = Math.min(Math.max(lngRange * paddingRatio, isSingleMarker ? 0.006 : 0.002), maxCoordinatePadding);
   const minLat = rawMinLat - latPadding;
@@ -257,8 +291,8 @@ export function MultiOsmMap({
             [${maxLat}, ${maxLng}]
           ]);
           map.fitBounds(bounds, {
-            padding: [${fitPadding}, ${fitPadding}],
-            maxZoom: ${maxZoom}
+            padding: [${resolvedFitPadding}, ${resolvedFitPadding}],
+            maxZoom: ${resolvedMaxZoom}
           });
           
           /* Mapbox 느낌의 모던한 CARTO Voyager 타일 적용 */

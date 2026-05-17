@@ -485,7 +485,7 @@ export function TripOverview({ trip, uiConfig, appStructure }: { trip: Trip; uiC
           transition={{ duration: 0.6, ease: "easeOut" }}
           className="relative h-[50vh] min-h-[350px] w-full overflow-hidden rounded-lg border border-[#E6DAC8] shadow-[0_16px_36px_rgba(45,45,45,0.10)]"
         >
-          <MultiOsmMap markers={markers} className="absolute inset-0 h-full w-full" />
+          <MultiOsmMap markers={markers} className="absolute inset-0 h-full w-full" mapVariant="atlas" />
         </motion.div>
         {renderMapLegend()}
       </div>
@@ -541,7 +541,7 @@ export function TripOverview({ trip, uiConfig, appStructure }: { trip: Trip; uiC
               transition={{ duration: 0.6, ease: "easeOut" }}
               className="relative h-[35vh] min-h-[250px] w-full overflow-hidden rounded-lg border border-[#E6DAC8] shadow-[0_16px_36px_rgba(45,45,45,0.10)]"
             >
-              <MultiOsmMap markers={markers} className="absolute inset-0 h-full w-full" />
+              <MultiOsmMap markers={markers} className="absolute inset-0 h-full w-full" mapVariant="atlas" />
             </motion.div>
             {renderMapLegend()}
           </div>

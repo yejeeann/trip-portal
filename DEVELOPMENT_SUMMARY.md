@@ -291,7 +291,7 @@ Tailwind 확장 토큰은 `tailwind.config.ts`에 정의되어 있습니다.
 - 모바일: native app / field guide / story-style daily browsing
 - 홈: 여행 포털과 가이드 라이브러리 혼합
 
-## 환경 변수
+아 ## 환경 변수
 
 `.env.example` 기준:
 
@@ -306,7 +306,7 @@ STITCH_TRAVEL_TOOL=travel_context
 ```bash
 TRAVEL_MCP_BASE_URL=https://travelmcp.yejeelee.synology.me
 TRAVEL_MCP_SSE_URL=https://travelmcp.yejeelee.synology.me/sse
-NEXT_PUBLIC_GOOGLE_MAPS_EMBED_API_KEY=
+NEXT_PUBLIC_GOOGLE_MAPS_EMBED_APㅋㅋㅋㅋI_KEY=
 NEXT_PUBLIC_ENABLE_GOOGLE_EMBED_MAPS=true
 ```
 
@@ -316,7 +316,7 @@ NEXT_PUBLIC_ENABLE_GOOGLE_EMBED_MAPS=true
 - MCP로 보강한 관광지 설명을 `data/generated`에서 정적 가이드 데이터로 더 체계적으로 반영
 - 일자별 상세 화면의 동선 최적화 결과를 alert가 아니라 UI 상태로 반영
 - `SightsSection`, `LogisticsSection`의 데스크톱 placeholder 영역을 실제 데이터 기반 화면으로 완성
-- 지도/장소 데이터가 부족한 날짜의 placeholder 표현을 더 명확히 다듬기
+- 지도/장소 데이터가 부족한 날짜의 placeholder 표현을 더 명확히 다듬기ㅇ
 - `/api/geocode` 외부 호출 실패 시 UX와 캐시 전략 개선
 - 런타임 MCP 버튼의 라벨을 “최신 확인” 또는 “도구 실행” 성격으로 더 명확히 정리
 - 타입 안정성 보강 및 `any` 사용 축소

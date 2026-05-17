@@ -254,6 +254,7 @@ function DailyMenu({ guides, trip, uiConfig, onSelectPlace }: { guides: DailyGui
           <MultiOsmMap 
             markers={markers} 
             className="h-full w-full" 
+            mapVariant="daily"
             onMarkerClick={(id) => {
               const place = guide.places.find((p) => p.id === id);
               if (place) onSelectPlace(place, guide.region);
@@ -800,7 +801,7 @@ function RouteMenu({ trip, items }: { trip: Trip; items: MasterTimelineItem[] })
   return (
     <div className="flex h-full flex-col">
       <div className="relative z-0 h-[40vh] w-full shrink-0 overflow-hidden bg-slate-200">
-        <MultiOsmMap markers={markers} className="h-full w-full" />
+        <MultiOsmMap markers={markers} className="h-full w-full" mapVariant="atlas" />
         <div className="absolute inset-x-0 bottom-0 h-12 bg-gradient-to-t from-slate-50 to-transparent pointer-events-none" />
       </div>
 

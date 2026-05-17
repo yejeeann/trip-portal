@@ -579,6 +579,7 @@ function DailyTimeline({
                 <MultiOsmMap
                   markers={overviewRouteMarkers}
                   className="h-full w-full"
+                  mapVariant="daily"
                   onMarkerClick={(id) => {
                     if (id.startsWith("city-segment-")) {
                       const segmentId = id.replace("city-segment-", "");
@@ -1306,8 +1307,8 @@ function CityCardMapPreview({
       {markerPlaces.length > 0 ? (
         <MultiOsmMap
           className="h-56 w-full sm:h-64 lg:h-72"
-          fitPadding={44}
           maxZoom={16}
+          mapVariant="daily"
           markers={markerPlaces.map((place, index) => ({
             lat: place.coordinates!.lat,
             lng: place.coordinates!.lng,
@@ -1659,8 +1660,8 @@ function CityAttractionThread({
             </div>
             <MultiOsmMap
               className="h-72 w-full sm:h-80 lg:h-[22rem]"
-              fitPadding={52}
               maxZoom={16}
+              mapVariant="daily"
               markers={mapPlaces
                 .filter((spot) => spot.coordinates)
                 .map((spot, spotIndex) => ({

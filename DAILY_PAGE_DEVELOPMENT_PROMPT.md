@@ -54,11 +54,41 @@
    - 장소별 상세 설명 부록은 Daily 뒤에 둔다. 이미지와 짧은 장소 요약은 Daily Page B가 담당하고, 부록은 텍스트 중심의 깊은 설명만 담당한다.
    - 부록은 모든 장소를 다시 반복하는 장이 아니다. 핵심 역사/문화/배경 설명이 긴 장소만 선별해 PDF가 과도하게 길어지지 않게 한다.
 
-7. PDF Daily 확정 템플릿 기준
+7. PDF Places & Stories 부록 작성 기준
+   - `Places & Stories`는 긴 글 목록이 아니라 출판형 여행 가이드북의 읽는 부록으로 만든다.
+   - 장소를 점수순으로 섞지 않고 일정 순서에 맞춰 권역/도시별로 묶는다.
+   - 권장 권역 구분: `Rome`, `Eastern Sicily: Catania / Etna / Taormina`, `Syracuse & Ortigia`, `Southeast Baroque: Noto / Ragusa / Modica`, `Malta: Valletta / Gozo / Mdina`, `Southern Sicily: Agrigento / Realmonte`, `Western Sicily: Trapani / Erice / Palermo / Cefalu`, `Calabria / Amalfi / Pompeii`.
+   - 각 권역은 섹션 오프너를 둔다. 오프너에는 대표 이미지 1장, 권역명, 2~3줄 리드문, 포함 도시/대표 장소 목록을 넣는다.
+   - 장소별 상세는 작은 카드 나열이 아니라 editorial story block으로 구성한다.
+   - 장소별 story block에는 장소 이미지, 장소명, Day 번호, 도시명, 카테고리, 80자 안팎의 리드문, 400자 이상의 상세 설명을 넣는다.
+   - 가능하면 `Why it matters`, `Look for`, `Best moment` 같은 짧은 읽기 포인트를 1~3개 넣어 긴 문단만 이어지지 않게 한다.
+   - 400자 이상 상세 설명을 유지해야 하므로 한 페이지에는 3개 story block을 기본으로 한다. 4개 이상 긴 텍스트 카드를 한 페이지에 넣지 않는다.
+   - 장소별 정확 이미지가 있으면 반드시 사용한다. 이미지가 부정확한 경우 공용 이미지를 억지로 넣지 말고 권역 오프너 이미지로만 사용하거나 텍스트 중심 블록으로 처리한다.
+   - 같은 이미지를 여러 장소가 공유하면 대표 이미지는 권역 오프너에만 쓰고, 세부 장소에는 개별 이미지가 확보된 경우에만 넣는다.
+   - 이동 기준점, 공항, 역, 숙소, 단순 카페/식사, 짧은 보조 전망 포인트는 원칙적으로 Places & Stories 부록에서 제외한다.
+   - Daily에 포함된 관광지는 Places & Stories 커버리지 감사 대상이다. 물류/숙소/단순 식사/디저트를 제외한 관광지 기준으로 누락 0건, 이미지 누락 0건, 상세 설명 400자 미만 0건을 통과해야 한다.
+   - Daily Page B는 장소 색인과 실전 동선, Places & Stories는 배경지식과 도시 맥락을 담당한다. 두 섹션이 같은 문장과 이미지를 반복하면 실패로 본다.
+   - 부록 포함 대상은 역사/문화/건축/지형/신화 맥락이 있는 핵심 장소, 도시를 이해시키는 대표 장소, 이미지와 설명 매핑이 정확한 장소로 제한한다.
+
+8. PDF Daily 확정 템플릿 기준
    - Daily PDF는 일자별 2페이지 스프레드로 만든다.
    - Page A는 `Maps & Movement` 역할이다. 도시/지역 이동 지도, 도시 내부 관광지 지도, Movement Route, Sight Route만 배치한다.
    - Page A 지도는 번호 핀 중심으로 구성하고, 번호는 Movement Route/Sight Route 리스트와 1:1로 대응해야 한다.
-   - Movement Route/Sight Route 리스트가 장소명, 이동 흐름, 구간별 거리/시간을 담당한다. 지도 위에 같은 정보를 반복하지 않는다.
+   - Movement Route/Sight Route 리스트는 지도 번호와 장소명을 대응시키는 짧은 범례 겸 순서표다. 장소 설명, 방문 이유, 역사/배경, 긴 체류 메모를 넣지 않는다.
+   - Movement Route에는 번호와 이동 기준점명만 기본으로 표시한다. 항공권, 야간열차, 확정 페리처럼 티켓 시간이 있는 구간만 `편명/열차명 · 출발→도착 · 소요시간`을 한 줄로 추가한다.
+   - Sight Route에는 번호와 관광지명만 표시한다. 도시명, entry point, stayDuration, routeMode, 장소 설명은 넣지 않는다. 도시/권역 구분은 지도 제목 또는 Page B에서 처리한다.
+   - Page A `Movement Map`과 `Route Flow`의 라벨은 도시, 권역, 숙소 베이스, 공항, 역, 항구 같은 이동 기준점만 사용한다. `Blue Lagoon`, `Amalfi Cathedral`처럼 관광지명이 이동 라벨로 나오면 실패로 보고 `Comino`, `Amalfi` 같은 권역명으로 고친다.
+   - 항공 이동일도 Page A가 비어 보이지 않게 출발/경유/도착 공항을 `routeOverview`에 최소 2개 이상 유지한다. 도착일은 마지막 항공 구간 또는 도착 공항 중심으로 Route Flow를 만든다.
+   - Page A `Local Sight Map`은 여러 도시/권역의 관광지를 하루 전체 지도 한 장에 몰아넣지 않는다. `cityVisits` 기준으로 도시별 미니맵을 나눠 각 도시 안의 관광지가 읽히게 한다.
+   - 도시별 Sight Map의 번호는 Page B Key Stops/Place Details의 Stop 번호와 같은 번호 체계를 사용한다. 도시별로 번호를 새로 시작하지 않는다.
+   - 도시별 Sight Map 카드는 출판용 가로형 카드로 구성한다. 지도는 왼쪽, 도시명과 번호 범례는 오른쪽에 두고, 작은 2열 카드로 쪼개 지도와 글씨가 모두 작아지는 레이아웃은 피한다.
+   - 도시별 Sight Map은 지도 위에 도시/권역명을 직접 표시한다. 오른쪽 범례 제목만으로 도시명을 알게 만들면 실패로 본다.
+   - 도시별 Sight Map은 모든 관광지 핀이 한 번에 보여야 한다. 핀이 지도 경계, 도시명 배지, 카드 가장자리에 가려지면 축척과 padding을 다시 조정한다.
+   - 도시별 Sight Map 카드 내부에 과도한 빈칸이 생기면 실패로 본다. 지도 높이, 범례 글씨, 카드 밀도를 일자별 도시 수에 맞춰 조정한다.
+   - Page A `Route Flow`는 설명문 영역이 아니라 이동 요약 타임라인이다. 도시/거점 노드를 세로 순서로 배치하고, 노드와 노드 사이에는 검수된 이동수단, 거리, 시간 또는 확정 티켓 시간만 보여준다.
+   - Route Flow의 거리/시간은 장소 카드 내부나 카드 옆이 아니라 카드와 카드 사이의 연결 정보처럼 읽혀야 한다. side-by-side 배치로 보이면 실패로 본다. 장소 상세, 역사/문화 배경, 방문 이유 문장은 Page B 또는 Places & Stories로 분리한다.
+   - Movement Map에서 항공/섬 이동 같은 장거리 교통 때문에 근교 핀이 뭉쳐 보이면 전체 이동 지도는 유지하고, 밀집권만 별도 확대 미니맵으로 추가한다. 예: Day 7 Catania -> Malta 이동은 전체 지도 안에 Malta Mini Map을 둔다.
+   - 일반 차량 관광일에는 근교 확대 미니맵을 자동으로 붙이지 않는다. Day 6처럼 로드트립 전체 지도 자체가 읽히는 날에 inset이 본 지도를 가리면 실패로 본다.
    - Page A 지도 비율은 실제 카드/패널의 가로세로비에 맞춰 렌더링한다. 타일이나 경로선이 늘어나 보이면 실패로 본다.
    - Page A 지도 배경은 복잡한 웹지도처럼 보이지 않게 저채도/저라벨 타일을 사용하고, 경로선과 번호 핀이 시각적 주인공이 되게 한다.
    - Page B는 `Places & Practical` 역할이다. 대표 이미지, Key Stops, Secondary Stops, Practical Notes, 특수 교통 카드만 배치한다.
@@ -67,14 +97,14 @@
    - Secondary Stops는 보조 동선, 휴식, 분위기 장소, 선택성이 있는 짧은 정차만 둔다. 핵심 랜드마크가 Secondary로 밀리면 실패로 본다.
    - Page A와 Page B는 같은 순서를 공유해야 한다. Sight Route의 순서와 Key Stops의 순서가 다르면 원인을 확인한다.
 
-8. 핵심 장소 포함 검수
+9. 핵심 장소 포함 검수
    - 원본 KML/DOCX, MCP 산출물, 기존 `cityVisits.spots`, `places`, `routeOverview`를 대조해 도시/관광지 누락 목록을 만든다.
    - 각 일자마다 `필수 방문`, `보조 방문`, `휴식/식사`, `이동 기준점`, `선택/대안`으로 장소 역할을 분류한다.
    - `필수 방문`으로 분류한 장소는 반드시 Page A의 Local Sight Map 또는 Movement Map, Page B의 Key Stops 중 적절한 위치에 들어가야 한다.
    - 이동 기준점은 Movement Map/Movement Route에는 들어갈 수 있지만, 관광지 Key Stops에는 넣지 않는다.
    - 실제 방문이 어려운 핵심 후보는 삭제하지 않고 Secondary, 대안 루프, Field Notes 중 하나로 보존한다.
 
-9. 경로 정확도 검수
+10. 경로 정확도 검수
    - 이동거리/시간은 직선거리 추정만으로 확정하지 않는다.
    - 차량/도보/페리/기차/항공 모드별로 OSRM, Google Maps 링크, MCP `generate_map_links`, 확정 교통편 시간을 대조한다.
    - Movement Route는 실제 도로, 산악 지형, 해안 우회, 페리 대기, 주차/하차 지점을 고려한 순서여야 한다.
@@ -130,7 +160,14 @@
 - 웹/앱: 상단 지도 아래 Today Route 카드에서 도시/교통 이동 순서와 거리/시간만 보여준다.
 - Today Route에는 관광지, 랜드마크, 식사/휴식 지점을 넣지 않는다. 이들은 Local Sight Map, Sight Route, 장소 카드에서만 다룬다.
 - PDF: Page A의 Movement Route / Sight Route 리스트에서 이동 순서와 거리/시간을 보여준다.
+- PDF: Page A의 Local Sight Map은 도시/권역별 미니맵으로 분할한다. 여러 도시의 관광지를 한 장에 넣어 핀이 겹치거나 도시 내부 축척이 깨지면 실패로 본다.
+- PDF: Page A의 Route Flow는 도시/교통 거점별 이동 구간만 요약한다. 도시/거점 노드 사이에 `이동수단`, `거리`, `시간`을 세로 타임라인 연결 정보로 표시하고, 긴 설명을 출력하지 않는다.
 - 지도 비율은 실제 렌더 카드의 가로세로비를 따라야 하며, OSM/Google/정적 타일이 늘어나 보이면 실패로 본다.
+- 지도 비율과 축척은 지도 타입별 고정 기준을 사용한다. Route Atlas `140:82`, PDF Stay Map `1.55:1`, PDF Daily Movement/Sight Map `1.85:1`, PDF movement-only map `1:1`, PDF City Guide Map `1.95:1`을 기준으로 한다.
+- 앱/웹 Leaflet 지도는 `fitBounds` padding 기본값을 50px 이상으로 둔다. 전체 루트/지도 탭은 `atlas`, 일자별 상단/미니맵은 `daily`, 숙소 지도는 `stay` 축척 기준을 사용한다.
+- 정적 타일 지도는 CSS 박스 비율과 타일 bounds 계산 비율이 반드시 같아야 한다. 둘 중 하나만 바꾸면 지도 타일이 기울거나 눌린 것으로 간주한다.
+- 모든 지도는 마커가 화면 끝에 붙지 않도록 충분한 padding을 둔다. 번호 핀이 4%/96% 경계에 붙으면 축척 실패로 보고 bounds 또는 지도 분리 기준을 재검토한다.
+- 항공/페리 기반 장거리 이동과 근교 이동이 한 Movement Map에 섞여 근교 핀이 서로 겹치면 확대 미니맵을 추가한다. 일반 차량 관광일에는 전체 지도 가독성을 우선하고, 확대 미니맵은 본 지도를 가리지 않을 때만 사용한다.
 - 도로/도보 경로선은 OSRM geometry 등 검증된 route geometry만 사용한다. 실패 구간은 직선으로 그리지 않고 `거리/시간 검수 필요`로 남긴다.
 - Google Maps는 검수, 열기 링크, 단일 장소 embed에 활용하고, PDF용 지도는 인쇄 안정성을 위해 OSM 타일/정적 경로 데이터를 우선한다.
 - 앱/웹 daily 상단 지도는 접기/펼치기 컨트롤이 항상 보여야 한다.
@@ -271,7 +308,10 @@ MCP 활용 결과:
 - Local Sight Map에는 장거리 항공/기차 도착 도시를 넣지 않고 해당 도시의 실제 관광일에 다시 표시한다.
 - Today Route와 상단 City Route Map은 `routeOverview` 중 이동/교통 포인트만 사용하고 관광지를 표시하지 않는다.
 - 관광지는 Local Sight Map, Sight Route, Key Stops, 장소 카드에서만 표시한다.
+- PDF Local Sight Map은 `cityVisits` 단위로 쪼개 도시별 지도 카드로 표시한다. 각 지도 카드에는 해당 도시/권역의 관광지만 들어가야 한다.
 - 웹/앱/PDF 지도는 번호 핀과 실제 경로선만 표시하고, 거리/시간과 장소명은 Route 리스트에서 처리한다.
+- PDF Page A Route Flow는 관광지 설명을 담지 않는다. 관광지가 섞여 routeOverview가 길어지는 날은 cityVisits 기준의 도시/권역 단위로 축약하고, 노드 사이 이동 정보로 도시별 거리/시간을 먼저 보여준다.
+- PDF Movement Map은 장거리 기준점 때문에 근교 지점이 보이지 않으면 inset 미니맵을 추가한다. inset은 새 번호를 만들지 않고 기존 Movement Map 번호를 그대로 사용한다.
 - 웹/앱/PDF 지도 배경은 출판형 editorial map 스타일로 낮은 채도, 낮은 대비, 최소 라벨을 사용한다.
 - 경로선은 밝은 casing과 테마 컬러 라인을 함께 사용해 배경 지도와 분리한다.
 - 경로선 opacity와 두께는 낮게 유지하고, 위치 인지는 번호 핀과 Route 리스트가 담당하게 한다.

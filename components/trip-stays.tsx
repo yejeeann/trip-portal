@@ -67,6 +67,7 @@ export function TripStays({ trip, uiConfig }: { trip: Trip; uiConfig?: AppDesign
                 <MultiOsmMap
                   markers={stayMarkers}
                   className="absolute inset-0 h-full w-full"
+                  mapVariant="stay"
                   onMarkerClick={(id) => document.getElementById(`stay-${id}`)?.scrollIntoView({ behavior: "smooth", block: "center" })}
                 />
               </div>
