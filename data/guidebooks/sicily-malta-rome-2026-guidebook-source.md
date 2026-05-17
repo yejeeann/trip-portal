@@ -873,7 +873,7 @@ MCP 참조: `data/generated/sicily-day16-19-mcp.json`
 
 ##### Amalfi
 
-- 이미지: `https://commons.wikimedia.org/wiki/Special:FilePath/Amalfi%20Coast%20(Positano).jpg?width=1600`
+- 이미지: `/travel-photos/home-hero-amalfi-editorial.png`
 - 상세설명: Amalfi는 로마 복귀 전 Campania 해안의 색을 짧게 확보하는 정차지입니다. 이 날은 다음날 FCO 10:30 출국을 앞두고 Rome 최종 숙소까지 들어가야 하므로, Amalfi Coast 전체 드라이브나 Positano/Ravello 확장보다 Amalfi 중심부와 항구 주변을 2시간 안팎으로 압축하는 구성이 현실적입니다. Salerno에서 페리로 접근하면 바다에서 절벽과 항구 라인을 볼 수 있고, 현지 주차 스트레스를 줄일 수 있습니다. 12:45 복귀 페리를 기준으로 움직여야 오후 Pompeii 3시간 관람과 Rome 이동이 무너지지 않습니다. 그래도 이 짧은 정차를 넣으면 Calabria에서 Campania로 넘어온 뒤 곧장 유적과 고속도로로만 끝나는 느낌을 줄이고, 남부 이탈리아 해안의 마지막 장면을 일정 안에 보존할 수 있습니다.
 
 ### 실무 메모
@@ -935,20 +935,28 @@ PDF 메모:
 
 1. 표지
 2. 전체 루트 요약 지도
-3. 항공권과 야간열차
-4. Accommodations
-5. Day 1~19 일자별 가이드
-6. 장소별 상세 설명 부록
+3. 항공권과 야간열차: 확정 항공편과 장거리 야간열차를 모은 이동 전용 페이지
+4. Accommodations: 숙소 전체 요약과 체크인/out 빠른 참조
+5. Day 1~19 일자별 가이드: PDF의 핵심 본문
+6. 장소별 상세 설명 부록: Daily 본문에서 줄인 긴 역사/배경 설명만 선별
 7. 오프라인 체크리스트
+
+구성 제외 기준:
+
+- `GuideIntro`, `GuideIndex`, `RouteSchedule`, 전면 `City & Place Guide`처럼 Daily 본문과 중복되거나 공백이 큰 섹션은 기본 PDF에 넣지 않는다.
+- 항공권과 야간열차는 이동 전용 페이지에서 요약하고, Daily Page A/B에는 같은 대형 카드를 반복하지 않는다.
+- 장소별 상세 설명 부록은 모든 장소를 다시 반복하는 장이 아니라 핵심 역사/문화/배경 설명이 긴 장소만 선별하는 텍스트 중심 부록이다.
 
 일자별 페이지 기본 템플릿:
 
-- 날짜, 요일, 지역, 숙소
-- 오늘의 이동 요약
-- 도시 이동 지도
-- 도시별 타임라인
-- 장소 카드: 이미지, 체류 시간, 상세 설명, 팁
-- 다음 이동: 거리, 소요 시간
+- Page A `Maps & Movement`: 날짜, 요일, 지역, 숙소, Mode/Pace/Base/Key Tip
+- Page A `Movement Map`: 도시/지역 이동, 공항, 역, 페리, 숙소 이동 기준점만 표시
+- Page A `Local Sight Map`: 도시 내부 관광지, 전망대, 성당, 유적, 광장, 해변 등 실제 관광지 핀만 표시
+- Page A `Movement Route / Sight Route`: 지도 핀과 같은 순서로 이동 흐름과 관광지 순서를 표시
+- Page B `Places & Practical`: 대표 이미지, Key Stops, Secondary Stops, Practical Notes, 특수 교통 카드
+- Page B 디자인: 출판형 editorial layout. 상단 대표 랜드마크 리드 스토리, 본문 Key Stops 랜드마크 인덱스, 오른쪽 사이드 레일의 Secondary Stops/Practical Notes/특수 교통 카드로 구성
+- Page B `Key Stops`: 하루의 랜드마크 인덱스. 대표 도시/핵심 관광지/필수 랜드마크를 모두 포함
+- Page B `Secondary Stops`: 보조 동선, 휴식, 분위기 장소, 선택성이 있는 짧은 정차만 배치
 
 PDF에서 특히 필요한 추가 데이터:
 
@@ -956,10 +964,21 @@ PDF에서 특히 필요한 추가 데이터:
 - 각 장소별 정적 이미지 경로
 - 각 장소별 400자 이상 상세 설명
 - 도시 간 이동 거리와 예상 소요 시간
+- 도시 내부 관광지 도보/차량 이동 순서 검수 근거
+- Movement Map과 Local Sight Map을 분리해야 하는 장거리 이동 여부
 - 운영시간, 입장권, 휴무 여부는 출발 직전 재검수 필요
 
 ## 검수 체크리스트
 
+- 각 Day의 KML/DOCX/MCP 후보 장소가 `필수 방문`, `보조 방문`, `휴식/식사`, `이동 기준점`, `선택/대안`으로 분류됐는지
+- `필수 방문` 장소가 Page B Key Stops에 모두 포함됐는지
+- 핵심 랜드마크가 Secondary Stops로 밀리지 않았는지
+- Secondary Stops에는 Monti District처럼 보조 성격의 장소만 남는지
+- Page A Sight Route 순서와 Page B Key Stops 순서가 같은지
+- Movement Route가 실제 도로, 산악 지형, 해안 우회, 페리/기차/항공 시간을 고려한 순서인지
+- 이동거리/시간은 직선거리 추정이 아니라 OSRM, Google Maps 링크, MCP 산출물, 확정 교통편 중 하나 이상의 근거로 검수됐는지
+- routeOverview 순서와 지도 핀 순서가 검수된 이동 순서와 일치하는지
+- 장거리 도시 이동과 도시 내부 관광지가 한 지도에 섞여 축척이 깨지지 않는지
 - Day 1은 Finnair 항공권만 표시되는지
 - Day 2 야간열차 카드에서 날짜 표기가 `MM/DD 시간` 형식인지
 - Day 2 Catania가 관광 카드로 과도하게 표시되지 않는지

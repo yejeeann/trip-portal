@@ -776,6 +776,110 @@ body.print-body * {
   text-align: center;
 }
 
+.transport-summary-page {
+  display: grid;
+  grid-template-rows: auto 1fr;
+  gap: 12px;
+}
+
+.transport-summary-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+  align-content: start;
+}
+
+.transport-card {
+  border: 0;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.78);
+  box-shadow: inset 0 0 0 1px rgba(222, 210, 195, 0.78);
+  padding: 11px;
+}
+
+.transport-card-header {
+  display: flex;
+  gap: 9px;
+  align-items: flex-start;
+  justify-content: space-between;
+}
+
+.transport-card-header p {
+  margin: 0 0 4px;
+  color: var(--guide-muted);
+  font-size: 8.6px;
+  font-weight: 900;
+  text-transform: uppercase;
+}
+
+.transport-card-header h3 {
+  margin: 0;
+  color: var(--guide-ink);
+  font-size: 14px;
+  font-weight: 900;
+  line-height: 1.12;
+}
+
+.transport-card-header strong {
+  flex: 0 0 auto;
+  color: var(--guide-theme);
+  font-size: 9px;
+  font-weight: 900;
+  text-align: right;
+}
+
+.transport-flight-segments .flight-segment {
+  grid-template-columns: 1fr 0.55fr 0.7fr 0.55fr;
+  gap: 6px;
+}
+
+.transport-flight-segments .flight-segment b {
+  font-size: 14px;
+}
+
+.transport-flight-segments .flight-segment span {
+  font-size: 8.6px;
+}
+
+.transport-facts {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 7px;
+  margin: 12px 0 0;
+}
+
+.transport-facts div {
+  border-radius: 7px;
+  background: var(--guide-soft);
+  padding: 7px;
+}
+
+.transport-facts dt {
+  color: var(--guide-accent);
+  font-size: 7.8px;
+  font-weight: 950;
+  text-transform: uppercase;
+}
+
+.transport-facts dd {
+  margin: 3px 0 0;
+  color: var(--guide-ink);
+  font-size: 9px;
+  font-weight: 800;
+  line-height: 1.22;
+}
+
+.transport-note-list {
+  display: grid;
+  gap: 4px;
+  margin: 10px 0 0;
+  padding-left: 13px;
+  color: var(--guide-muted);
+  font-size: 8.8px;
+  font-weight: 720;
+  line-height: 1.25;
+}
+
 .route-atlas-map {
   position: relative;
   height: 82mm;
@@ -1517,6 +1621,58 @@ body.print-body * {
   align-items: start;
 }
 
+.daily-overview-page {
+  display: grid;
+  grid-template-rows: auto auto auto minmax(0, 1fr);
+  gap: 7px;
+}
+
+.daily-overview-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 0.86fr) minmax(0, 1.14fr);
+  gap: 8px;
+  align-items: start;
+  min-height: 0;
+}
+
+.daily-overview-notes {
+  display: grid;
+  gap: 7px;
+}
+
+.daily-overview-notes .daily-edit-section {
+  margin-top: 0;
+}
+
+.daily-overview-notes .night-train-card {
+  grid-template-columns: 1fr;
+  gap: 6px;
+}
+
+.daily-overview-notes .night-train-card img {
+  width: 100%;
+  height: 22mm;
+}
+
+.daily-overview-notes .night-train-card dl,
+.daily-overview-notes .night-train-card ul {
+  grid-template-columns: 1fr;
+}
+
+.daily-overview-maps {
+  display: grid;
+  gap: 7px;
+}
+
+.daily-overview-maps .map-panel {
+  grid-template-rows: auto 40mm auto;
+  padding: 7px;
+}
+
+.daily-overview-maps .map-panel-map {
+  min-height: 40mm;
+}
+
 .daily-book-grid .daily-edit-section {
   margin-top: 0;
 }
@@ -1524,6 +1680,202 @@ body.print-body * {
 .daily-side-notes {
   display: grid;
   gap: 8px;
+}
+
+.daily-places-page {
+  display: grid;
+  grid-template-rows: auto auto auto minmax(0, 1fr) auto;
+  gap: 7px;
+}
+
+.daily-place-intro {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.58);
+  box-shadow: inset 0 0 0 1px rgba(222, 210, 195, 0.68);
+  padding: 7px 8px;
+}
+
+.daily-place-intro span {
+  display: block;
+  color: var(--guide-accent);
+  font-size: 8px;
+  font-weight: 950;
+  text-transform: uppercase;
+}
+
+.daily-place-intro strong {
+  display: block;
+  margin-top: 1px;
+  color: var(--guide-theme);
+  font-size: 13px;
+  font-weight: 950;
+}
+
+.daily-place-intro p {
+  margin: 0;
+  color: var(--guide-muted);
+  font-size: 8.8px;
+  font-weight: 800;
+  text-align: right;
+}
+
+.daily-place-gallery {
+  display: grid;
+  gap: 6px;
+}
+
+.daily-place-density-comfort .daily-place-gallery,
+.daily-place-density-medium .daily-place-gallery {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.daily-place-density-dense .daily-place-gallery {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.daily-place-density-ultra .daily-place-gallery {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 5px;
+}
+
+.daily-place-card {
+  display: grid;
+  grid-template-columns: 19mm minmax(0, 1fr);
+  gap: 6px;
+  min-width: 0;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.72);
+  box-shadow: inset 0 0 0 1px rgba(222, 210, 195, 0.72);
+  padding: 6px;
+}
+
+.daily-place-card-featured {
+  grid-template-columns: 44mm minmax(0, 1fr);
+  align-items: stretch;
+  background:
+    linear-gradient(135deg, rgba(26, 67, 78, 0.08), rgba(212, 163, 115, 0.12)),
+    rgba(255, 255, 255, 0.82);
+}
+
+.daily-place-density-dense .daily-place-card-featured,
+.daily-place-density-ultra .daily-place-card-featured {
+  grid-template-columns: 35mm minmax(0, 1fr);
+}
+
+.daily-place-card-image {
+  position: relative;
+  min-height: 17mm;
+  overflow: hidden;
+  border-radius: 6px;
+  background: var(--guide-soft);
+}
+
+.daily-place-card-featured .daily-place-card-image {
+  min-height: 29mm;
+}
+
+.daily-place-density-dense .daily-place-card-image {
+  min-height: 15mm;
+}
+
+.daily-place-density-ultra .daily-place-card {
+  display: block;
+  padding: 5px;
+}
+
+.daily-place-density-ultra .daily-place-card-image {
+  height: 13mm;
+  min-height: 13mm;
+  margin-bottom: 4px;
+}
+
+.daily-place-card-image img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.daily-place-card-image span {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--guide-theme);
+  font-size: 12px;
+  font-weight: 950;
+}
+
+.daily-place-card-body {
+  min-width: 0;
+}
+
+.daily-place-card-body p {
+  margin: 0 0 2px;
+  color: var(--guide-accent);
+  font-size: 7.8px;
+  font-weight: 950;
+  line-height: 1.1;
+  text-transform: uppercase;
+}
+
+.daily-place-card-body h4 {
+  margin: 0;
+  color: var(--guide-ink);
+  font-size: 10.2px;
+  font-weight: 950;
+  line-height: 1.1;
+  overflow-wrap: anywhere;
+}
+
+.daily-place-card-featured .daily-place-card-body h4 {
+  font-family: "Playfair Display", Georgia, serif;
+  font-size: 18px;
+  line-height: 1;
+}
+
+.daily-place-density-dense .daily-place-card-body h4 {
+  font-size: 9px;
+}
+
+.daily-place-density-ultra .daily-place-card-body h4 {
+  display: -webkit-box;
+  font-size: 8.3px;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  overflow: hidden;
+}
+
+.daily-place-card-body span {
+  display: -webkit-box;
+  margin-top: 3px;
+  color: var(--guide-muted);
+  font-size: 8.3px;
+  font-weight: 680;
+  line-height: 1.24;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  overflow: hidden;
+}
+
+.daily-place-card-featured .daily-place-card-body span {
+  font-size: 9.5px;
+  line-height: 1.35;
+  -webkit-line-clamp: 4;
+}
+
+.daily-place-density-dense .daily-place-card-body span {
+  font-size: 7.7px;
+  -webkit-line-clamp: 2;
+}
+
+.daily-place-density-ultra .daily-place-card-body span {
+  display: none;
 }
 
 .essential-place {
@@ -1685,6 +2037,75 @@ body.print-body * {
   color: var(--guide-muted);
   font-size: 10px;
   line-height: 1.34;
+}
+
+.place-appendix-page,
+.offline-checklist-page {
+  display: grid;
+  grid-template-rows: auto 1fr;
+  gap: 12px;
+}
+
+.place-appendix-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 9px;
+  align-content: start;
+}
+
+.place-appendix-card,
+.offline-checklist-card {
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.78);
+  box-shadow: inset 0 0 0 1px rgba(222, 210, 195, 0.74);
+  padding: 10px;
+}
+
+.place-appendix-card p {
+  margin: 0 0 4px;
+  color: var(--guide-accent);
+  font-size: 8.2px;
+  font-weight: 950;
+  text-transform: uppercase;
+}
+
+.place-appendix-card h3,
+.offline-checklist-card h3 {
+  margin: 0;
+  color: var(--guide-ink);
+  font-size: 13px;
+  font-weight: 900;
+  line-height: 1.18;
+}
+
+.place-appendix-card span {
+  display: block;
+  margin-top: 6px;
+  color: var(--guide-muted);
+  font-size: 9px;
+  font-weight: 620;
+  line-height: 1.38;
+}
+
+.offline-checklist-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+  align-content: start;
+}
+
+.offline-checklist-card ul {
+  display: grid;
+  gap: 6px;
+  margin: 9px 0 0;
+  padding-left: 15px;
+}
+
+.offline-checklist-card li {
+  color: var(--guide-muted);
+  font-size: 10px;
+  font-weight: 700;
+  line-height: 1.35;
 }
 
 @media print {

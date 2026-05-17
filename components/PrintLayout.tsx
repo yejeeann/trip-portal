@@ -2,6 +2,7 @@
 
 import { useEffect } from "react";
 import { sicilyGuideData } from "@/lib/sicily-guide-data";
+import { buildDailyMainRouteOverview } from "@/lib/daily-route-overview";
 import { staticPrintGuideDesign, type PrintGuideDesign } from "@/lib/print-guide-design";
 import type { DailyCityVisit, DailyGuide, DailyGuidePlace, FlightTicket, MasterTimelineItem, TimelineAccommodation } from "@/lib/swiss-guide-data";
 import type { TravelPayload } from "@/lib/types";
@@ -73,7 +74,37 @@ function getDayTimelineItem(day: number) {
 
 function getPrimaryPlaces(guide: DailyGuide) {
   const cityVisitPlaces = guide.cityVisits?.flatMap((visit) => visit.spots) ?? [];
-  return cityVisitPlaces.length ? cityVisitPlaces : guide.places;
+  const seen = new Set<string>();
+
+  return [...cityVisitPlaces, ...guide.places].filter((place) => {
+    const key = place.id || `${place.name}-${place.coordinates?.lat ?? ""}-${place.coordinates?.lng ?? ""}`;
+    if (seen.has(key)) return false;
+    seen.add(key);
+    return true;
+  });
+}
+
+function cleanPrintText(value: string | undefined) {
+  if (!value) return "";
+
+  return value
+    .replace(/Itinerary\.md\s*기준\s*/g, "")
+    .replace(/Itinerary\.md\s*반영:\s*/g, "")
+    .replace(/Itinerary\.md\s*/g, "")
+    .replace(/MCP route artifact:[^.。]*[.。]?\s*/gi, "")
+    .replace(/MCP train route check:[^.。]*[.。]?\s*/gi, "")
+    .replace(/KML\/docx\s*/gi, "")
+    .replace(/\s+/g, " ")
+    .trim();
+}
+
+function getPrintPlaceLabel(place: DailyGuidePlace) {
+  const category = place.category.trim();
+  if (!category || category.includes("꼭") || category.includes("숨은") || category.toLowerCase().includes("must")) {
+    return place.timeLabel ?? "Visit";
+  }
+
+  return category;
 }
 
 function isTransitOrEndpointName(value: string) {
@@ -116,9 +147,9 @@ function isLogisticsPlace(place: DailyGuidePlace) {
     "terminal",
     "ferry terminal",
     "ferry port",
-    "port",
-    "harbor",
-    "harbour",
+    "accommodation",
+    "lodging",
+    "hotel",
     "parking",
     "park-and-ride",
     "luggage",
@@ -137,9 +168,11 @@ function isLogisticsPlace(place: DailyGuidePlace) {
     "기차역",
     "역",
     "터미널",
-    "항구",
     "페리",
     "선착장",
+    "숙소",
+    "호텔",
+    "체크인",
     "주차",
     "짐",
     "보관",
@@ -153,6 +186,13 @@ function isLogisticsPlace(place: DailyGuidePlace) {
 
 function isFoodBreakPlace(place: DailyGuidePlace) {
   const text = `${place.name} ${place.category}`.toLowerCase();
+  if (text.includes("fontanella")) return false;
+  if (text.includes("baglio di scopello")) return false;
+  if (text.includes("monastero di santa caterina")) return false;
+  if (text.includes("mercato ballaro")) return false;
+  if (text.includes("tartufo di pizzo")) return false;
+  if (text.includes("lemon sorbet")) return false;
+
   return [
     "restaurant",
     "cafe",
@@ -292,13 +332,17 @@ function splitGuidePlacesByPriority(places: DailyGuidePlace[]) {
 }
 
 function truncateText(value: string | undefined, maxLength: number) {
-  if (!value) return "";
-  if (value.length <= maxLength) return value;
-  return `${value.slice(0, maxLength).trimEnd()}...`;
+  const cleanedValue = cleanPrintText(value);
+  if (!cleanedValue) return "";
+  if (cleanedValue.length <= maxLength) return cleanedValue;
+  return `${cleanedValue.slice(0, maxLength).trimEnd()}...`;
 }
 
 function getDayFocus(guide: DailyGuide, places: DailyGuidePlace[]) {
-  const categories = Array.from(new Set(places.map((place) => place.category).filter(Boolean))).slice(0, 3);
+  const categories = Array.from(new Set(places
+    .map((place) => getPrintPlaceLabel(place))
+    .filter((label) => label && label !== "Visit" && !label.includes(":"))
+  )).slice(0, 3);
   if (categories.length) return categories.join(" / ");
   return guide.region;
 }
@@ -316,13 +360,23 @@ function getDayTip(guide: DailyGuide, timeline?: MasterTimelineItem) {
   return truncateText(notes[0] ?? timeline?.note ?? guide.deck, 84);
 }
 
+function isPrintNoiseNote(note: string) {
+  const normalized = note.toLowerCase();
+  return [
+    "mcp route artifact",
+    "mcp train route check",
+    "itinerary.md 반영",
+    "kml/docx 후보"
+  ].some((token) => normalized.includes(token));
+}
+
 function getPracticalNotes(guide: DailyGuide, timeline?: MasterTimelineItem) {
   const notes = [
     ...(timeline?.note ? [timeline.note] : []),
     ...(guide.cityVisits?.flatMap((visit) => visit.practicalNotes ?? []) ?? [])
   ];
 
-  return Array.from(new Set(notes)).filter(Boolean).slice(0, 7);
+  return Array.from(new Set(notes)).filter(Boolean).filter((note) => !isPrintNoiseNote(note)).slice(0, 7);
 }
 
 function uniqueMarkers(markers: PrintMapMarker[]) {
@@ -599,8 +653,10 @@ function getDailyMarkers(guide: DailyGuide) {
 }
 
 function getDailyRouteMarkers(guide: DailyGuide) {
-  if (guide.routeOverview?.length) {
-    return uniqueMarkers(guide.routeOverview.map((point, index) => ({
+  const routeOverview = buildDailyMainRouteOverview(guide);
+
+  if (routeOverview.length) {
+    return uniqueMarkers(routeOverview.map((point, index) => ({
       lat: point.coordinates.lat,
       lng: point.coordinates.lng,
       name: point.name,
@@ -626,7 +682,8 @@ function getDailySightMarkers(guide: DailyGuide) {
       lat: place.coordinates!.lat,
       lng: place.coordinates!.lng,
       name: place.name,
-      label: String(index + 1)
+      label: String(index + 1),
+      includeInRoute: false
     })));
 }
 
@@ -701,6 +758,12 @@ function getAllGuidePlaces() {
     seen.add(key);
     return true;
   });
+}
+
+function getTrainVisits(guides: DailyGuide[]) {
+  return guides.flatMap((guide) => (guide.cityVisits ?? [])
+    .filter((visit) => visit.displayMode === "train" || visit.trainInfo)
+    .map((visit) => ({ guide, visit })));
 }
 
 function getCityGuidePlaces(definition: CityGuideDefinition) {
@@ -898,7 +961,7 @@ function CityGuidePage({ definition }: { definition: CityGuideDefinition }) {
             <article key={place.id} className="city-guide-place">
               <strong>{String(index + 1).padStart(2, "0")}</strong>
               <div>
-                <p>{place.category}</p>
+                <p>{getPrintPlaceLabel(place)}</p>
                 <h3>{place.name}</h3>
                 <span>{truncateText(place.shortDescription || place.description, 150)}</span>
               </div>
@@ -931,7 +994,7 @@ function CityGuidePage({ definition }: { definition: CityGuideDefinition }) {
                 <article key={place.id} className="city-guide-place">
                   <strong>{String(absoluteIndex + 1).padStart(2, "0")}</strong>
                   <div>
-                    <p>{place.category}</p>
+                    <p>{getPrintPlaceLabel(place)}</p>
                     <h3>{place.name}</h3>
                     <span>{truncateText(place.shortDescription || place.description, 170)}</span>
                   </div>
@@ -1038,6 +1101,91 @@ function FlightSummary({ tickets, title }: { tickets: FlightTicket[]; title: str
   );
 }
 
+function TransportEssentialsPage({ tickets, guides }: { tickets: FlightTicket[]; guides: DailyGuide[] }) {
+  const trainVisits = getTrainVisits(guides).filter(({ visit }) => visit.trainInfo);
+
+  if (!tickets.length && !trainVisits.length) return null;
+
+  return (
+    <section className="guide-page transport-summary-page page-break-before">
+      <SectionTitle eyebrow="Transport" title="Flights & Night Train" note="확정된 장거리 이동만 모은 전용 페이지" />
+
+      <div className="transport-summary-grid">
+        {tickets.map((ticket) => (
+          <article key={ticket.id} className="transport-card transport-card-flight avoid-break-inside">
+            <div className="transport-card-header">
+              <div>
+                <p>{ticket.title}</p>
+                <h3>{ticket.routeLabel}</h3>
+              </div>
+              <strong>{ticket.dateLabel}</strong>
+            </div>
+            <div className="flight-segments transport-flight-segments">
+              {ticket.segments.map((segment) => (
+                <div key={`${ticket.id}-${segment.flightNo}`} className="flight-segment">
+                  <div>
+                    <strong>{segment.flightNo}</strong>
+                    <span>{segment.airlineName}</span>
+                  </div>
+                  <div>
+                    <b>{segment.from.code}</b>
+                    <span>{segment.from.time}</span>
+                  </div>
+                  <div className="flight-arrow">{segment.duration}</div>
+                  <div>
+                    <b>{segment.to.code}</b>
+                    <span>{segment.to.time}</span>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </article>
+        ))}
+
+        {trainVisits.map(({ guide, visit }) => {
+          const trainInfo = visit.trainInfo;
+          if (!trainInfo) return null;
+
+          return (
+            <article key={`${guide.id}-${visit.id}`} className="transport-card transport-card-train avoid-break-inside">
+              <div className="transport-card-header">
+                <div>
+                  <p>Day {String(guide.day).padStart(2, "0")} / Overnight Train</p>
+                  <h3>{trainInfo.title}</h3>
+                </div>
+                <strong>{trainInfo.cabinType}</strong>
+              </div>
+              <dl className="transport-facts">
+                <div>
+                  <dt>Route</dt>
+                  <dd>{trainInfo.routeLabel}</dd>
+                </div>
+                <div>
+                  <dt>Depart</dt>
+                  <dd>{trainInfo.departureLabel}</dd>
+                </div>
+                <div>
+                  <dt>Arrive</dt>
+                  <dd>{trainInfo.arrivalLabel}</dd>
+                </div>
+                <div>
+                  <dt>Duration</dt>
+                  <dd>{trainInfo.durationLabel}</dd>
+                </div>
+              </dl>
+              <ul className="transport-note-list">
+                {trainInfo.highlights.slice(0, 3).map((item) => (
+                  <li key={item}>{item}</li>
+                ))}
+              </ul>
+            </article>
+          );
+        })}
+      </div>
+    </section>
+  );
+}
+
 function RouteAtlas() {
   const markers = getAtlasMarkers();
 
@@ -1136,7 +1284,8 @@ function StayDirectory({ stays, title }: { stays: StayRow[]; title: string }) {
 }
 
 function RouteOverview({ guide }: { guide: DailyGuide }) {
-  if (!guide.routeOverview?.length) return null;
+  const routeOverview = buildDailyMainRouteOverview(guide);
+  if (!routeOverview.length) return null;
 
   return (
     <section className="day-route-flow avoid-break-inside">
@@ -1145,11 +1294,11 @@ function RouteOverview({ guide }: { guide: DailyGuide }) {
         <strong>오늘의 동선</strong>
       </div>
       <div className="day-route-strip">
-        {guide.routeOverview.slice(0, 6).map((point, index) => (
+        {routeOverview.slice(0, 6).map((point, index) => (
           <div key={point.id}>
             <span>{index + 1}</span>
             <strong>{point.name}</strong>
-            {point.detail && <p>{point.detail}</p>}
+            {point.detail && <p>{cleanPrintText(point.detail)}</p>}
           </div>
         ))}
       </div>
@@ -1234,7 +1383,7 @@ function DailyMapPage({ guide, sectionTitle }: { guide: DailyGuide; sectionTitle
   const routeMarkers = getDailyRouteMarkers(guide);
   const sightMarkers = getDailySightMarkers(guide);
   const trainVisits = guide.cityVisits?.filter((visit) => visit.displayMode === "train" || visit.trainInfo) ?? [];
-  const routePoints = guide.routeOverview ?? [];
+  const routePoints = buildDailyMainRouteOverview(guide);
 
   if (!routeMarkers.length && !sightMarkers.length && !trainVisits.length) return null;
 
@@ -1268,7 +1417,7 @@ function DailyMapPage({ guide, sectionTitle }: { guide: DailyGuide; sectionTitle
               <strong>{String(index + 1).padStart(2, "0")}</strong>
               <div>
                 <h3>{point.name}</h3>
-                <p>{point.detail}</p>
+                <p>{cleanPrintText(point.detail)}</p>
               </div>
             </article>
           ))}
@@ -1321,7 +1470,7 @@ function PlaceBrief({ place, index }: { place: DailyGuidePlace; index: number })
             <p>Stop {String(index + 1).padStart(2, "0")}</p>
             <h4>{place.name}</h4>
           </div>
-          <span>{place.category}</span>
+          <span>{getPrintPlaceLabel(place)}</span>
         </div>
         <p className="place-summary">{summary}</p>
       </div>
@@ -1354,7 +1503,7 @@ function MorePlaceCard({ place, index }: { place: DailyGuidePlace; index: number
     <article className="more-place avoid-break-inside">
       {place.image && <img src={place.image} alt={place.imageAlt} />}
       <div>
-        <p>Stop {String(index + 1).padStart(2, "0")} / {place.category}</p>
+        <p>Stop {String(index + 1).padStart(2, "0")} / {getPrintPlaceLabel(place)}</p>
         <h4>{place.name}</h4>
         <span>{truncateText(place.shortDescription || place.description, 120)}</span>
       </div>
@@ -1411,7 +1560,10 @@ function DailyFieldNotes({
     ...(guide.editorial ?? []),
     guide.deck,
     timeline?.note
-  ].filter(Boolean)));
+  ].filter((note): note is string => Boolean(note))))
+    .filter((note) => !isPrintNoiseNote(note))
+    .map((note) => cleanPrintText(note))
+    .filter(Boolean);
 
   if (!notes.length) return null;
 
@@ -1430,18 +1582,94 @@ function DailyFieldNotes({
   );
 }
 
+function getDailyDetailPlaces(guide: DailyGuide) {
+  const places = getPrimaryPlaces(guide);
+  const tourismPlaces = places.filter((place) => !isLogisticsPlace(place) && !isFoodBreakPlace(place));
+
+  return tourismPlaces.length ? tourismPlaces : places.slice(0, 8);
+}
+
+function getDailyPlaceDensityClass(count: number) {
+  if (count >= 15) return "daily-place-density-ultra";
+  if (count >= 10) return "daily-place-density-dense";
+  if (count >= 6) return "daily-place-density-medium";
+  return "daily-place-density-comfort";
+}
+
+function DailyPlaceCard({ place, index, featured = false }: { place: DailyGuidePlace; index: number; featured?: boolean }) {
+  const summary = truncateText(place.detailDescription || place.shortDescription || place.description, featured ? 260 : 120);
+
+  return (
+    <article className={`daily-place-card ${featured ? "daily-place-card-featured" : ""} avoid-break-inside`}>
+      <div className="daily-place-card-image">
+        {place.image ? (
+          <img src={place.image} alt={place.imageAlt} />
+        ) : (
+          <span>{String(index + 1).padStart(2, "0")}</span>
+        )}
+      </div>
+      <div className="daily-place-card-body">
+        <p>Stop {String(index + 1).padStart(2, "0")} / {getPrintPlaceLabel(place)}</p>
+        <h4>{place.name}</h4>
+        <span>{summary}</span>
+      </div>
+    </article>
+  );
+}
+
+function DailyPlacesPage({ guide, sectionTitle }: { guide: DailyGuide; sectionTitle: string }) {
+  const timeline = getDayTimelineItem(guide.day);
+  const places = getDailyDetailPlaces(guide);
+  const featuredPlace = places[0];
+  const restPlaces = places.slice(1);
+  const densityClass = getDailyPlaceDensityClass(places.length);
+  const practicalNotes = getPracticalNotes(guide, timeline);
+
+  return (
+    <section className={`guide-page daily-places-page ${densityClass} page-break-before`}>
+      <SectionTitle
+        eyebrow={sectionTitle}
+        title={`Day ${String(guide.day).padStart(2, "0")} Place Details`}
+        note={`${formatDate(guide.date)} / ${guide.region}`}
+      />
+
+      <div className="daily-place-intro">
+        <div>
+          <span>Page B</span>
+          <strong>방문지 상세</strong>
+        </div>
+        <p>{places.length > 0 ? `${places.length} stops from the app/web daily plan` : "No sightseeing stops for this travel day"}</p>
+      </div>
+
+      {featuredPlace ? (
+        <>
+          <DailyPlaceCard place={featuredPlace} index={0} featured />
+          {restPlaces.length > 0 && (
+            <div className="daily-place-gallery">
+              {restPlaces.map((place, index) => (
+                <DailyPlaceCard key={place.id} place={place} index={index + 1} />
+              ))}
+            </div>
+          )}
+        </>
+      ) : (
+        <DailyFieldNotes guide={guide} timeline={timeline} />
+      )}
+
+      {places.length <= 5 && practicalNotes.length > 0 && (
+        <PracticalNotes notes={practicalNotes.slice(0, 2)} />
+      )}
+    </section>
+  );
+}
+
 function DailyGuidePage({ guide, sectionTitle }: { guide: DailyGuide; sectionTitle: string }) {
   const timeline = getDayTimelineItem(guide.day);
   const places = getPrimaryPlaces(guide);
   const tourismPlaces = places.filter((place) => !isLogisticsPlace(place));
-  const foodPlaces = tourismPlaces.filter(isFoodBreakPlace);
-  const guidePlaces = tourismPlaces.filter((place) => !isFoodBreakPlace(place));
-  const { essential: essentialPlaces, more: morePlaces } = splitGuidePlacesByPriority(guidePlaces);
-  const featuredPlaces = essentialPlaces.slice(0, 1);
-  const secondaryPlaces = [...essentialPlaces.slice(1), ...morePlaces].slice(0, 1);
-  const dailyFoodPlaces = secondaryPlaces.length === 0 ? foodPlaces.slice(0, 1) : [];
+  const routeMarkers = getDailyRouteMarkers(guide);
   const dailyMarkers = getDailySightMarkers(guide);
-  const heroPlace = tourismPlaces.find((place) => place.image) ?? places.find((place) => place.image);
+  const routePoints = buildDailyMainRouteOverview(guide);
   const daySummary = [
     { label: "Route", value: timeline?.primaryRoute ?? guide.region },
     { label: "Pace", value: getDayPace(guide, tourismPlaces.length) },
@@ -1452,7 +1680,7 @@ function DailyGuidePage({ guide, sectionTitle }: { guide: DailyGuide; sectionTit
 
   return (
     <>
-      <section className="guide-page day-page page-break-before">
+      <section className="guide-page day-page daily-overview-page page-break-before">
         <header className="day-header">
           <div className="day-badge">Day {String(guide.day).padStart(2, "0")}</div>
           <div>
@@ -1460,26 +1688,6 @@ function DailyGuidePage({ guide, sectionTitle }: { guide: DailyGuide; sectionTit
             <h2>{guide.title}</h2>
           </div>
         </header>
-
-        {(heroPlace?.image || dailyMarkers.length > 0) && (
-          <div className="day-visual-grid avoid-break-inside">
-            {heroPlace?.image && (
-              <figure className="day-hero-image">
-                <img src={heroPlace.image} alt={heroPlace.imageAlt} />
-                <figcaption>Featured stop / {heroPlace.name}</figcaption>
-              </figure>
-            )}
-            {dailyMarkers.length > 0 && (
-              <div className="day-mini-map">
-                <PrintTileMap markers={dailyMarkers} scope="daily" />
-                <div className="day-map-caption">
-                  <span>Sight Map</span>
-                  <strong>{dailyMarkers.length} mapped stops</strong>
-                </div>
-              </div>
-            )}
-          </div>
-        )}
 
         <div className="day-brief day-summary-grid">
           {daySummary.map((item) => (
@@ -1490,52 +1698,121 @@ function DailyGuidePage({ guide, sectionTitle }: { guide: DailyGuide; sectionTit
           ))}
         </div>
         <p className="day-mood">{truncateText(guide.deck, 220)}</p>
-        <RouteOverview guide={guide} />
 
-        <div className="daily-book-grid">
-          <div>
-            {featuredPlaces.length > 0 && (
-              <section className="daily-edit-section">
-                <div className="daily-edit-title">
-                  <span>Editor's Picks</span>
-                  <strong>오늘 꼭 볼 장소</strong>
-                </div>
-                <div className="place-grid essential-grid">
-                  {featuredPlaces.map((place, index) => <PlaceBrief key={place.id} place={place} index={index} />)}
-                </div>
-              </section>
-            )}
-            {featuredPlaces.length === 0 && (
+        <div className="daily-overview-grid">
+          <div className="daily-overview-notes">
+            <RouteOverview guide={guide} />
+            <PracticalNotes notes={practicalNotes.slice(0, 2)} />
+            {!routePoints.length && !practicalNotes.length && (
               <DailyFieldNotes guide={guide} timeline={timeline} />
             )}
-            {featuredPlaces.length > 0 && secondaryPlaces.length === 0 && dailyFoodPlaces.length === 0 && (
-              <DailyFieldNotes guide={guide} timeline={timeline} compact />
-            )}
           </div>
-          <aside className="daily-side-notes">
-            {secondaryPlaces.length > 0 && (
-              <section className="daily-edit-section">
-                <div className="daily-edit-title">
-                  <span>Nearby Notes</span>
-                  <strong>함께 보는 장소</strong>
-                </div>
-                <div className="more-place-grid">
-                  {secondaryPlaces.map((place, index) => (
-                    <MorePlaceCard key={place.id} place={place} index={featuredPlaces.length + index} />
-                  ))}
-                </div>
-              </section>
-            )}
 
-            <FoodBreaks places={dailyFoodPlaces} />
-            <PracticalNotes notes={practicalNotes.slice(0, 1)} />
-          </aside>
+          <div className="daily-overview-maps">
+            <MapPanel
+              title="Movement Map"
+              caption="도시 이동 경로"
+              markers={routeMarkers}
+              emptyLabel="이동 경로 좌표가 부족합니다."
+            />
+            <MapPanel
+              title="Sight Map"
+              caption="관광지 번호"
+              markers={dailyMarkers}
+              emptyLabel="관광지 좌표가 부족합니다."
+            />
+          </div>
         </div>
       </section>
-      <DailyMapPage guide={guide} sectionTitle={sectionTitle} />
+      <DailyPlacesPage guide={guide} sectionTitle={sectionTitle} />
     </>
   );
 }
+
+function PlaceDetailAppendix() {
+  const appendixPlaces = getAllGuidePlaces()
+    .filter((place) => !isFoodBreakPlace(place))
+    .filter((place) => (place.detailDescription || place.description || "").length > 220)
+    .map((place, index) => ({ place, index, score: getEssentialScore(place) }))
+    .filter((item) => item.score > 0)
+    .sort((a, b) => b.score - a.score || a.index - b.index)
+    .slice(0, 36)
+    .map((item) => item.place);
+  const pages = chunkArray(appendixPlaces, 6);
+
+  if (!pages.length) return null;
+
+  return (
+    <>
+      {pages.map((pagePlaces, pageIndex) => (
+        <section key={`place-appendix-${pageIndex}`} className="guide-page place-appendix-page page-break-before">
+          <SectionTitle
+            eyebrow="Appendix"
+            title={pageIndex === 0 ? "Places & Stories" : "Places & Stories Continued"}
+            note="Daily 본문에서 줄인 긴 역사/배경 설명만 선별"
+          />
+          <div className="place-appendix-grid">
+            {pagePlaces.map((place, index) => (
+              <article key={`${place.id}-appendix`} className="place-appendix-card avoid-break-inside">
+                <p>{String(pageIndex * 6 + index + 1).padStart(2, "0")} / {getPrintPlaceLabel(place)}</p>
+                <h3>{place.name}</h3>
+                <span>{truncateText(place.detailDescription || place.description, 430)}</span>
+              </article>
+            ))}
+          </div>
+        </section>
+      ))}
+    </>
+  );
+}
+
+const offlineChecklistGroups = [
+  {
+    title: "Documents & Money",
+    items: ["Passport and ticket PDFs saved offline", "Travel insurance and emergency contacts", "Cards, cash, and backup payment method"]
+  },
+  {
+    title: "Transport",
+    items: ["Flight, train, ferry, and rental confirmations", "Google/OSM offline maps for each region", "Parking, ZTL, and ferry boarding notes"]
+  },
+  {
+    title: "Stays",
+    items: ["Check-in instructions and host contacts", "Door codes, parking notes, and address screenshots", "Next-day checkout and luggage plan"]
+  },
+  {
+    title: "Daily Kit",
+    items: ["Water, sunscreen, hat, and compact umbrella", "Power bank and charging cables", "Comfortable shoes for stone streets and ruins"]
+  },
+  {
+    title: "Tickets & Timing",
+    items: ["Prebooked sights and museum time slots", "Opening days rechecked before departure", "Buffer time for meals, ferries, and mountain roads"]
+  },
+  {
+    title: "Health & Safety",
+    items: ["Medication and basic first aid", "Heat, wind, and sea-condition checks", "Offline copy of this PDF on all phones"]
+  }
+];
+
+function OfflineChecklistPage() {
+  return (
+    <section className="guide-page offline-checklist-page page-break-before">
+      <SectionTitle eyebrow="Offline" title="Checklist" note="출발 전 저장하고 현장에서 확인할 항목" />
+      <div className="offline-checklist-grid">
+        {offlineChecklistGroups.map((group) => (
+          <article key={group.title} className="offline-checklist-card avoid-break-inside">
+            <h3>{group.title}</h3>
+            <ul>
+              {group.items.map((item) => (
+                <li key={item}>{item}</li>
+              ))}
+            </ul>
+          </article>
+        ))}
+      </div>
+    </section>
+  );
+}
+
 export const PrintLayout = ({ payload, printDesign }: { payload: TravelPayload; printDesign?: PrintGuideDesign }) => {
   const guideData = sicilyGuideData;
   const design = printDesign ?? staticPrintGuideDesign;
@@ -1557,36 +1834,14 @@ export const PrintLayout = ({ payload, printDesign }: { payload: TravelPayload; 
       } as React.CSSProperties}
     >
       <CoverPage payload={payload} design={design} />
-      <GuideIntroPage payload={payload} design={design} />
-      <GuideIndexPage items={guideData.masterTimeline} />
-      <ChapterOpener
-        eyebrow="Part One"
-        title="Essentials Before Departure"
-        copy="Flights, route structure, accommodation anchors, and the wide map view are grouped first so the PDF works as an offline travel book rather than a loose itinerary dump."
-        meta={["Flights", "Route Atlas", "Stay Directory", "Journey Planner"]}
-      />
-      <FlightSummary tickets={guideData.flightTickets} title={design.sectionLabels.flights} />
       <RouteAtlas />
-      <RouteSchedule items={guideData.masterTimeline} title={design.sectionLabels.schedule} />
+      <TransportEssentialsPage tickets={guideData.flightTickets} guides={guideData.dailyGuides} />
       <StayDirectory stays={stays} title={design.sectionLabels.stays} />
-      <ChapterOpener
-        eyebrow="Part Two"
-        title="City & Place Guide"
-        copy="The richest background notes are separated from the daily execution pages, so the guide can be read like a travel book before or during the trip."
-        meta={["City Essays", "Essential Sights", "History Notes", "Reading Pages"]}
-      />
-      {cityGuideDefinitions.map((definition) => (
-        <CityGuidePage key={definition.title} definition={definition} />
-      ))}
-      <ChapterOpener
-        eyebrow="Part Three"
-        title="Daily Field Guide"
-        copy="Each day is edited like a guidebook spread: a visual anchor, a readable route flow, key stops, nearby notes, food breaks, and practical reminders."
-        meta={["Daily Maps", "Editor's Picks", "Practical Notes", "Offline Reading"]}
-      />
       {guideData.dailyGuides.map((guide) => (
         <DailyGuidePage key={guide.id} guide={guide} sectionTitle={design.sectionLabels.daily} />
       ))}
+      <PlaceDetailAppendix />
+      <OfflineChecklistPage />
     </main>
   );
 };

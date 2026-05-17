@@ -32,6 +32,7 @@ import { GuideImage } from "./guide-image";
 import { AirlineLogo } from "./airline-logo";
 import { useTravelPayload } from "@/lib/travel-payload-client";
 import { useDailyMapMarkers } from "@/lib/daily-map-markers-client";
+import { buildDailyMainRouteOverview, isSightseeingPlace, isTravelLogisticsPlace } from "@/lib/daily-route-overview";
 import { calculateDistanceKm, estimateRouteTime, formatDistance, fetchOsrmRouteMetrics, formatDuration } from "@/lib/route-math";
 
 const dailyTabLabels: Record<number, string> = {
@@ -159,6 +160,7 @@ function DailyTimeline({
   const markerById = useMemo(() => {
     return new Map(markers.filter((marker) => marker.id).map((marker) => [marker.id, marker]));
   }, [markers]);
+  const mainRouteOverview = useMemo(() => buildDailyMainRouteOverview(guide), [guide]);
 
   useEffect(() => {
     const fetchMetrics = async () => {
@@ -179,8 +181,8 @@ function DailyTimeline({
 
       // 2. Overview 동선 추출
       const overviewCoords: Coordinates[] = [];
-      if (guide.routeOverview?.length) {
-        for (const point of guide.routeOverview) {
+      if (mainRouteOverview.length) {
+        for (const point of mainRouteOverview) {
           overviewCoords.push(point.coordinates);
         }
       }
@@ -229,7 +231,7 @@ function DailyTimeline({
     };
 
     fetchMetrics();
-  }, [guide.accommodation, guide.places, guide.routeOverview, markerById, guide.transportMode]);
+  }, [guide.accommodation, guide.places, mainRouteOverview, markerById, guide.transportMode]);
 
   const routeStops = useMemo(() => {
     const stops: {
@@ -338,9 +340,9 @@ function DailyTimeline({
     (isSmartFill || guide.region.includes("/") || routeStops.some((stop) => (stop.legDistanceKm ?? 0) >= 20));
 
   const explicitRouteOverviewStops = useMemo<RouteStopSummary[]>(() => {
-    if (!guide.routeOverview?.length) return [];
+    if (!mainRouteOverview.length) return [];
 
-    return guide.routeOverview.map((point, index, all) => {
+    return mainRouteOverview.map((point, index, all) => {
       const previous = all[index - 1];
       let distanceKm = previous
         ? calculateDistanceKm(previous.coordinates, point.coordinates)
@@ -365,7 +367,7 @@ function DailyTimeline({
         kind: "city" as const
       };
     });
-  }, [guide.routeOverview, routeMetrics]);
+  }, [mainRouteOverview, routeMetrics]);
 
   const compactRouteStops = useMemo(
     () => explicitRouteOverviewStops.length
@@ -378,8 +380,8 @@ function DailyTimeline({
     [compactRouteStops, guide.places]
   );
   const overviewRouteMarkers = useMemo(() => {
-    if (guide.routeOverview?.length) {
-      return guide.routeOverview.map((point, index) => ({
+    if (mainRouteOverview.length) {
+      return mainRouteOverview.map((point, index) => ({
         lat: point.coordinates.lat,
         lng: point.coordinates.lng,
         label: String(index + 1),
@@ -426,7 +428,7 @@ function DailyTimeline({
 
     const routeHasMeaningfulSpan = routeStops.some((stop) => (stop.legDistanceKm ?? 0) >= 20);
     return routeHasMeaningfulSpan ? [firstMarker, lastMarker] : [firstMarker];
-  }, [citySegments, guide.routeOverview, isCityTransferDay, markers, routeStops]);
+  }, [citySegments, mainRouteOverview, isCityTransferDay, markers, routeStops]);
 
   const cityLabel = guide.region?.split(" / ")[0] || guide.region || "Route";
   const activeDayIndex = Math.max(0, dailyGuides.findIndex((item) => item.day === guide.day));
@@ -1665,6 +1667,7 @@ function CityAttractionThread({
                   lat: spot.coordinates!.lat,
                   lng: spot.coordinates!.lng,
                   label: String(spotIndex + 1),
+                  includeInRoute: false,
                   id: spot.id
                 }))}
               onMarkerClick={(id) => {
@@ -2124,41 +2127,6 @@ function isAirTicket(ticket: FlightTicket) {
     const text = `${segment.flightNo} ${segment.airlineName} ${segment.airlineCode}`.toLowerCase();
     return !text.includes("intercity") && !text.includes("train") && !text.includes("notte");
   });
-}
-
-function isTravelLogisticsPlace(place: DailyGuidePlace) {
-  const text = `${place.name} ${place.category}`.toLowerCase();
-  return (
-    text.includes("공항") ||
-    text.includes("airport") ||
-    text.includes("기차역") ||
-    text.includes("station") ||
-    text.includes("termini") ||
-    text.includes("centrale")
-  );
-}
-
-function isSightseeingPlace(place: DailyGuidePlace) {
-  const text = `${place.name} ${place.category}`.toLowerCase();
-  const logisticsTerms = [
-    "공항",
-    "airport",
-    "기차역",
-    "station",
-    "termini",
-    "centrale",
-    "숙소",
-    "거점",
-    "체크인",
-    "도착",
-    "터미널",
-    "terminal",
-    "ferry terminal",
-    "이동 기준",
-    "mgarr harbour gozo"
-  ];
-
-  return !logisticsTerms.some((term) => text.includes(term));
 }
 
 function getSegmentSightseeingStops(spots: DailyGuidePlace[]) {

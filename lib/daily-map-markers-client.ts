@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
+import { buildDailyMainRouteOverview } from "@/lib/daily-route-overview";
 import type { DailyGuide } from "@/lib/swiss-guide-data";
 import type { Coordinates, Trip } from "@/lib/types";
 
@@ -77,6 +78,24 @@ export function useDailyMapMarkers({
         } catch {
           console.warn("Failed to geocode lodging:", guide.accommodation.name);
         }
+      }
+
+      const mainRouteOverview = buildDailyMainRouteOverview(guide);
+      if (mainRouteOverview.length) {
+        mainRouteOverview.forEach((point, index) => {
+          results.push({
+            lat: point.coordinates.lat,
+            lng: point.coordinates.lng,
+            label: String(index + 1),
+            id: `route-overview-${point.id}`
+          });
+        });
+
+        if (active) {
+          setDynamicMarkers(results);
+          setIsLoading(false);
+        }
+        return;
       }
 
       for (let i = 0; i < guide.places.length; i += 1) {

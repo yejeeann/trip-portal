@@ -125,6 +125,7 @@ export type DailyRouteOverviewPoint = {
   name: string;
   detail?: string;
   mode?: MasterTimelineItem["transportMode"];
+  mainRoute?: boolean;
   coordinates: {
     lat: number;
     lng: number;

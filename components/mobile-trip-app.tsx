@@ -28,9 +28,21 @@ import { MultiOsmMap } from "./multi-osm-map";
 import { optimizeRouteAction, generateMapLinkAction } from "@/lib/mcp-actions";
 import { PlaceBottomSheet } from "./place-detail";
 import { useDailyMapMarkers } from "@/lib/daily-map-markers-client";
+import { buildDailyMainRouteOverview } from "@/lib/daily-route-overview";
 import { AirlineLogo } from "./airline-logo";
 
 type MobileTripTab = "home" | "route" | "daily" | "sights" | "logistics";
+
+type MobileMovementStop = {
+  id: string;
+  name: string;
+  category: string;
+  timeLabel?: string;
+  description: string;
+  image?: string;
+  imageAlt?: string;
+  sourcePlace?: DailyGuidePlace;
+};
 
 export function MobileTripApp({
   trip,
@@ -91,6 +103,32 @@ function DailyMenu({ guides, trip, uiConfig, onSelectPlace }: { guides: DailyGui
 
   const guide = guides.find((g) => g.day === selectedDay) || guides[0];
   const { markers, isLoading: isMapMarkersLoading, isSmartFill } = useDailyMapMarkers({ guide, trip });
+  const mainRouteOverview = useMemo(() => guide ? buildDailyMainRouteOverview(guide) : [], [guide]);
+
+  const movementStops = useMemo<MobileMovementStop[]>(() => {
+    if (!guide) return [];
+
+    if (mainRouteOverview.length) {
+      return mainRouteOverview.map((point) => ({
+        id: `route-overview-${point.id}`,
+        name: point.name,
+        category: point.mode === "train" ? "기차 이동" : point.mode === "flight" ? "항공 이동" : point.mode === "ferry" ? "페리 이동" : "이동 경로",
+        description: point.detail ?? "",
+        timeLabel: undefined
+      }));
+    }
+
+    return guide.places.map((place) => ({
+      id: place.id,
+      name: place.name,
+      category: place.category,
+      timeLabel: place.timeLabel,
+      description: place.description,
+      image: place.image,
+      imageAlt: place.imageAlt,
+      sourcePlace: place
+    }));
+  }, [guide, mainRouteOverview]);
 
   useEffect(() => {
     scrollRef.current?.scrollTo({ top: 0, behavior: "smooth" });
@@ -101,7 +139,7 @@ function DailyMenu({ guides, trip, uiConfig, onSelectPlace }: { guides: DailyGui
     if (!guide) return;
     setIsOptimizing(true);
     const city = guide.region?.split(" / ")[0] || guide.region;
-    const stops = guide.places.map(p => ({ name: p.name, category: p.category }));
+    const stops = movementStops.map((stop) => ({ name: stop.name, category: stop.category }));
     
     try {
       const res = await optimizeRouteAction(city, stops);
@@ -121,7 +159,7 @@ function DailyMenu({ guides, trip, uiConfig, onSelectPlace }: { guides: DailyGui
     if (!guide) return;
     setIsMapLoading(true);
     const city = guide.region?.split(" / ")[0] || guide.region;
-    const stops = guide.places.map(p => ({ name: p.name }));
+    const stops = movementStops.map((stop) => ({ name: stop.name }));
     
     try {
       const res = await generateMapLinkAction(city, stops);
@@ -283,17 +321,17 @@ function DailyMenu({ guides, trip, uiConfig, onSelectPlace }: { guides: DailyGui
           </div>
 
           {/* Quick Route Summary */}
-          {guide.places.length > 0 && (
+          {movementStops.length > 0 && (
             <div className="mb-6 rounded-[1.5rem] border border-[#E6DAC8] bg-white p-5 shadow-sm">
               <h3 className="mb-3 text-[10px] font-bold uppercase tracking-widest text-[#B98045]">Movement Route</h3>
               <div className="flex flex-wrap items-center gap-2">
-                {guide.places.map((place, idx) => (
+                {movementStops.map((place, idx) => (
                   <div key={`summary-${place.id}`} className="flex items-center gap-1.5">
                     <span className="flex h-5 w-5 items-center justify-center rounded-full bg-[#E7F0EE] text-[10px] font-bold text-[#1A434E]">
                       {idx + 1}
                     </span>
                     <span className="text-xs font-bold text-[#2D2D2D]">{place.name}</span>
-                    {idx < guide.places.length - 1 && (
+                    {idx < movementStops.length - 1 && (
                       <ChevronRight className="h-3 w-3 text-[#D4A373]" />
                     )}
                   </div>
@@ -336,7 +374,7 @@ function DailyMenu({ guides, trip, uiConfig, onSelectPlace }: { guides: DailyGui
                 </motion.div>
               ))
             ) : (
-              guide.places.map((place, idx) => (
+              movementStops.map((place, idx) => (
                 <motion.div
                   key={place.id}
                   initial={{ opacity: 0, y: 15 }}
@@ -346,7 +384,7 @@ function DailyMenu({ guides, trip, uiConfig, onSelectPlace }: { guides: DailyGui
                   className="group relative flex gap-3 pb-6"
                 >
                   {/* Vertical Connection Line */}
-                  <div className={`absolute bottom-[-10px] left-[19px] top-10 w-[2px] transition-all duration-300 ${idx === guide.places.length - 1 && !guide.accommodation ? 'hidden' : 'bg-gradient-to-b from-[#D4A373]/60 via-[#E6DAC8] to-[#E6DAC8] group-hover:from-[#1A434E]/75 group-hover:via-[#D4A373]/50 group-hover:to-[#E6DAC8]'}`} />
+                  <div className={`absolute bottom-[-10px] left-[19px] top-10 w-[2px] transition-all duration-300 ${idx === movementStops.length - 1 && !guide.accommodation ? 'hidden' : 'bg-gradient-to-b from-[#D4A373]/60 via-[#E6DAC8] to-[#E6DAC8] group-hover:from-[#1A434E]/75 group-hover:via-[#D4A373]/50 group-hover:to-[#E6DAC8]'}`} />
 
                   {/* Time & Node */}
                   <div className="relative flex w-10 shrink-0 flex-col items-center pt-1">
@@ -360,8 +398,10 @@ function DailyMenu({ guides, trip, uiConfig, onSelectPlace }: { guides: DailyGui
 
                   {/* Card */}
                   <div
-                    onClick={() => onSelectPlace(place, guide.region)}
-                    className="flex-1 cursor-pointer overflow-hidden rounded-[1.5rem] border border-[#E6DAC8] bg-white/90 shadow-sm backdrop-blur-xl transition-all hover:-translate-y-1 hover:border-[#D4A373] hover:shadow-md active:scale-[0.98]"
+                    onClick={() => {
+                      if (place.sourcePlace) onSelectPlace(place.sourcePlace, guide.region);
+                    }}
+                    className={`flex-1 overflow-hidden rounded-[1.5rem] border border-[#E6DAC8] bg-white/90 shadow-sm backdrop-blur-xl transition-all hover:border-[#D4A373] hover:shadow-md ${place.sourcePlace ? "cursor-pointer hover:-translate-y-1 active:scale-[0.98]" : ""}`}
                   >
                     <div className="flex items-center gap-3 p-3 sm:p-4">
                       {place.image && (
@@ -400,7 +440,7 @@ function DailyMenu({ guides, trip, uiConfig, onSelectPlace }: { guides: DailyGui
                 initial={{ opacity: 0, y: 15 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, margin: "-10%" }}
-                transition={{ duration: 0.4, delay: guide.places.length * 0.1 }}
+                transition={{ duration: 0.4, delay: movementStops.length * 0.1 }}
                 className="relative flex gap-3 pt-2"
               >
                 <div className="relative flex w-10 shrink-0 flex-col items-center pt-1">
