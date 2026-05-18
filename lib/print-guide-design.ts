@@ -29,7 +29,7 @@ export const staticPrintGuideDesign: PrintGuideDesign = {
   coverLabel: "Independent Travel Guide",
   sectionLabels: {
     flights: "Travel Essentials",
-    schedule: "Journey Planner",
+    schedule: "Travel Framework",
     stays: "Stay Guide",
     daily: "Daily Guide"
   },

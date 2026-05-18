@@ -33,16 +33,6 @@ type PlaceStoryEntry = {
   region: string;
 };
 
-type ContentsPart = {
-  part: string;
-  title: string;
-  description: string;
-  entries: {
-    title: string;
-    note: string;
-  }[];
-};
-
 type DailyRouteListItem = {
   id: string;
   label: string;
@@ -352,8 +342,9 @@ function splitGuidePlacesByPriority(places: DailyGuidePlace[]) {
 }
 
 const MAX_KEY_STOPS_PER_DAY = 7;
-const PAGE_B_FIRST_PAGE_KEY_LIMIT = 4;
-const PAGE_B_CARD_PAGE_SIZE = 8;
+const PAGE_B_FIRST_PAGE_KEY_LIMIT = 3;
+const PAGE_B_CARD_PAGE_SIZE = 6;
+const STAY_CARDS_PER_PAGE = 8;
 
 function truncateText(value: string | undefined, maxLength: number) {
   if (!value) return "";
@@ -984,62 +975,6 @@ const cityGuideDefinitions: CityGuideDefinition[] = [
   }
 ];
 
-const contentsParts: ContentsPart[] = [
-  {
-    part: "Opening",
-    title: "Before the Journey",
-    description: "책의 사용법, 전체 동선, 여행 리듬을 먼저 잡는 도입부",
-    entries: [
-      { title: "Cover & Title", note: "guidebook identity" },
-      { title: "Route at a Glance", note: "Mediterranean route map" },
-      { title: "Day Finder", note: "date-by-date quick index" }
-    ]
-  },
-  {
-    part: "Part One",
-    title: "Essentials Before Departure",
-    description: "항공, 숙소, 전체 이동, 체크인처럼 여행 전에 확인해야 할 기준 정보",
-    entries: [
-      { title: "Flights & Transfers", note: "confirmed air segments" },
-      { title: "Route Atlas", note: "full trip geography" },
-      { title: "Journey Planner", note: "day-by-day framework" },
-      { title: "Stay Directory", note: "addresses and check-in notes" }
-    ]
-  },
-  {
-    part: "Part Two",
-    title: "Daily Journey Guide",
-    description: "날짜 순서대로 도시, 이동, 관광지, 식사와 실전 메모를 먼저 확인하는 본문",
-    entries: [
-      { title: "Days 01-06", note: "Rome arrival, Catania, Taormina, Syracuse, Noto, Ragusa" },
-      { title: "Days 07-09", note: "Malta, Valletta, Gozo, Three Cities" },
-      { title: "Days 10-15", note: "Agrigento, Trapani, Erice, Palermo, Cefalu" },
-      { title: "Days 16-18", note: "Calabria, Tropea, Salerno, Amalfi, Pompeii" },
-      { title: "Day 19", note: "Rome and return flight" }
-    ]
-  },
-  {
-    part: "Part Three",
-    title: "Places & Stories",
-    description: "일자별 페이지에서 만난 도시와 관광지를 더 깊게 읽는 지역별 해설 파트",
-    entries: cityGuideDefinitions.map((definition) => ({
-      title: definition.title,
-      note: definition.eyebrow
-    }))
-  },
-  {
-    part: "Reference",
-    title: "Back Matter",
-    description: "추가 고도화 단계에서 붙일 예약, 음식, 주소, 비상 정보 섹션",
-    entries: [
-      { title: "Food & Cafe Index", note: "planned" },
-      { title: "Reservations & Tickets", note: "planned" },
-      { title: "Addresses & Map Links", note: "planned" },
-      { title: "Emergency Notes", note: "planned" }
-    ]
-  }
-];
-
 function isSimpleFoodBreakPlace(place: DailyGuidePlace) {
   const text = `${place.name} ${place.category}`.toLowerCase();
   if (text.includes("mercato") || text.includes("market") || text.includes("pescheria") || text.includes("ballaro")) {
@@ -1214,18 +1149,17 @@ function GuideIntroPage({ payload, design }: { payload: TravelPayload; design: P
   return (
     <section className="guide-page guide-intro page-break-before">
       <div className="intro-masthead">
-        <p className="guide-kicker">Offline Guidebook Source</p>
-        <h2>{payload.trip.title || design.title}</h2>
+        <p className="guide-kicker">Journey at a Glance</p>
+        <h2>여행 한눈에 보기</h2>
         <p>{payload.trip.subtitle || design.subtitle}</p>
       </div>
 
       <div className="intro-grid">
         <article className="intro-note">
-          <span>Editorial brief</span>
+          <span>Route Rhythm</span>
           <p>
-            Built from the markdown guidebook source, confirmed transport, static attraction data, accommodations, route notes,
-            and the same warm Mediterranean visual system used in the mobile home screen. The layout is tuned for A4 reading,
-            quick daily scanning, and offline use.
+            Rome 도착과 야간열차, Sicily 동부와 남부, Malta 섬 이동, 서부 Sicily, Calabria와 Amalfi 해안을 지나
+            Rome 출국으로 이어지는 긴 호흡의 지중해 루트입니다. 이 페이지는 전체 지리와 이동 리듬을 먼저 잡기 위한 요약 지도입니다.
           </p>
         </article>
 
@@ -1267,63 +1201,24 @@ function GuideIntroPage({ payload, design }: { payload: TravelPayload; design: P
   );
 }
 
-function ChapterOpener({
-  eyebrow,
-  title,
-  copy,
-  meta
-}: {
-  eyebrow: string;
-  title: string;
-  copy: string;
-  meta: string[];
-}) {
-  return (
-    <section className="guide-page chapter-opener page-break-before">
-      <div>
-        <p className="guide-kicker">{eyebrow}</p>
-        <h2>{title}</h2>
-        <p>{copy}</p>
-      </div>
-      <div className="chapter-meta">
-        {meta.map((item) => (
-          <span key={item}>{item}</span>
-        ))}
-      </div>
-    </section>
+function getNightTrainVisits(guides: DailyGuide[]) {
+  return guides.flatMap((guide) =>
+    (guide.cityVisits ?? [])
+      .filter((visit) => visit.trainInfo)
+      .map((visit) => ({ guide, visit }))
   );
 }
 
-function TableOfContentsPage() {
-  return (
-    <section className="guide-page contents-page page-break-before">
-      <header className="contents-header">
-        <p className="guide-kicker">Contents</p>
-        <h2>Table of Contents</h2>
-      </header>
-
-      <div className="contents-part-list">
-        {contentsParts.map((part, partIndex) => (
-          <article key={part.title} className="contents-part avoid-break-inside">
-            <div className="contents-part-number">{String(partIndex + 1).padStart(2, "0")}</div>
-            <div>
-              <p>{part.part}</p>
-              <h3>{part.title}</h3>
-              <span>{part.description}</span>
-              <ol>
-                {part.entries.map((entry) => (
-                  <li key={`${part.title}-${entry.title}`}>
-                    <strong>{entry.title}</strong>
-                    <em>{entry.note}</em>
-                  </li>
-                ))}
-              </ol>
-            </div>
-          </article>
-        ))}
-      </div>
-    </section>
-  );
+function getTransportMovementRows(items: MasterTimelineItem[]) {
+  return items
+    .filter((item) => ["flight", "train", "ferry"].includes(item.transportMode ?? "") || [15, 17].includes(item.day))
+    .map((item) => ({
+      day: item.day,
+      date: item.dateLabel,
+      route: item.primaryRoute,
+      mode: modeLabel(item.transportMode),
+      stay: item.accommodation?.name ?? "Transit"
+    }));
 }
 
 function CityGuidePage({ definition }: { definition: CityGuideDefinition }) {
@@ -1352,7 +1247,7 @@ function CityGuidePage({ definition }: { definition: CityGuideDefinition }) {
           </div>
           {heroPlace?.image && (
             <figure>
-              <img src={heroPlace.image} alt={heroPlace.imageAlt} />
+              <img src={heroPlace.image} alt={heroPlace.imageAlt} style={getPlaceImageStyle(heroPlace)} />
               <figcaption>{heroPlace.name}</figcaption>
             </figure>
           )}
@@ -1376,7 +1271,7 @@ function CityGuidePage({ definition }: { definition: CityGuideDefinition }) {
         </div>
 
         <div className="city-guide-place-list city-guide-place-list-featured">
-          {entries.slice(0, 6).map((entry, index) => (
+          {entries.slice(0, 4).map((entry, index) => (
             <article key={entry.place.id} className="city-guide-place">
               <strong>{String(index + 1).padStart(2, "0")}</strong>
               <div>
@@ -1389,7 +1284,7 @@ function CityGuidePage({ definition }: { definition: CityGuideDefinition }) {
         </div>
 
         <div className="city-guide-tip-grid">
-          {entries.slice(0, 3).map((entry) => (
+          {entries.slice(0, 2).map((entry) => (
             <article key={`${entry.place.id}-tip`}>
               <span>{entry.place.name}</span>
               <p>{pageCardText(entry.place.tips?.[0] || entry.place.whatToSee?.[0] || entry.place.whyVisit?.[0] || entry.place.description, 120)}</p>
@@ -1419,7 +1314,7 @@ function CityGuidePage({ definition }: { definition: CityGuideDefinition }) {
                         alt={entry.place.imageAlt}
                         loading="eager"
                         decoding="sync"
-                        style={{ objectPosition: getPlaceImageObjectPosition(entry.place) }}
+                        style={getPlaceImageStyle(entry.place)}
                       />
                     </figure>
                   )}
@@ -1448,83 +1343,6 @@ function CityGuidePage({ definition }: { definition: CityGuideDefinition }) {
   );
 }
 
-function getRouteArcLabel(day: number) {
-  if (day <= 6) return "Eastern Sicily";
-  if (day <= 9) return "Malta";
-  if (day <= 15) return "Western Sicily";
-  if (day <= 18) return "Mainland Coast";
-  return "Rome";
-}
-
-function GuideIndexPage({ items }: { items: MasterTimelineItem[] }) {
-  const grouped = items.reduce<Record<string, MasterTimelineItem[]>>((acc, item) => {
-    const label = getRouteArcLabel(item.day);
-    acc[label] = acc[label] ?? [];
-    acc[label].push(item);
-    return acc;
-  }, {});
-  const firstDay = items[0];
-  const lastDay = items[items.length - 1];
-  const stayCount = getUniqueStays(items).length;
-  const modeCount = new Set(items.map((item) => item.transportMode).filter(Boolean)).size;
-
-  return (
-    <section className="guide-page guide-index page-break-before">
-      <header className="day-finder-header">
-        <p className="guide-kicker">Field Index</p>
-        <h2>Day Finder</h2>
-        <p>
-          여행 중에는 이 페이지에서 날짜를 먼저 찾고, Part Two의 해당 Day 페이지로 이동합니다.
-          각 행은 도시 흐름, 이동수단, 숙소 기준점을 함께 보여주는 현장용 빠른 찾기입니다.
-        </p>
-      </header>
-      <div className="day-finder-stats">
-        <div>
-          <span>Travel Window</span>
-          <strong>{firstDay?.dateLabel} - {lastDay?.dateLabel}</strong>
-        </div>
-        <div>
-          <span>Total Days</span>
-          <strong>{items.length} days</strong>
-        </div>
-        <div>
-          <span>Transport Modes</span>
-          <strong>{modeCount} modes</strong>
-        </div>
-        <div>
-          <span>Stay Bases</span>
-          <strong>{stayCount} stays</strong>
-        </div>
-      </div>
-      <div className="guide-index-grid">
-        {Object.entries(grouped).map(([label, days]) => (
-          <article key={label} className="guide-index-block avoid-break-inside">
-            <div className="guide-index-block-head">
-              <p>{label}</p>
-              <span>Days {days[0].day}-{days[days.length - 1].day}</span>
-            </div>
-            <div>
-              {days.map((item) => (
-                <div key={item.id} className="guide-index-row">
-                  <strong>{String(item.day).padStart(2, "0")}</strong>
-                  <div>
-                    <div className="guide-index-row-meta">
-                      <b>{item.dateLabel} {item.weekday}</b>
-                      <em>{modeLabel(item.transportMode)}</em>
-                    </div>
-                    <span>{item.primaryRoute}</span>
-                    <small>{item.accommodation?.name ?? "Transit / no overnight stay"}</small>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </article>
-        ))}
-      </div>
-    </section>
-  );
-}
-
 function SectionTitle({ eyebrow, title, note }: { eyebrow: string; title: string; note?: string }) {
   return (
     <header className="guide-section-title">
@@ -1535,91 +1353,21 @@ function SectionTitle({ eyebrow, title, note }: { eyebrow: string; title: string
   );
 }
 
-function PartOneOverview({ items, stays, tickets }: { items: MasterTimelineItem[]; stays: StayRow[]; tickets: FlightTicket[] }) {
-  const firstDay = items[0];
-  const lastDay = items[items.length - 1];
-  const transportModes = Array.from(new Set(items.map((item) => item.transportMode).filter(Boolean).map(modeLabel)));
-  const overviewCards = [
-    {
-      label: "01",
-      title: "Flights & Transfers",
-      copy: `${tickets.length} confirmed flight groups, airport timing, and long-transfer days kept together before the route pages.`
-    },
-    {
-      label: "02",
-      title: "Route Atlas",
-      copy: "A single geographic frame for Sicily, Malta, Calabria, Campania, and the Rome arrival/return points."
-    },
-    {
-      label: "03",
-      title: "Journey Planner",
-      copy: `${items.length} daily rows for date, route, movement mode, and overnight base.`
-    },
-    {
-      label: "04",
-      title: "Stay Directory",
-      copy: `${stays.length} accommodation bases with address and check-in/check-out reference.`
-    }
-  ];
-
-  return (
-    <section className="guide-page essentials-overview-page page-break-before">
-      <SectionTitle eyebrow="Part One" title="Overview" note="전체 여정 요약과 준비 사항" />
-
-      <div className="essentials-overview-stats">
-        <div>
-          <span>Travel Window</span>
-          <strong>{firstDay?.dateLabel} - {lastDay?.dateLabel}</strong>
-        </div>
-        <div>
-          <span>Days</span>
-          <strong>{items.length}</strong>
-        </div>
-        <div>
-          <span>Stay Bases</span>
-          <strong>{stays.length}</strong>
-        </div>
-        <div>
-          <span>Modes</span>
-          <strong>{transportModes.join(" / ")}</strong>
-        </div>
-      </div>
-
-      <div className="essentials-flow">
-        {overviewCards.map((card) => (
-          <article key={card.title}>
-            <b>{card.label}</b>
-            <div>
-              <h3>{card.title}</h3>
-              <p>{card.copy}</p>
-            </div>
-          </article>
-        ))}
-      </div>
-
-      <section className="departure-checklist avoid-break-inside">
-        <div>
-          <span>Before You Print</span>
-          <strong>Departure Checks</strong>
-        </div>
-        <ul>
-          <li>Confirm flight, ferry, train, and rental-car reservation numbers outside the PDF.</li>
-          <li>Save accommodation addresses and map links for offline use.</li>
-          <li>Download the PDF locally before departure and keep a phone copy plus a cloud copy.</li>
-          <li>Review Day Finder first, then use Part Two for the daily route pages.</li>
-        </ul>
-      </section>
-    </section>
-  );
-}
-
-function FlightSummary({ tickets, title }: { tickets: FlightTicket[]; title: string }) {
+function TransportGuidePage({
+  tickets
+}: {
+  tickets: FlightTicket[];
+}) {
   if (!tickets.length) return null;
 
   return (
-    <section className="guide-page flight-essentials-page page-break-before">
-      <SectionTitle eyebrow="Part One / Air" title={title} note="항공과 환승 흐름을 한눈에" />
-      <div className="flight-ticket-grid" style={{ display: 'grid', gap: '1.5rem' }}>
+    <section className="guide-page flight-essentials-page transport-guide-page page-break-before">
+      <SectionTitle
+        eyebrow="Transport Guide"
+        title="Flight Tickets"
+        note={`${tickets.length} confirmed flight groups`}
+      />
+      <div className="flight-ticket-grid">
         {tickets.map((ticket) => (
           <article key={ticket.id} className="guide-box avoid-break-inside">
             <div className="guide-box-header">
@@ -1655,87 +1403,189 @@ function FlightSummary({ tickets, title }: { tickets: FlightTicket[]; title: str
   );
 }
 
-function RouteAtlas() {
-  const markers = getAtlasMarkers();
-
-  if (!markers.length) return null;
+function MovementReferencePage({ items, dailyGuides }: { items: MasterTimelineItem[]; dailyGuides: DailyGuide[] }) {
+  const movementRows = getTransportMovementRows(items);
+  const trainVisits = getNightTrainVisits(dailyGuides);
+  if (!movementRows.length && !trainVisits.length) return null;
 
   return (
-    <section className="guide-page route-atlas-page page-break-before">
-      <SectionTitle eyebrow="Part One / Geography" title="Route Atlas" note="주요 도시와 거점만 표시한 전체 동선" />
-      <div className="route-atlas-map avoid-break-inside">
-        <PrintTileMap markers={markers} scope="atlas" />
-      </div>
-      <div className="map-key-grid">
-        {markers.map((marker) => (
-          <div key={`marker-${marker.label}-${marker.name}`}>
-            <strong className={marker.variant === "stay" ? "map-key-stay" : undefined}>
-              {marker.variant === "stay" ? "⌂" : marker.label}
-            </strong>
-            <span>{marker.name}</span>
+    <section className="guide-page movement-reference-page page-break-before">
+      <SectionTitle eyebrow="Transport Guide" title="Night Train & Movement Reference" note="Flights, trains, ferries and long driving days" />
+      {trainVisits.map(({ guide, visit }) => (
+        <div key={`${guide.id}-${visit.id}-movement-train`} className="transport-train-block">
+          <div className="transport-day-label">Day {String(guide.day).padStart(2, "0")} / {formatDate(guide.date)}</div>
+          <NightTrainCard visit={visit} />
+        </div>
+      ))}
+      {movementRows.length > 0 && (
+        <section className="transport-movement-table avoid-break-inside">
+          <div className="daily-edit-title">
+            <span>Movement Days</span>
+            <strong>Long-distance days</strong>
           </div>
-        ))}
-      </div>
-    </section>
-  );
-}
-
-function RouteSchedule({ items, title }: { items: MasterTimelineItem[]; title: string }) {
-  return (
-    <section className="guide-page journey-planner-page page-break-before">
-      <SectionTitle
-        eyebrow="Part One / Framework"
-        title={title}
-        note="날짜별 이동과 숙소 기준표"
-      />
-      <table className="guide-table">
-        <thead>
-          <tr>
-            <th>Day</th>
-            <th>Date</th>
-            <th>Route</th>
-            <th>Mode</th>
-            <th>Stay</th>
-          </tr>
-        </thead>
-        <tbody>
-          {items.map((item) => (
-            <tr key={item.id} className="avoid-break-inside">
-              <td>{String(item.day).padStart(2, "0")}</td>
-              <td>{item.dateLabel}</td>
-              <td>{item.primaryRoute}</td>
-              <td>{modeLabel(item.transportMode)}</td>
-              <td>{item.accommodation?.name ?? "-"}</td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
+          <table className="guide-table">
+            <thead>
+              <tr>
+                <th>Day</th>
+                <th>Date</th>
+                <th>Route</th>
+                <th>Mode</th>
+                <th>Stay</th>
+              </tr>
+            </thead>
+            <tbody>
+              {movementRows.map((row) => (
+                <tr key={`movement-${row.day}`}>
+                  <td>{String(row.day).padStart(2, "0")}</td>
+                  <td>{row.date}</td>
+                  <td>{row.route}</td>
+                  <td>{row.mode}</td>
+                  <td>{row.stay}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </section>
+      )}
     </section>
   );
 }
 
 function StayDirectory({ stays, title }: { stays: StayRow[]; title: string }) {
   if (!stays.length) return null;
+  const stayMarkers = getStayMarkers();
+  const stayPages = chunkArray(stays, STAY_CARDS_PER_PAGE);
 
   return (
-    <section className="guide-page stay-directory-page page-break-before">
-      <SectionTitle eyebrow="Part One / Bases" title={title} note="체크인과 주소 빠른 참조" />
-      <div className="stay-grid">
-        {stays.map((stay) => (
-          <article key={stay.key} className="guide-box avoid-break-inside">
-            <p className="stay-days">Days {stay.days.join(", ")}</p>
-            <h3>{stay.name}</h3>
-            <p>{stay.address}</p>
-            <dl className="mini-facts">
-              <div>
-                <dt>Check-in</dt>
-                <dd>{stay.checkIn ?? "-"}</dd>
+    <>
+      <section className="guide-page stay-directory-page page-break-before">
+        <SectionTitle eyebrow="Accommodations" title={title} note="숙소 전체 요약 지도" />
+        {stayMarkers.length > 0 && (
+          <section className="stay-map-block avoid-break-inside">
+            <div className="stay-map-panel">
+              <div className="stay-map-canvas">
+                <PrintTileMap markers={stayMarkers} scope="atlas" />
               </div>
-              <div>
-                <dt>Check-out</dt>
-                <dd>{stay.checkOut ?? "-"}</dd>
+              <div className="day-map-caption">
+                <span>Stay Map</span>
+                <strong>{stays.length} accommodation bases</strong>
               </div>
-            </dl>
+            </div>
+            <div className="stay-map-key">
+              {stays.map((stay, index) => (
+                <div key={`${stay.key}-map-key`}>
+                  <b>{index + 1}</b>
+                  <span>
+                    <strong>{stay.name}</strong>
+                    <em>Days {stay.days.join(", ")}</em>
+                  </span>
+                </div>
+              ))}
+            </div>
+          </section>
+        )}
+      </section>
+
+      {stayPages.map((pageStays, pageIndex) => (
+        <section key={`stay-directory-cards-${pageIndex}`} className="guide-page stay-directory-page stay-directory-cards-page page-break-before">
+          <SectionTitle
+            eyebrow="Accommodations"
+            title={`${title} Links`}
+            note={`예약 주소와 링크 ${pageIndex + 1}/${stayPages.length}`}
+          />
+          <div className="stay-grid">
+            {pageStays.map((stay, index) => {
+              const absoluteIndex = pageIndex * STAY_CARDS_PER_PAGE + index;
+
+              return (
+                <article key={stay.key} className="guide-box avoid-break-inside">
+                  <p className="stay-days">{String(absoluteIndex + 1).padStart(2, "0")} / Days {stay.days.join(", ")}</p>
+                  <h3>{stay.name}</h3>
+                  <p>{stay.address}</p>
+                  <dl className="mini-facts">
+                    <div>
+                      <dt>Check-in</dt>
+                      <dd>{stay.checkIn ?? "-"}</dd>
+                    </div>
+                    <div>
+                      <dt>Check-out</dt>
+                      <dd>{stay.checkOut ?? "-"}</dd>
+                    </div>
+                  </dl>
+                  {(stay.googleMapsUrl || stay.airbnbUrl) && (
+                    <div className="stay-links">
+                      {stay.googleMapsUrl && <a href={stay.googleMapsUrl}>Google Maps</a>}
+                      {stay.airbnbUrl && <a href={stay.airbnbUrl}>Airbnb</a>}
+                    </div>
+                  )}
+                </article>
+              );
+            })}
+          </div>
+        </section>
+      ))}
+    </>
+  );
+}
+
+function OfflineChecklistPage({
+  stays,
+  tickets,
+  items
+}: {
+  stays: StayRow[];
+  tickets: FlightTicket[];
+  items: MasterTimelineItem[];
+}) {
+  const firstDay = items[0];
+  const lastDay = items[items.length - 1];
+  const checklistGroups = [
+    {
+      title: "예약 확인",
+      items: [
+        `${tickets.length}개 항공권 그룹과 야간열차 예약 정보를 출발 전 별도 저장`,
+        `${stays.length}개 숙소의 주소, 체크인/체크아웃, 예약 링크 확인`,
+        "페리, 렌터카, 주요 입장권은 앱/메일 원본과 함께 오프라인 보관"
+      ]
+    },
+    {
+      title: "오프라인 저장",
+      items: [
+        "이 PDF를 휴대폰 로컬 파일과 클라우드 양쪽에 저장",
+        "Google Maps/OSM 오프라인 지도와 숙소 주소를 사전 저장",
+        "Places & Stories의 긴 설명은 이동 전날 필요한 도시만 미리 읽기"
+      ]
+    },
+    {
+      title: "현장 이동",
+      items: [
+        "Daily Guide Page A에서 이동 지도와 Route Flow를 먼저 확인",
+        "장거리 이동일은 Transport Guide와 해당 Day 페이지를 함께 확인",
+        "렌터카 날에는 주차 지점과 체크인 시간을 먼저 고정"
+      ]
+    },
+    {
+      title: "여행 종료 전",
+      items: [
+        `${firstDay?.dateLabel ?? "출발일"} - ${lastDay?.dateLabel ?? "도착일"} 전체 일정 재확인`,
+        "출국 전날 숙소, 주유/반납, 공항 이동 시간을 다시 점검",
+        "여권, 결제수단, 통신, 비상 연락처를 마지막 페이지 기준으로 확인"
+      ]
+    }
+  ];
+
+  return (
+    <section className="guide-page offline-checklist-page page-break-before">
+      <SectionTitle eyebrow="Offline Travel Kit" title="오프라인 체크리스트" note="출발 전과 현장에서 바로 확인할 마지막 점검표" />
+      <div className="offline-checklist-grid">
+        {checklistGroups.map((group) => (
+          <article key={group.title} className="offline-checklist-card avoid-break-inside">
+            <h3>{group.title}</h3>
+            <ul>
+              {group.items.map((item) => (
+                <li key={item}>{item}</li>
+              ))}
+            </ul>
           </article>
         ))}
       </div>
@@ -1779,7 +1629,7 @@ function DailyMapCard({
   scope?: PrintMapScope;
 }) {
   return (
-    <div className="daily-route-map-card avoid-break-inside">
+    <div className={`daily-route-map-card daily-route-map-card-${scope} avoid-break-inside`}>
       {markers.length > 0 ? (
         <PrintTileMap markers={markers} scope={scope} />
       ) : (
@@ -1913,7 +1763,7 @@ function DailyRoutePage({
   });
 
   return (
-    <section className="guide-page daily-route-map-page page-break-before">
+    <section className={`guide-page daily-route-map-page ${splitMaps ? "daily-route-map-page-split" : "daily-route-map-page-single"} page-break-before`}>
       <header className="day-header">
         <div className="day-badge">Day {String(guide.day).padStart(2, "0")}</div>
         <div>
@@ -1931,7 +1781,7 @@ function DailyRoutePage({
         ))}
       </div>
 
-      <div className="daily-route-map-layout">
+      <div className={`daily-route-map-layout ${splitMaps ? "daily-route-map-layout-split" : "daily-route-map-layout-single"}`}>
         {splitMaps ? (
           <div className="daily-route-map-stack">
             <DailyMapCard
@@ -1954,6 +1804,7 @@ function DailyRoutePage({
             label={singleMapLabel}
             title={singleMapTitle}
             emptyLabel="이동 경로 좌표가 부족합니다."
+            scope={localSightMarkers.length > 0 ? "daily" : "dailyWide"}
           />
         )}
 
@@ -2162,6 +2013,45 @@ function getPlaceImageObjectPosition(place: DailyGuidePlace) {
   return "50% 50%";
 }
 
+function getPlaceImageObjectFit(place: DailyGuidePlace) {
+  const name = place.name.toLowerCase();
+  const image = place.image?.toLowerCase() ?? "";
+  const text = `${name} ${image}`;
+
+  if (
+    text.includes("sant-agata") ||
+    text.includes("piazza-universita") ||
+    text.includes("piazza universita") ||
+    text.includes("upper-barrakka") ||
+    text.includes("upper barrakka") ||
+    text.includes("mosta-rotunda") ||
+    text.includes("mosta rotunda") ||
+    text.includes("erice-panorama") ||
+    text.includes("monastero-santa-caterina") ||
+    text.includes("cefalu-cathedral") ||
+    text.includes("villa-romana-del-casale") ||
+    text.includes("tomb-of-theron") ||
+    text.includes("tomb of theron") ||
+    text.includes("via-atenea") ||
+    text.includes("via atenea") ||
+    text.includes("monreale") ||
+    text.includes("pompeii-archaeological-park") ||
+    text.includes("forum-of-pompeii") ||
+    text.includes("lungo garden")
+  ) {
+    return "contain";
+  }
+
+  return "cover";
+}
+
+function getPlaceImageStyle(place: DailyGuidePlace): React.CSSProperties {
+  return {
+    objectFit: getPlaceImageObjectFit(place),
+    objectPosition: getPlaceImageObjectPosition(place)
+  };
+}
+
 function PlaceBrief({ place, index, showImage = true }: { place: DailyGuidePlace; index: number; showImage?: boolean }) {
   const seeItems = (place.whatToSee?.slice(0, 2) ?? []).map((item) => pageCardText(item, 112));
   const tipItems = (place.tips?.slice(0, 1) ?? []).map((item) => pageCardText(item, 108));
@@ -2179,7 +2069,7 @@ function PlaceBrief({ place, index, showImage = true }: { place: DailyGuidePlace
             alt={place.imageAlt}
             loading="eager"
             decoding="sync"
-            style={{ objectPosition: getPlaceImageObjectPosition(place) }}
+            style={getPlaceImageStyle(place)}
           />
         </figure>
       )}
@@ -2212,12 +2102,22 @@ function PlaceBrief({ place, index, showImage = true }: { place: DailyGuidePlace
   );
 }
 
-function KeyStopCard({ place, stopNumber, hideImage }: { place: DailyGuidePlace; stopNumber: string; hideImage?: boolean }) {
-  const summary = pageCardText(place.shortDescription || place.description || place.detailDescription, 82);
-  const focus = pageCardText(place.whatToSee?.[0] || place.whyVisit?.[0], 42);
+function KeyStopCard({
+  place,
+  stopNumber,
+  hideImage,
+  compact = false
+}: {
+  place: DailyGuidePlace;
+  stopNumber: string;
+  hideImage?: boolean;
+  compact?: boolean;
+}) {
+  const summary = pageCardText(place.detailDescription || place.description || place.shortDescription, compact ? 150 : 220);
+  const focus = pageCardText(place.whatToSee?.[0] || place.whyVisit?.[0], compact ? 70 : 95);
 
   return (
-    <article className="key-stop-card avoid-break-inside" style={hideImage ? { display: "block" } : undefined}>
+    <article className={`key-stop-card ${compact ? "key-stop-card-compact" : ""} avoid-break-inside`} style={hideImage ? { display: "block" } : undefined}>
       {!hideImage && place.image && (
         <figure className="key-stop-image">
           <img
@@ -2225,7 +2125,7 @@ function KeyStopCard({ place, stopNumber, hideImage }: { place: DailyGuidePlace;
             alt={place.imageAlt}
             loading="eager"
             decoding="sync"
-            style={{ objectPosition: getPlaceImageObjectPosition(place) }}
+            style={getPlaceImageStyle(place)}
           />
         </figure>
       )}
@@ -2250,7 +2150,7 @@ function MorePlaceCard({
 }) {
   return (
     <article className={`more-place ${compact ? "more-place-compact" : ""} avoid-break-inside`}>
-      {place.image && <img src={place.image} alt={place.imageAlt} />}
+      {place.image && <img src={place.image} alt={place.imageAlt} style={getPlaceImageStyle(place)} />}
       <div>
         <p>Stop {stopNumber} / {place.category}</p>
         <h4>{place.name}</h4>
@@ -2260,12 +2160,24 @@ function MorePlaceCard({
   );
 }
 
-function SecondaryPlaceCard({ place, stopNumber, hideImage }: { place: DailyGuidePlace; stopNumber: string; hideImage?: boolean }) {
-  const summary = pageCardText(place.shortDescription || place.description || place.detailDescription, (place.image && !hideImage) ? 190 : 210);
-  const note = pageCardText(place.whatToSee?.[0] || place.tips?.[0] || place.whyVisit?.[0], (place.image && !hideImage) ? 118 : 128);
+function SecondaryPlaceCard({
+  place,
+  stopNumber,
+  hideImage,
+  compact = false
+}: {
+  place: DailyGuidePlace;
+  stopNumber: string;
+  hideImage?: boolean;
+  compact?: boolean;
+}) {
+  const summaryLength = compact ? ((place.image && !hideImage) ? 135 : 160) : ((place.image && !hideImage) ? 220 : 240);
+  const noteLength = compact ? ((place.image && !hideImage) ? 72 : 88) : ((place.image && !hideImage) ? 118 : 128);
+  const summary = pageCardText(place.detailDescription || place.description || place.shortDescription, summaryLength);
+  const note = pageCardText(place.whatToSee?.[0] || place.tips?.[0] || place.whyVisit?.[0], noteLength);
 
   return (
-    <article className="secondary-place-card avoid-break-inside" style={hideImage ? { display: "block" } : undefined}>
+    <article className={`secondary-place-card ${compact ? "secondary-place-card-compact" : ""} avoid-break-inside`} style={hideImage ? { display: "block" } : undefined}>
       {!hideImage && place.image && (
         <figure className="secondary-place-image">
           <img
@@ -2273,7 +2185,7 @@ function SecondaryPlaceCard({ place, stopNumber, hideImage }: { place: DailyGuid
             alt={place.imageAlt}
             loading="eager"
             decoding="sync"
-            style={{ objectPosition: getPlaceImageObjectPosition(place) }}
+            style={getPlaceImageStyle(place)}
           />
         </figure>
       )}
@@ -2367,7 +2279,7 @@ function DailyFieldNotes({
       </div>
       <div className="field-note-list">
         {displayNotes.slice(0, compact ? 1 : 3).map((note, index) => (
-          <p key={`${guide.id}-field-note-${index}`}>{pageCardText(note, compact ? 130 : 190)}</p>
+          <p key={`${guide.id}-field-note-${index}`}>{pageCardText(note, compact ? 110 : 155)}</p>
         ))}
       </div>
     </section>
@@ -2383,15 +2295,16 @@ function DailyGuidePage({ guide, sectionTitle }: { guide: DailyGuide; sectionTit
   const heroPlace = guidePlaces.find((place) => place.image) ?? guidePlaces[0];
   const guidePlacesWithoutHero = guidePlaces.filter((p) => p.id !== heroPlace?.id);
   const { essential: essentialPlaces, more: morePlaces } = splitGuidePlacesByPriority(guidePlacesWithoutHero);
-  const densePlacesPage = guidePlacesWithoutHero.length > PAGE_B_FIRST_PAGE_KEY_LIMIT + 2;
+  const densePlacesPage = guidePlacesWithoutHero.length >= PAGE_B_FIRST_PAGE_KEY_LIMIT + 2;
   const firstPageKeyLimit = densePlacesPage ? PAGE_B_FIRST_PAGE_KEY_LIMIT : MAX_KEY_STOPS_PER_DAY;
   const keyPlaces = essentialPlaces.slice(0, firstPageKeyLimit);
+  const denseSecondaryLimit = densePlacesPage ? Math.max(0, PAGE_B_FIRST_PAGE_KEY_LIMIT - keyPlaces.length) : 0;
   const secondaryPlaces = densePlacesPage
-    ? []
+    ? morePlaces.slice(0, denseSecondaryLimit)
     : [...essentialPlaces.slice(firstPageKeyLimit), ...morePlaces].slice(0, 3);
   const remainingPageBCards: PageBPlaceCard[] = [
     ...essentialPlaces.slice(firstPageKeyLimit).map((place) => ({ place, variant: "key" as const })),
-    ...morePlaces.slice(densePlacesPage ? 0 : Math.max(0, 3 - essentialPlaces.slice(firstPageKeyLimit).length)).map((place) => ({ place, variant: "secondary" as const }))
+    ...morePlaces.slice(densePlacesPage ? denseSecondaryLimit : Math.max(0, 3 - essentialPlaces.slice(firstPageKeyLimit).length)).map((place) => ({ place, variant: "secondary" as const }))
   ];
   const continuedPlacePages = chunkArray(remainingPageBCards, PAGE_B_CARD_PAGE_SIZE);
   const dailyFoodPlaces = foodPlaces.slice(0, 2);
@@ -2438,7 +2351,7 @@ function DailyGuidePage({ guide, sectionTitle }: { guide: DailyGuide; sectionTit
                   alt={heroPlace.imageAlt}
                   loading="eager"
                   decoding="sync"
-                  style={{ objectPosition: getPlaceImageObjectPosition(heroPlace) }}
+                  style={getPlaceImageStyle(heroPlace)}
                 />
               </figure>
             )}
@@ -2451,11 +2364,11 @@ function DailyGuidePage({ guide, sectionTitle }: { guide: DailyGuide; sectionTit
                 <p>{heroPlace.category}</p>
               </div>
               <div className="daily-featured-stop-copy">
-                <p>{pageCardText(heroPlace.detailDescription || heroPlace.description, 350)}</p>
+                <p>{pageCardText(heroPlace.detailDescription || heroPlace.description, 300)}</p>
                 {(heroPlace.whatToSee?.[0] || heroPlace.whyVisit?.[0]) && (
                   <div>
                     <strong>관람 포인트</strong>
-                    <span>{pageCardText(heroPlace.whatToSee?.[0] || heroPlace.whyVisit?.[0], 120)}</span>
+                    <span>{pageCardText(heroPlace.whatToSee?.[0] || heroPlace.whyVisit?.[0], 95)}</span>
                   </div>
                 )}
               </div>
@@ -2476,6 +2389,7 @@ function DailyGuidePage({ guide, sectionTitle }: { guide: DailyGuide; sectionTit
                     place={place}
                     hideImage={place.id === heroPlace?.id}
                     stopNumber={getStopNumber(place.id)}
+                    compact
                   />
                 ))}
               </div>
@@ -2493,7 +2407,7 @@ function DailyGuidePage({ guide, sectionTitle }: { guide: DailyGuide; sectionTit
                 </div>
                 <div className="more-place-grid">
                   {secondaryPlaces.map((place) => (
-                    <SecondaryPlaceCard key={place.id} place={place} stopNumber={getStopNumber(place.id)} hideImage={place.id === heroPlace?.id} />
+                    <SecondaryPlaceCard key={place.id} place={place} stopNumber={getStopNumber(place.id)} hideImage={place.id === heroPlace?.id} compact />
                   ))}
                 </div>
               </section>
@@ -2524,7 +2438,7 @@ function DailyGuidePage({ guide, sectionTitle }: { guide: DailyGuide; sectionTit
             title="More Places"
             note={`${formatDate(guide.date)} / ${guide.region}`}
           />
-          <div className="continued-place-grid">
+          <div className={`continued-place-grid continued-place-grid-count-${pageCards.length}`}>
             {pageCards.map(({ place, variant }) => (
               variant === "key" ? (
                 <KeyStopCard
@@ -2570,37 +2484,22 @@ export const PrintLayout = ({ payload, printDesign }: { payload: TravelPayload; 
     >
       <CoverPage payload={payload} design={design} />
       <GuideIntroPage payload={payload} design={design} />
-      <TableOfContentsPage />
-      <GuideIndexPage items={guideData.masterTimeline} />
-      <ChapterOpener
-        eyebrow="Part One"
-        title="Essentials Before Departure"
-        copy="Flights, route structure, accommodation anchors, and the wide map view are grouped first so the PDF works as an offline travel book rather than a loose itinerary dump."
-        meta={["Flights", "Route Atlas", "Stay Directory", "Journey Planner"]}
+      <TransportGuidePage
+        tickets={guideData.flightTickets}
       />
-      <PartOneOverview items={guideData.masterTimeline} stays={stays} tickets={guideData.flightTickets} />
-      <FlightSummary tickets={guideData.flightTickets} title={design.sectionLabels.flights} />
-      <RouteAtlas />
-      <RouteSchedule items={guideData.masterTimeline} title={design.sectionLabels.schedule} />
+      <MovementReferencePage items={guideData.masterTimeline} dailyGuides={guideData.dailyGuides} />
       <StayDirectory stays={stays} title={design.sectionLabels.stays} />
-      <ChapterOpener
-        eyebrow="Part Two"
-        title="Daily Journey Guide"
-        copy="The main body follows the actual trip day by day: city movement, mapped stops, key sights, food breaks, and practical reminders appear before the deeper guidebook essays."
-        meta={["Daily Spreads", "Maps & Movement", "Editor's Picks", "Practical Notes"]}
-      />
       {guideData.dailyGuides.map((guide) => (
         <DailyGuidePage key={guide.id} guide={guide} sectionTitle={design.sectionLabels.daily} />
       ))}
-      <ChapterOpener
-        eyebrow="Part Three"
-        title="Places & Stories"
-        copy="After the daily itinerary establishes where each stop belongs, this section slows down for regional context, essential sights, history notes, and reading pages."
-        meta={["Regional Essays", "Essential Sights", "History Notes", "Reading Pages"]}
-      />
       {cityGuideDefinitions.map((definition) => (
         <CityGuidePage key={definition.title} definition={definition} />
       ))}
+      <OfflineChecklistPage
+        stays={stays}
+        tickets={guideData.flightTickets}
+        items={guideData.masterTimeline}
+      />
     </main>
   );
 };
