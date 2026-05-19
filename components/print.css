@@ -1253,42 +1253,14 @@ body.print-body * {
   inset: 0;
   overflow: hidden;
   border-radius: inherit;
-  background: #dfeeea;
+  background: var(--guide-soft);
 }
 
-.print-static-map-svg {
+.print-tile-map img {
   position: absolute;
-  inset: 0;
   display: block;
-  width: 100%;
-  height: 100%;
-}
-
-.print-map-water {
-  fill: #dcecea;
-}
-
-.print-map-grid-line line {
-  stroke: rgba(107, 104, 97, 0.12);
-  stroke-width: 0.25;
-  vector-effect: non-scaling-stroke;
-}
-
-.print-map-land {
-  fill: #f2eadc;
-  stroke: rgba(151, 126, 91, 0.4);
-  stroke-width: 0.45;
-  vector-effect: non-scaling-stroke;
-}
-
-.print-map-route-line {
-  stroke: var(--guide-theme);
-  stroke-width: 1.45;
-  stroke-linecap: round;
-  stroke-linejoin: round;
-  stroke-dasharray: 3 2;
-  opacity: 0.92;
-  vector-effect: non-scaling-stroke;
+  max-width: none;
+  object-fit: fill;
 }
 
 .print-tile-route {

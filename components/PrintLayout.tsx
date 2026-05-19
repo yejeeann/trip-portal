@@ -5,7 +5,6 @@ import { sicilyGuideData } from "@/lib/sicily-guide-data";
 import { staticPrintGuideDesign, type PrintGuideDesign } from "@/lib/print-guide-design";
 import type { DailyCityVisit, DailyGuide, DailyGuidePlace, DailyRouteOverviewPoint, FlightTicket, MasterTimelineItem, TimelineAccommodation } from "@/lib/swiss-guide-data";
 import type { TravelPayload } from "@/lib/types";
-import worldGeo from "@/world.geo.json";
 import type { OsmMarker } from "./multi-osm-map";
 
 type StayRow = TimelineAccommodation & {
@@ -460,34 +459,19 @@ type ProjectedPrintMarker = PrintMapMarker & {
   index: number;
 };
 
-type PrintGeoGeometry = {
-  type: "Polygon" | "MultiPolygon";
-  coordinates: number[][][] | number[][][][];
-};
-
-type PrintGeoFeature = {
-  id?: string;
-  properties?: {
-    name?: string;
-  };
-  geometry?: PrintGeoGeometry;
-};
-
-type PrintGeoCollection = {
-  features: PrintGeoFeature[];
+type PrintMapTile = {
+  key: string;
+  src: string;
+  left: number;
+  top: number;
+  width: number;
+  height: number;
 };
 
 type PrintMapLayout = {
-  zoom: number;
-  minX: number;
-  minY: number;
-  width: number;
-  height: number;
+  tiles: PrintMapTile[];
   markers: ProjectedPrintMarker[];
 };
-
-const printWorldGeo = worldGeo as PrintGeoCollection;
-const PRINT_MAP_COUNTRY_IDS = new Set(["ITA", "MLT", "KOR", "FIN", "VAT", "SMR"]);
 
 function clamp(value: number, min: number, max: number) {
   return Math.min(max, Math.max(min, value));
@@ -605,6 +589,12 @@ function fitBoundsToAspect(minX: number, maxX: number, minY: number, maxY: numbe
   };
 }
 
+function getTileUrl(x: number, y: number, zoom: number) {
+  const subdomains = ["a", "b", "c"];
+  const subdomain = subdomains[Math.abs(x + y) % subdomains.length];
+  return `https://${subdomain}.basemaps.cartocdn.com/rastertiles/voyager/${zoom}/${x}/${y}.png`;
+}
+
 function getTileMapLayout(markers: PrintMapMarker[], scope: PrintMapScope): PrintMapLayout {
   const zoom = getPrintMapZoom(markers, scope);
   const worldSize = PRINT_TILE_SIZE * 2 ** zoom;
@@ -641,6 +631,25 @@ function getTileMapLayout(markers: PrintMapMarker[], scope: PrintMapScope): Prin
   const maxY = fittedBounds.maxY;
   const width = Math.max(maxX - minX, PRINT_TILE_SIZE);
   const height = Math.max(maxY - minY, PRINT_TILE_SIZE);
+  const minTileX = Math.floor(minX / PRINT_TILE_SIZE);
+  const maxTileX = Math.floor(maxX / PRINT_TILE_SIZE);
+  const minTileY = Math.floor(minY / PRINT_TILE_SIZE);
+  const maxTileY = Math.floor(maxY / PRINT_TILE_SIZE);
+  const maxTile = 2 ** zoom - 1;
+  const tiles: PrintMapTile[] = [];
+
+  for (let tileX = clamp(minTileX, 0, maxTile); tileX <= clamp(maxTileX, 0, maxTile); tileX += 1) {
+    for (let tileY = clamp(minTileY, 0, maxTile); tileY <= clamp(maxTileY, 0, maxTile); tileY += 1) {
+      tiles.push({
+        key: `${zoom}-${tileX}-${tileY}`,
+        src: getTileUrl(tileX, tileY, zoom),
+        left: ((tileX * PRINT_TILE_SIZE - minX) / width) * 100,
+        top: ((tileY * PRINT_TILE_SIZE - minY) / height) * 100,
+        width: (PRINT_TILE_SIZE / width) * 100,
+        height: (PRINT_TILE_SIZE / height) * 100
+      });
+    }
+  }
 
   const projectedMarkers: ProjectedPrintMarker[] = rawPoints.map((item) => ({
     ...item.marker,
@@ -650,11 +659,7 @@ function getTileMapLayout(markers: PrintMapMarker[], scope: PrintMapScope): Prin
   }));
 
   return {
-    zoom,
-    minX,
-    minY,
-    width,
-    height,
+    tiles,
     markers: projectedMarkers.map((item) => ({
       ...item,
       x: clamp(item.x, boundsConfig.markerInset, 100 - boundsConfig.markerInset),
@@ -663,71 +668,39 @@ function getTileMapLayout(markers: PrintMapMarker[], scope: PrintMapScope): Prin
   };
 }
 
-function projectPrintMapPoint(lng: number, lat: number, layout: PrintMapLayout) {
-  return {
-    x: ((lonToWorldX(lng, layout.zoom) - layout.minX) / layout.width) * 100,
-    y: ((latToWorldY(lat, layout.zoom) - layout.minY) / layout.height) * 100
-  };
-}
-
-function ringToPrintPath(ring: number[][], layout: PrintMapLayout) {
-  const points = ring
-    .map(([lng, lat]) => projectPrintMapPoint(lng, lat, layout))
-    .filter((point) => Number.isFinite(point.x) && Number.isFinite(point.y));
-
-  if (points.length < 3) return "";
-
-  const xs = points.map((point) => point.x);
-  const ys = points.map((point) => point.y);
-  const minX = Math.min(...xs);
-  const maxX = Math.max(...xs);
-  const minY = Math.min(...ys);
-  const maxY = Math.max(...ys);
-
-  if (maxX < -12 || minX > 112 || maxY < -12 || minY > 112) return "";
-
-  return `${points.map((point, index) => `${index === 0 ? "M" : "L"}${point.x.toFixed(2)} ${point.y.toFixed(2)}`).join(" ")} Z`;
-}
-
-function geometryToPrintPaths(geometry: PrintGeoGeometry, layout: PrintMapLayout) {
-  const polygons = geometry.type === "Polygon"
-    ? [geometry.coordinates as number[][][]]
-    : geometry.coordinates as number[][][][];
-
-  return polygons
-    .map((polygon) => ringToPrintPath(polygon[0] ?? [], layout))
-    .filter(Boolean);
-}
-
-function getStaticMapLandPaths(layout: PrintMapLayout) {
-  return printWorldGeo.features
-    .filter((feature) => feature.id && PRINT_MAP_COUNTRY_IDS.has(feature.id) && feature.geometry)
-    .flatMap((feature) => geometryToPrintPaths(feature.geometry!, layout));
-}
-
 function PrintTileMap({ markers, scope }: { markers: PrintMapMarker[]; scope: PrintMapScope }) {
   if (!markers.length) return <div className="print-tile-map print-tile-map-empty">지도 데이터가 부족합니다.</div>;
 
   const layout = getTileMapLayout(markers, scope);
-  const landPaths = getStaticMapLandPaths(layout);
   const routePoints = layout.markers.filter((item) => item.includeInRoute !== false);
   const routePolyline = routePoints.map((item) => `${item.x},${item.y}`).join(" ");
 
   return (
     <div className={`print-tile-map print-tile-map-${scope}`}>
-      <svg className="print-static-map-svg" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
-        <rect className="print-map-water" x="0" y="0" width="100" height="100" />
-        {[20, 40, 60, 80].map((position) => (
-          <g key={`${scope}-grid-${position}`} className="print-map-grid-line">
-            <line x1={position} y1="0" x2={position} y2="100" />
-            <line x1="0" y1={position} x2="100" y2={position} />
-          </g>
-        ))}
-        {landPaths.map((path, index) => (
-          <path key={`${scope}-land-${index}`} className="print-map-land" d={path} />
-        ))}
-        {routePolyline && <polyline className="print-map-route-line" points={routePolyline} fill="none" />}
-      </svg>
+      {layout.tiles.map((tile) => (
+        <img
+          key={tile.key}
+          src={tile.src}
+          alt=""
+          loading="eager"
+          decoding="sync"
+          referrerPolicy="no-referrer"
+          onError={(event) => {
+            event.currentTarget.style.display = "none";
+          }}
+          style={{
+            left: `${tile.left}%`,
+            top: `${tile.top}%`,
+            width: `${tile.width}%`,
+            height: `${tile.height}%`
+          }}
+        />
+      ))}
+      {routePolyline && (
+        <svg className="print-tile-route" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
+          <polyline points={routePolyline} fill="none" />
+        </svg>
+      )}
       {layout.markers.map((markerItem) => (
         <span
           key={`${markerItem.name}-${markerItem.index}`}
