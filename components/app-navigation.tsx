@@ -23,6 +23,21 @@ const IconMap: Record<string, React.ElementType> = {
   accommodations: House,
 };
 
+const tabToneMap: Record<string, string> = {
+  home: "#1A434E",
+  overview: "#1A434E",
+  daily: "#D4A373",
+  map: "#4F928B",
+  places: "#9B6B43",
+  guidebook: "#1A434E",
+  print: "#1A434E",
+  stays: "#C8795A",
+  accommodations: "#C8795A",
+  logistics: "#8A6F4D",
+  saved: "#C8795A",
+  explore: "#4F928B"
+};
+
 export function AppNavigation({
   appStructure,
   themeColor = "#1A434E",
@@ -77,26 +92,30 @@ export function AppNavigation({
           const Icon = IconMap[tab.iconType] || IconMap[tab.id] || LayoutGrid;
           const isActive = checkIsActive(tab.id);
           const label = tab.id === "stays" ? "Stays" : tab.label;
+          const tone = isActive ? themeColor : tabToneMap[tab.id] ?? tabToneMap[tab.iconType] ?? themeColor;
 
           return (
             <Link
               key={tab.id}
               href={getHref(tab.id)}
-              className={`relative flex min-w-0 flex-1 flex-col items-center justify-center rounded-full px-1.5 py-1.5 transition-colors sm:px-2 ${
-                isActive ? "bg-[#E7F0EE]" : "hover:bg-[#F9F7F2]"
+              className={`relative flex min-w-0 flex-1 flex-col items-center justify-center rounded-[1rem] px-1.5 py-1.5 transition duration-200 sm:px-2 ${
+                isActive ? "bg-[#F4ECE0]" : "hover:bg-[#F9F7F2]"
               }`}
             >
               <div
-                className="relative flex h-7 w-7 items-center justify-center"
+                className={`relative flex h-8 w-8 items-center justify-center rounded-full transition duration-200 ${
+                  isActive ? "shadow-[0_8px_18px_rgba(26,67,78,0.18)]" : "bg-white/70 shadow-[inset_0_0_0_1px_rgba(230,218,200,0.92)]"
+                }`}
+                style={{ backgroundColor: isActive ? tone : undefined }}
               >
                 <Icon
-                  className="h-4 w-4 transition-colors"
-                  style={{ color: isActive ? themeColor : "#6B6861" }}
+                  className="h-[1.15rem] w-[1.15rem] stroke-[1.45] transition-colors"
+                  style={{ color: isActive ? "#F9F7F2" : tone }}
                 />
               </div>
               <span
-                className="mt-0.5 max-w-full truncate text-[9px] font-extrabold tracking-normal transition-colors sm:text-[10px]"
-                style={{ color: isActive ? themeColor : "#6B6861" }}
+                className="mt-0.5 max-w-full truncate text-[9px] font-black tracking-normal transition-colors sm:text-[10px]"
+                style={{ color: isActive ? themeColor : "#2D2D2D" }}
               >
                 {label}
               </span>

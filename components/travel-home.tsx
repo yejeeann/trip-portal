@@ -301,10 +301,10 @@ function WeatherTimeline({
       <div className="mb-3 flex items-center justify-between gap-3">
         <div className="min-w-0">
           <p className="text-[10px] font-extrabold uppercase tracking-[0.16em]" style={{ color: design.accent }}>
-            {hasForecast ? "Live forecast" : "Seasonal estimate"}
+            {hasForecast ? "Open-Meteo forecast" : "Forecast pending"}
           </p>
           <p className={`mt-1 truncate text-xs font-bold ${design.muted}`}>
-            {trip.dateRange} · Open-Meteo
+            {trip.dateRange} · accurate dates only
           </p>
         </div>
         <CloudSun className="hidden h-7 w-7 shrink-0 sm:block" style={{ color: design.coral }} />
@@ -312,7 +312,8 @@ function WeatherTimeline({
       <div className="flex w-full min-w-0 max-w-full gap-2 overflow-x-auto pb-1 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
         {trip.itinerary.map((day) => {
           const isActive = day.day === activeDay;
-          const WeatherIcon = getWeatherIcon(day.weather.weatherCode);
+          const isForecast = day.weather.source === "forecast";
+          const WeatherIcon = isForecast ? getWeatherIcon(day.weather.weatherCode) : CloudSun;
 
           return (
             <Link
@@ -334,12 +335,14 @@ function WeatherTimeline({
               </div>
               <div>
                 <div className="flex items-end justify-between gap-2">
-                  <p className="text-xl font-black leading-none">{day.weather.tempC}°</p>
+                  <p className="text-xl font-black leading-none">{isForecast ? `${day.weather.tempC}°` : "--"}</p>
                   <WeatherIcon className={`h-5 w-5 shrink-0 ${isActive ? "text-white/82" : "text-[#D96C4A]"}`} aria-label={day.weather.condition} />
                 </div>
-                <p className={`mt-1 whitespace-nowrap text-[9px] font-bold ${isActive ? "text-white/70" : design.muted}`}>H{day.weather.highC}° L{day.weather.lowC}°</p>
+                <p className={`mt-1 whitespace-nowrap text-[9px] font-bold ${isActive ? "text-white/70" : design.muted}`}>
+                  {isForecast ? `H${day.weather.highC}° L${day.weather.lowC}°` : "예보 대기"}
+                </p>
                 <p className={`mt-0.5 text-[8px] font-extrabold uppercase ${isActive ? "text-white/62" : design.muted}`}>
-                  {day.weather.source === "forecast" ? "Forecast" : "Estimate"}
+                  {isForecast ? "Forecast" : "Pending"}
                 </p>
               </div>
             </Link>
@@ -513,7 +516,7 @@ function TripCard({ snapshot, isMain, design }: { snapshot: TripSnapshot; isMain
           </span>
           <span className="inline-flex items-center gap-1.5">
             <CloudSun className="h-3.5 w-3.5" />
-            {focusDay.city} {focusDay.weather.tempC}°
+            {focusDay.city} {focusDay.weather.source === "forecast" ? `${focusDay.weather.tempC}°` : "예보 대기"}
           </span>
         </div>
         <p className={`mt-3 line-clamp-2 text-sm font-semibold leading-relaxed ${design.muted}`}>

@@ -5,6 +5,7 @@ import { sicilyGuideData } from "@/lib/sicily-guide-data";
 import { staticPrintGuideDesign, type PrintGuideDesign } from "@/lib/print-guide-design";
 import type { DailyCityVisit, DailyGuide, DailyGuidePlace, DailyRouteOverviewPoint, FlightTicket, MasterTimelineItem, TimelineAccommodation } from "@/lib/swiss-guide-data";
 import type { TravelPayload } from "@/lib/types";
+import worldGeo from "@/world.geo.json";
 import type { OsmMarker } from "./multi-osm-map";
 
 type StayRow = TimelineAccommodation & {
@@ -443,6 +444,13 @@ function normalizePrintPlaceKey(name: string) {
   return name.toLowerCase().replace(/[^a-z0-9가-힣]+/g, " ").trim();
 }
 
+function getPrintImageSrc(src?: string) {
+  if (!src) return src;
+  const match = src.match(/^\/travel-photos\/(.+?)\.(jpe?g|png)$/i);
+  if (!match) return src;
+  return `/travel-photos-print/${match[1]}.jpg`;
+}
+
 const PRINT_TILE_SIZE = 256;
 const MAX_MERCATOR_LAT = 85.05112878;
 
@@ -451,6 +459,35 @@ type ProjectedPrintMarker = PrintMapMarker & {
   y: number;
   index: number;
 };
+
+type PrintGeoGeometry = {
+  type: "Polygon" | "MultiPolygon";
+  coordinates: number[][][] | number[][][][];
+};
+
+type PrintGeoFeature = {
+  id?: string;
+  properties?: {
+    name?: string;
+  };
+  geometry?: PrintGeoGeometry;
+};
+
+type PrintGeoCollection = {
+  features: PrintGeoFeature[];
+};
+
+type PrintMapLayout = {
+  zoom: number;
+  minX: number;
+  minY: number;
+  width: number;
+  height: number;
+  markers: ProjectedPrintMarker[];
+};
+
+const printWorldGeo = worldGeo as PrintGeoCollection;
+const PRINT_MAP_COUNTRY_IDS = new Set(["ITA", "MLT", "KOR", "FIN", "VAT", "SMR"]);
 
 function clamp(value: number, min: number, max: number) {
   return Math.min(max, Math.max(min, value));
@@ -568,13 +605,7 @@ function fitBoundsToAspect(minX: number, maxX: number, minY: number, maxY: numbe
   };
 }
 
-function getTileUrl(x: number, y: number, zoom: number) {
-  const subdomains = ["a", "b", "c"];
-  const subdomain = subdomains[Math.abs(x + y) % subdomains.length];
-  return `https://${subdomain}.basemaps.cartocdn.com/rastertiles/voyager/${zoom}/${x}/${y}.png`;
-}
-
-function getTileMapLayout(markers: PrintMapMarker[], scope: PrintMapScope) {
+function getTileMapLayout(markers: PrintMapMarker[], scope: PrintMapScope): PrintMapLayout {
   const zoom = getPrintMapZoom(markers, scope);
   const worldSize = PRINT_TILE_SIZE * 2 ** zoom;
   const boundsConfig = getMapBoundsConfig(scope);
@@ -610,25 +641,6 @@ function getTileMapLayout(markers: PrintMapMarker[], scope: PrintMapScope) {
   const maxY = fittedBounds.maxY;
   const width = Math.max(maxX - minX, PRINT_TILE_SIZE);
   const height = Math.max(maxY - minY, PRINT_TILE_SIZE);
-  const minTileX = Math.floor(minX / PRINT_TILE_SIZE);
-  const maxTileX = Math.floor(maxX / PRINT_TILE_SIZE);
-  const minTileY = Math.floor(minY / PRINT_TILE_SIZE);
-  const maxTileY = Math.floor(maxY / PRINT_TILE_SIZE);
-  const maxTile = 2 ** zoom - 1;
-  const tiles = [];
-
-  for (let tileX = clamp(minTileX, 0, maxTile); tileX <= clamp(maxTileX, 0, maxTile); tileX += 1) {
-    for (let tileY = clamp(minTileY, 0, maxTile); tileY <= clamp(maxTileY, 0, maxTile); tileY += 1) {
-      tiles.push({
-        key: `${zoom}-${tileX}-${tileY}`,
-        src: getTileUrl(tileX, tileY, zoom),
-        left: ((tileX * PRINT_TILE_SIZE - minX) / width) * 100,
-        top: ((tileY * PRINT_TILE_SIZE - minY) / height) * 100,
-        width: (PRINT_TILE_SIZE / width) * 100,
-        height: (PRINT_TILE_SIZE / height) * 100
-      });
-    }
-  }
 
   const projectedMarkers: ProjectedPrintMarker[] = rawPoints.map((item) => ({
     ...item.marker,
@@ -638,7 +650,11 @@ function getTileMapLayout(markers: PrintMapMarker[], scope: PrintMapScope) {
   }));
 
   return {
-    tiles,
+    zoom,
+    minX,
+    minY,
+    width,
+    height,
     markers: projectedMarkers.map((item) => ({
       ...item,
       x: clamp(item.x, boundsConfig.markerInset, 100 - boundsConfig.markerInset),
@@ -647,39 +663,71 @@ function getTileMapLayout(markers: PrintMapMarker[], scope: PrintMapScope) {
   };
 }
 
+function projectPrintMapPoint(lng: number, lat: number, layout: PrintMapLayout) {
+  return {
+    x: ((lonToWorldX(lng, layout.zoom) - layout.minX) / layout.width) * 100,
+    y: ((latToWorldY(lat, layout.zoom) - layout.minY) / layout.height) * 100
+  };
+}
+
+function ringToPrintPath(ring: number[][], layout: PrintMapLayout) {
+  const points = ring
+    .map(([lng, lat]) => projectPrintMapPoint(lng, lat, layout))
+    .filter((point) => Number.isFinite(point.x) && Number.isFinite(point.y));
+
+  if (points.length < 3) return "";
+
+  const xs = points.map((point) => point.x);
+  const ys = points.map((point) => point.y);
+  const minX = Math.min(...xs);
+  const maxX = Math.max(...xs);
+  const minY = Math.min(...ys);
+  const maxY = Math.max(...ys);
+
+  if (maxX < -12 || minX > 112 || maxY < -12 || minY > 112) return "";
+
+  return `${points.map((point, index) => `${index === 0 ? "M" : "L"}${point.x.toFixed(2)} ${point.y.toFixed(2)}`).join(" ")} Z`;
+}
+
+function geometryToPrintPaths(geometry: PrintGeoGeometry, layout: PrintMapLayout) {
+  const polygons = geometry.type === "Polygon"
+    ? [geometry.coordinates as number[][][]]
+    : geometry.coordinates as number[][][][];
+
+  return polygons
+    .map((polygon) => ringToPrintPath(polygon[0] ?? [], layout))
+    .filter(Boolean);
+}
+
+function getStaticMapLandPaths(layout: PrintMapLayout) {
+  return printWorldGeo.features
+    .filter((feature) => feature.id && PRINT_MAP_COUNTRY_IDS.has(feature.id) && feature.geometry)
+    .flatMap((feature) => geometryToPrintPaths(feature.geometry!, layout));
+}
+
 function PrintTileMap({ markers, scope }: { markers: PrintMapMarker[]; scope: PrintMapScope }) {
   if (!markers.length) return <div className="print-tile-map print-tile-map-empty">지도 데이터가 부족합니다.</div>;
 
   const layout = getTileMapLayout(markers, scope);
+  const landPaths = getStaticMapLandPaths(layout);
   const routePoints = layout.markers.filter((item) => item.includeInRoute !== false);
   const routePolyline = routePoints.map((item) => `${item.x},${item.y}`).join(" ");
 
   return (
     <div className={`print-tile-map print-tile-map-${scope}`}>
-      {layout.tiles.map((tile) => (
-        <img
-          key={tile.key}
-          src={tile.src}
-          alt=""
-          loading="eager"
-          decoding="sync"
-          referrerPolicy="no-referrer"
-          onError={(event) => {
-            event.currentTarget.style.display = "none";
-          }}
-          style={{
-            left: `${tile.left}%`,
-            top: `${tile.top}%`,
-            width: `${tile.width}%`,
-            height: `${tile.height}%`
-          }}
-        />
-      ))}
-      {routePolyline && (
-        <svg className="print-tile-route" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
-          <polyline points={routePolyline} fill="none" />
-        </svg>
-      )}
+      <svg className="print-static-map-svg" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
+        <rect className="print-map-water" x="0" y="0" width="100" height="100" />
+        {[20, 40, 60, 80].map((position) => (
+          <g key={`${scope}-grid-${position}`} className="print-map-grid-line">
+            <line x1={position} y1="0" x2={position} y2="100" />
+            <line x1="0" y1={position} x2="100" y2={position} />
+          </g>
+        ))}
+        {landPaths.map((path, index) => (
+          <path key={`${scope}-land-${index}`} className="print-map-land" d={path} />
+        ))}
+        {routePolyline && <polyline className="print-map-route-line" points={routePolyline} fill="none" />}
+      </svg>
       {layout.markers.map((markerItem) => (
         <span
           key={`${markerItem.name}-${markerItem.index}`}
@@ -1090,7 +1138,7 @@ function CoverPage({ payload, design }: { payload: TravelPayload; design: PrintG
 
   return (
     <section className="guide-cover">
-      <img className="cover-photo" src={coverImage} alt={payload.trip.title || design.title} />
+      <img className="cover-photo" src={getPrintImageSrc(coverImage)} alt={payload.trip.title || design.title} />
       <div className="cover-scrim" />
       <div className="cover-topline">
         <span>{design.coverLabel}</span>
@@ -1247,7 +1295,7 @@ function CityGuidePage({ definition }: { definition: CityGuideDefinition }) {
           </div>
           {heroPlace?.image && (
             <figure>
-              <img src={heroPlace.image} alt={heroPlace.imageAlt} style={getPlaceImageStyle(heroPlace)} />
+              <img src={getPrintImageSrc(heroPlace.image)} alt={heroPlace.imageAlt} style={getPlaceImageStyle(heroPlace)} />
               <figcaption>{heroPlace.name}</figcaption>
             </figure>
           )}
@@ -1310,7 +1358,7 @@ function CityGuidePage({ definition }: { definition: CityGuideDefinition }) {
                   {entry.place.image && (
                     <figure>
                       <img
-                        src={entry.place.image}
+                        src={getPrintImageSrc(entry.place.image)}
                         alt={entry.place.imageAlt}
                         loading="eager"
                         decoding="sync"
@@ -1539,44 +1587,49 @@ function OfflineChecklistPage({
 }) {
   const firstDay = items[0];
   const lastDay = items[items.length - 1];
+  const tripWindow = `${firstDay?.dateLabel ?? "5/21"} - ${lastDay?.dateLabel ?? "6/8"}`;
   const checklistGroups = [
     {
-      title: "예약 확인",
+      title: "Documents & Tickets",
       items: [
-        `${tickets.length}개 항공권 그룹과 야간열차 예약 정보를 출발 전 별도 저장`,
-        `${stays.length}개 숙소의 주소, 체크인/체크아웃, 예약 링크 확인`,
-        "페리, 렌터카, 주요 입장권은 앱/메일 원본과 함께 오프라인 보관"
+        `여권, 항공권, 야간열차, 렌터카, 숙소 예약서를 ${tripWindow} 일정 순서대로 저장`,
+        "Finnair AY042/AY1761, InterCityNotte 1955, Ryanair FR2930/FR395, Finnair AY1762/AY041 시간 재확인",
+        "렌터카 예약자 면허증, 국제운전면허증, 보조 운전자 등록 여부 확인",
+        "주요 성당/유적 입장권과 예약 메일은 휴대폰 로컬 파일로 저장"
       ]
     },
     {
-      title: "오프라인 저장",
+      title: "Maps & Addresses",
       items: [
-        "이 PDF를 휴대폰 로컬 파일과 클라우드 양쪽에 저장",
-        "Google Maps/OSM 오프라인 지도와 숙소 주소를 사전 저장",
-        "Places & Stories의 긴 설명은 이동 전날 필요한 도시만 미리 읽기"
+        `${stays.length}개 숙소의 주소, 체크인 방법, 주차/열쇠 안내를 오프라인으로 열어둘 것`,
+        "Rome Termini, Catania Centrale, Catania Airport, Malta Airport, Messina/Villa San Giovanni 항구 핀 저장",
+        "동부 시칠리아, 몰타, 서부 시칠리아, 칼라브리아, 아말피/나폴리, 로마 오프라인 지도 다운로드",
+        "Day 12 Realmonte-Trapani-Erice-Balestrate와 Day 17 Tropea-Pizzo-Pompeii-Salerno 장거리 경로 사전 저장"
       ]
     },
     {
-      title: "현장 이동",
+      title: "Movement Days",
       items: [
-        "Daily Guide Page A에서 이동 지도와 Route Flow를 먼저 확인",
-        "장거리 이동일은 Transport Guide와 해당 Day 페이지를 함께 확인",
-        "렌터카 날에는 주차 지점과 체크인 시간을 먼저 고정"
+        "Day 1 Rome 도착 후 Termini 이동과 20:16 야간열차 탑승 플랫폼 확인",
+        "Day 7 Catania-Malta 오전 항공은 수하물/보안 시간을 감안해 공항 도착 여유 확보",
+        "Day 9 Malta-Catania 밤 도착 후 숙소 체크인 안내와 주차 동선을 미리 캡처",
+        "Day 15 Sicily-Calabria 이동은 페리 대기, 주유, 숙소 도착 시간을 함께 계산"
       ]
     },
     {
-      title: "여행 종료 전",
+      title: "Daily Essentials",
       items: [
-        `${firstDay?.dateLabel ?? "출발일"} - ${lastDay?.dateLabel ?? "도착일"} 전체 일정 재확인`,
-        "출국 전날 숙소, 주유/반납, 공항 이동 시간을 다시 점검",
-        "여권, 결제수단, 통신, 비상 연락처를 마지막 페이지 기준으로 확인"
+        "여권 사본, 카드 2장 이상, 소액 현금, 여행자보험, 비상 연락처를 가족별로 분산 보관",
+        "eSIM/로밍, 보조배터리, C타입 케이블, EU 어댑터, 차량용 충전기 준비",
+        "돌길이 많은 Erice, Mdina, Palermo, Pompeii용 편한 신발과 얇은 겉옷 준비",
+        "해변/페리/장거리 운전일을 위해 선크림, 선글라스, 멀미약, 상비약 확인"
       ]
     }
   ];
 
   return (
     <section className="guide-page offline-checklist-page page-break-before">
-      <SectionTitle eyebrow="Offline Travel Kit" title="오프라인 체크리스트" note="출발 전과 현장에서 바로 확인할 마지막 점검표" />
+      <SectionTitle eyebrow="Final Travel Check" title="Pre-Departure Checklist" note="Sicily, Malta, Calabria, Amalfi and Rome 일정 전용 출발 전 점검표" />
       <div className="offline-checklist-grid">
         {checklistGroups.map((group) => (
           <article key={group.title} className="offline-checklist-card avoid-break-inside">
@@ -1620,16 +1673,18 @@ function DailyMapCard({
   label,
   title,
   emptyLabel,
-  scope = "daily"
+  scope = "daily",
+  className
 }: {
   markers: PrintMapMarker[];
   label: string;
   title: string;
   emptyLabel: string;
   scope?: PrintMapScope;
+  className?: string;
 }) {
   return (
-    <div className={`daily-route-map-card daily-route-map-card-${scope} avoid-break-inside`}>
+    <div className={`daily-route-map-card daily-route-map-card-${scope} ${className ?? ""} avoid-break-inside`}>
       {markers.length > 0 ? (
         <PrintTileMap markers={markers} scope={scope} />
       ) : (
@@ -1738,6 +1793,7 @@ function DailyRoutePage({
   const routeMarkers = getDailyMovementMarkers(guide);
   const localSightMarkers = getPrimaryLocalSightMarkers(guide);
   const splitMaps = shouldSplitDailyMaps(routeMarkers, localSightMarkers);
+  const isLongReturnMovementDay = guide.day === 17;
   const singleMapMarkers = splitMaps ? [] : uniqueMarkers([...routeMarkers, ...localSightMarkers]);
   const singleMapLabel = localSightMarkers.length > 0 ? "Route & Sight Map" : "Movement Map";
   const singleMapTitle = localSightMarkers.length > 0
@@ -1790,6 +1846,7 @@ function DailyRoutePage({
               title={`${routeMarkers.length} route points`}
               emptyLabel="이동 경로 좌표가 부족합니다."
               scope="dailyWide"
+              className={isLongReturnMovementDay ? "daily-route-map-card-return-wide" : undefined}
             />
             <DailyMapCard
               markers={localSightMarkers}
@@ -1871,7 +1928,7 @@ function NightTrainCard({ visit }: { visit: DailyCityVisit }) {
         <h3>{trainInfo.title}</h3>
         <span>{trainInfo.cabinType}</span>
       </div>
-      {trainInfo.image && <img src={trainInfo.image} alt={trainInfo.imageAlt} />}
+      {trainInfo.image && <img src={getPrintImageSrc(trainInfo.image)} alt={trainInfo.imageAlt} />}
       <dl>
         <div>
           <dt>Route</dt>
@@ -1926,6 +1983,83 @@ function CompactNightTrainCard({ visit }: { visit: DailyCityVisit }) {
         </div>
       </dl>
     </article>
+  );
+}
+
+function ReturnJourneyCombinedPage({ guides, sectionTitle }: { guides: DailyGuide[]; sectionTitle: string }) {
+  const returnGuides = guides.filter(Boolean);
+  if (!returnGuides.length) return null;
+
+  return (
+    <section className="guide-page return-journey-page page-break-before">
+      <SectionTitle
+        eyebrow={sectionTitle}
+        title="Return Journey"
+        note={returnGuides.map((guide) => `Day ${String(guide.day).padStart(2, "0")} · ${formatDate(guide.date)}`).join(" / ")}
+      />
+
+      <div className="return-journey-grid">
+        {returnGuides.map((guide) => {
+          const timeline = getDayTimelineItem(guide.day);
+          const routeMarkers = getDailyMovementMarkers(guide);
+          const routeItems: DailyRouteListItem[] = routeMarkers.map((markerItem) => ({
+            id: `${guide.id}-${markerItem.label}-${markerItem.name}`,
+            label: markerItem.label,
+            name: markerItem.name
+          }));
+          const notes = [
+            guide.deck,
+            ...(guide.editorial ?? []),
+            timeline?.note
+          ].filter(Boolean).slice(0, 3);
+
+          return (
+            <article key={guide.id} className="return-day-card avoid-break-inside">
+              <header className="return-day-header">
+                <div className="day-badge">Day {String(guide.day).padStart(2, "0")}</div>
+                <div>
+                  <p>{formatDate(guide.date)} / {guide.region}</p>
+                  <h3>{guide.title}</h3>
+                </div>
+              </header>
+
+              <div className="return-day-map">
+                {routeMarkers.length > 0 ? (
+                  <PrintTileMap markers={routeMarkers} scope="dailyWide" />
+                ) : (
+                  <div className="print-tile-map print-tile-map-empty">이동 경로 좌표가 부족합니다.</div>
+                )}
+                <div className="day-map-caption">
+                  <span>Movement</span>
+                  <strong>{routeMarkers.length} route point{routeMarkers.length === 1 ? "" : "s"}</strong>
+                </div>
+              </div>
+
+              <div className="return-day-facts">
+                <div>
+                  <span>Mode</span>
+                  <strong>{modeLabel(guide.transportMode ?? timeline?.transportMode)}</strong>
+                </div>
+                <div>
+                  <span>Base</span>
+                  <strong>{guide.accommodation?.name ?? guide.region}</strong>
+                </div>
+              </div>
+
+              {routeItems.length > 0 && <DailyRouteSpine title="Route Point" items={routeItems} />}
+
+              {notes.length > 0 && (
+                <div className="return-day-notes">
+                  {notes.map((note, index) => (
+                    <p key={`${guide.id}-return-note-${index}`}>{pageCardText(note, 150)}</p>
+                  ))}
+                </div>
+              )}
+            </article>
+          );
+        })}
+      </div>
+    </section>
   );
 }
 
@@ -2065,7 +2199,7 @@ function PlaceBrief({ place, index, showImage = true }: { place: DailyGuidePlace
       {showImage && place.image && (
         <figure className="place-thumb">
           <img
-            src={place.image}
+            src={getPrintImageSrc(place.image)}
             alt={place.imageAlt}
             loading="eager"
             decoding="sync"
@@ -2121,7 +2255,7 @@ function KeyStopCard({
       {!hideImage && place.image && (
         <figure className="key-stop-image">
           <img
-            src={place.image}
+            src={getPrintImageSrc(place.image)}
             alt={place.imageAlt}
             loading="eager"
             decoding="sync"
@@ -2150,7 +2284,7 @@ function MorePlaceCard({
 }) {
   return (
     <article className={`more-place ${compact ? "more-place-compact" : ""} avoid-break-inside`}>
-      {place.image && <img src={place.image} alt={place.imageAlt} style={getPlaceImageStyle(place)} />}
+      {place.image && <img src={getPrintImageSrc(place.image)} alt={place.imageAlt} style={getPlaceImageStyle(place)} />}
       <div>
         <p>Stop {stopNumber} / {place.category}</p>
         <h4>{place.name}</h4>
@@ -2181,7 +2315,7 @@ function SecondaryPlaceCard({
       {!hideImage && place.image && (
         <figure className="secondary-place-image">
           <img
-            src={place.image}
+            src={getPrintImageSrc(place.image)}
             alt={place.imageAlt}
             loading="eager"
             decoding="sync"
@@ -2347,7 +2481,7 @@ function DailyGuidePage({ guide, sectionTitle }: { guide: DailyGuide; sectionTit
             {heroPlace.image && (
               <figure className="daily-featured-stop-image">
                 <img
-                  src={heroPlace.image}
+                  src={getPrintImageSrc(heroPlace.image)}
                   alt={heroPlace.imageAlt}
                   loading="eager"
                   decoding="sync"
@@ -2489,9 +2623,22 @@ export const PrintLayout = ({ payload, printDesign }: { payload: TravelPayload; 
       />
       <MovementReferencePage items={guideData.masterTimeline} dailyGuides={guideData.dailyGuides} />
       <StayDirectory stays={stays} title={design.sectionLabels.stays} />
-      {guideData.dailyGuides.map((guide) => (
-        <DailyGuidePage key={guide.id} guide={guide} sectionTitle={design.sectionLabels.daily} />
-      ))}
+      {guideData.dailyGuides.map((guide) => {
+        if (guide.day === 18) {
+          const nextGuide = guideData.dailyGuides.find((item) => item.day === 19);
+          return (
+            <ReturnJourneyCombinedPage
+              key="return-journey-combined"
+              guides={nextGuide ? [guide, nextGuide] : [guide]}
+              sectionTitle={design.sectionLabels.daily}
+            />
+          );
+        }
+
+        if (guide.day === 19) return null;
+
+        return <DailyGuidePage key={guide.id} guide={guide} sectionTitle={design.sectionLabels.daily} />;
+      })}
       {cityGuideDefinitions.map((definition) => (
         <CityGuidePage key={definition.title} definition={definition} />
       ))}

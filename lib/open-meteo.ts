@@ -103,7 +103,8 @@ async function mergeWeatherIntoDay(day: ItineraryDay): Promise<ItineraryDay> {
     ...day,
     weather: forecast ?? {
       ...day.weather,
-      source: "estimate"
+      condition: "예보 대기",
+      source: "unavailable"
     }
   };
 }

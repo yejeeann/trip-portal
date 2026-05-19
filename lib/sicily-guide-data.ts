@@ -1056,7 +1056,7 @@ const pantheonImage = "/travel-photos/rome/pantheon.jpg";
 const piazzaNavonaImage = "/travel-photos/rome/piazza-navona.jpg";
 const treviFountainImage = "/travel-photos/rome/trevi-fountain.jpg";
 const spanishStepsImage = "/travel-photos/rome/spanish-steps.jpg";
-const montiDistrictImage = "https://commons.wikimedia.org/wiki/Special:FilePath/Rue%20du%20rione%20Monti%20%C3%A0%20Rome.JPG?width=1600";
+const montiDistrictImage = "/travel-photos/rome/monti-district.jpg";
 const romaTerminiImage = "https://commons.wikimedia.org/wiki/Special:FilePath/Main%20entrance%20hall%20at%20Roma%20Termini%20Railway%20Station%20in%20Rome%2C%20Italy.jpg?width=1600";
 const cataniaCentraleImage = "/travel-photos/sicily-day3-6/catania-centrale.jpg";
 const cataniaImage = "/travel-photos/sicily-day3-6/catania-overview.jpg";
@@ -1132,7 +1132,7 @@ const viaAteneaImage = "/travel-photos/sicily-day10-12/via-atenea-agrigento.jpg"
 const santaMariaGreciImage = "/travel-photos/sicily-day10-12/santa-maria-dei-greci.jpg";
 const trapaniPortImage = "/travel-photos/sicily-day10-12/trapani-port.jpg";
 const torreLignyImage = "/travel-photos/sicily-day10-12/torre-di-ligny.jpg";
-const ericePanoramaImage = "/travel-photos/sicily-day10-12/erice-panorama.jpg";
+const ericePanoramaImage = "/travel-photos/sicily-day10-12/erice-overview.jpg";
 const churchSanGiulianoImage = "/travel-photos/sicily-day10-12/church-san-giuliano-erice.jpg";
 const giardiniBalioImage = "/travel-photos/sicily-day10-12/giardini-del-balio-erice.jpg";
 const giardinoKolymbethraImage = "/travel-photos/sicily-day10-12/giardino-kolymbethra.jpg";
@@ -1163,10 +1163,10 @@ const pompeiiParkImage = "/travel-photos/sicily-day16-19/pompeii-archaeological-
 const forumPompeiiImage = "/travel-photos/sicily-day16-19/forum-of-pompeii.jpg";
 const villaMysteriesImage = "/travel-photos/sicily-day16-19/villa-of-the-mysteries.jpg";
 const amphitheatrePompeiiImage = "/travel-photos/sicily-day16-19/amphitheatre-of-pompeii.jpg";
-const amalfiImage = "https://commons.wikimedia.org/wiki/Special:FilePath/Amalfi%20Coast%20(Positano).jpg?width=1600";
+const amalfiImage = "/travel-photos/sicily-day16-19/amalfi-coast-positano.jpg";
 const agrigentoImage = "https://commons.wikimedia.org/wiki/Special:FilePath/Agrigento%20Valley%20of%20the%20Temples%20Temple%20of%20Concordia.jpg?width=1600";
 const palermoImage = "https://commons.wikimedia.org/wiki/Special:FilePath/Palermo%20Cathedral%20BW%202012-10-09%2011-24-16.jpg?width=1600";
-const westernSicilyImage = "https://commons.wikimedia.org/wiki/Special:FilePath/Erice%20Sicily%20panorama.jpg?width=1600";
+const westernSicilyImage = "/travel-photos/sicily-day10-12/erice-overview.jpg";
 
 const sicilyAccommodations = {
   eastSicily: {
