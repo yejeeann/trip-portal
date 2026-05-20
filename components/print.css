@@ -1263,6 +1263,12 @@ body.print-body * {
   object-fit: fill;
 }
 
+.print-tile-map-snapshot .print-map-snapshot-image {
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
 .print-tile-route {
   position: absolute;
   inset: 0;

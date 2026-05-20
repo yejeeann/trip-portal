@@ -2,8 +2,8 @@ import type { Metadata, Viewport } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "The Guide Desk",
-  description: "A premium editorial travel guide dashboard for professional trip planning."
+  title: "Sicily & Malta Trip Guide",
+  description: "A personal trip guide app for the Sicily and Malta journey."
 };
 
 export const viewport: Viewport = {

@@ -7,7 +7,8 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "generate:print-maps": "node scripts/generate-print-map-snapshots.mjs"
   },
   "dependencies": {
     "clsx": "^2.1.1",

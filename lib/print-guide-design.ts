@@ -19,7 +19,7 @@ export type PrintGuideDesign = {
 
 export const staticPrintGuideDesign: PrintGuideDesign = {
   source: "stitch-mcp",
-  title: "Sicily, Malta & Rome",
+  title: "Sicily & Malta Travel Guide · May 2026",
   subtitle: "A sunlit field guide to coastlines, ancient cities, slow roads, and practical travel days",
   themeColor: "#1A434E",
   accentColor: "#D4A373",

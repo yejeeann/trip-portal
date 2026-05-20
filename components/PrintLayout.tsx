@@ -1,10 +1,11 @@
 "use client";
 
-import { useEffect } from "react";
+import { createContext, useContext, useEffect } from "react";
 import { sicilyGuideData } from "@/lib/sicily-guide-data";
 import { staticPrintGuideDesign, type PrintGuideDesign } from "@/lib/print-guide-design";
 import type { DailyCityVisit, DailyGuide, DailyGuidePlace, DailyRouteOverviewPoint, FlightTicket, MasterTimelineItem, TimelineAccommodation } from "@/lib/swiss-guide-data";
 import type { TravelPayload } from "@/lib/types";
+import printMapSnapshots from "@/data/generated/print-map-snapshots.json";
 import type { OsmMarker } from "./multi-osm-map";
 
 type StayRow = TimelineAccommodation & {
@@ -17,6 +18,10 @@ type PrintMapMarker = OsmMarker & {
 };
 
 type PrintMapScope = "overview" | "atlas" | "daily" | "dailyWide";
+
+type PrintMapSnapshotManifest = {
+  maps?: string[];
+};
 
 type CityGuideDefinition = {
   eyebrow: string;
@@ -452,6 +457,8 @@ function getPrintImageSrc(src?: string) {
 
 const PRINT_TILE_SIZE = 256;
 const MAX_MERCATOR_LAT = 85.05112878;
+const PRINT_MAP_SNAPSHOT_KEYS = new Set(((printMapSnapshots as PrintMapSnapshotManifest).maps ?? []));
+const PrintMapSnapshotContext = createContext(true);
 
 type ProjectedPrintMarker = PrintMapMarker & {
   x: number;
@@ -595,6 +602,32 @@ function getTileUrl(x: number, y: number, zoom: number) {
   return `https://${subdomain}.basemaps.cartocdn.com/rastertiles/voyager/${zoom}/${x}/${y}.png`;
 }
 
+function stablePrintMapHash(value: string) {
+  let hash = 2166136261;
+
+  for (let index = 0; index < value.length; index += 1) {
+    hash ^= value.charCodeAt(index);
+    hash = Math.imul(hash, 16777619);
+  }
+
+  return (hash >>> 0).toString(36);
+}
+
+function getPrintMapSnapshotKey(markers: PrintMapMarker[], scope: PrintMapScope) {
+  const markerSignature = markers
+    .map((markerItem) => [
+      markerItem.name,
+      markerItem.lat.toFixed(5),
+      markerItem.lng.toFixed(5),
+      markerItem.label,
+      markerItem.variant ?? "route",
+      markerItem.includeInRoute === false ? "no-route" : "route"
+    ].join(":"))
+    .join("|");
+
+  return `print-map-${scope}-${stablePrintMapHash(markerSignature)}`;
+}
+
 function getTileMapLayout(markers: PrintMapMarker[], scope: PrintMapScope): PrintMapLayout {
   const zoom = getPrintMapZoom(markers, scope);
   const worldSize = PRINT_TILE_SIZE * 2 ** zoom;
@@ -671,12 +704,32 @@ function getTileMapLayout(markers: PrintMapMarker[], scope: PrintMapScope): Prin
 function PrintTileMap({ markers, scope }: { markers: PrintMapMarker[]; scope: PrintMapScope }) {
   if (!markers.length) return <div className="print-tile-map print-tile-map-empty">지도 데이터가 부족합니다.</div>;
 
+  const preferMapSnapshots = useContext(PrintMapSnapshotContext);
+  const snapshotKey = getPrintMapSnapshotKey(markers, scope);
+  const snapshotSrc = `/print-maps/${snapshotKey}.png`;
+
+  if (preferMapSnapshots && PRINT_MAP_SNAPSHOT_KEYS.has(snapshotKey)) {
+    return (
+      <div
+        className={`print-tile-map print-tile-map-${scope} print-tile-map-snapshot`}
+        data-print-map-key={snapshotKey}
+        data-print-map-scope={scope}
+      >
+        <img className="print-map-snapshot-image" src={snapshotSrc} alt="" loading="eager" decoding="sync" />
+      </div>
+    );
+  }
+
   const layout = getTileMapLayout(markers, scope);
   const routePoints = layout.markers.filter((item) => item.includeInRoute !== false);
   const routePolyline = routePoints.map((item) => `${item.x},${item.y}`).join(" ");
 
   return (
-    <div className={`print-tile-map print-tile-map-${scope}`}>
+    <div
+      className={`print-tile-map print-tile-map-${scope}`}
+      data-print-map-key={snapshotKey}
+      data-print-map-scope={scope}
+    >
       {layout.tiles.map((tile) => (
         <img
           key={tile.key}
@@ -1111,7 +1164,7 @@ function CoverPage({ payload, design }: { payload: TravelPayload; design: PrintG
 
   return (
     <section className="guide-cover">
-      <img className="cover-photo" src={getPrintImageSrc(coverImage)} alt={payload.trip.title || design.title} />
+      <img className="cover-photo" src={getPrintImageSrc(coverImage)} alt={design.title} />
       <div className="cover-scrim" />
       <div className="cover-topline">
         <span>{design.coverLabel}</span>
@@ -1119,7 +1172,7 @@ function CoverPage({ payload, design }: { payload: TravelPayload; design: PrintG
       </div>
       <div className="cover-copy">
         <p className="guide-kicker">Sicily / Malta / Calabria / Amalfi / Rome</p>
-        <h1>{payload.trip.title || design.title}</h1>
+        <h1>{design.title}</h1>
         <p className="guide-subtitle">{design.subtitle}</p>
         <div className="cover-route">
           <span>Sicily</span>
@@ -2569,7 +2622,15 @@ function DailyGuidePage({ guide, sectionTitle }: { guide: DailyGuide; sectionTit
     </>
   );
 }
-export const PrintLayout = ({ payload, printDesign }: { payload: TravelPayload; printDesign?: PrintGuideDesign }) => {
+export const PrintLayout = ({
+  payload,
+  printDesign,
+  preferMapSnapshots = true
+}: {
+  payload: TravelPayload;
+  printDesign?: PrintGuideDesign;
+  preferMapSnapshots?: boolean;
+}) => {
   const guideData = sicilyGuideData;
   const design = printDesign ?? staticPrintGuideDesign;
   const stays = getUniqueStays(guideData.masterTimeline);
@@ -2580,6 +2641,7 @@ export const PrintLayout = ({ payload, printDesign }: { payload: TravelPayload; 
   }, []);
 
   return (
+    <PrintMapSnapshotContext.Provider value={preferMapSnapshots}>
     <main
       className={`print-guide print-density-${design.layoutDensity}`}
       style={{
@@ -2621,6 +2683,7 @@ export const PrintLayout = ({ payload, printDesign }: { payload: TravelPayload; 
         items={guideData.masterTimeline}
       />
     </main>
+    </PrintMapSnapshotContext.Provider>
   );
 };
 

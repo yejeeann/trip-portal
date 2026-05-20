@@ -4,8 +4,16 @@ import { fallbackTravelPayload } from "@/lib/fallback-travel";
 import { staticPrintGuideDesign } from "@/lib/print-guide-design";
 import { PrintButton } from "@/components/print-button";
 import Link from "next/link";
+import type { Metadata } from "next";
 
-export default function PrintPage() {
+export const metadata: Metadata = {
+  title: "Sicily & Malta Travel Guide · May 2026",
+  description: "A publication-ready PDF travel guide for Sicily and Malta in May 2026."
+};
+
+export default function PrintPage({ searchParams }: { searchParams?: { mapSnapshotSource?: string } }) {
+  const preferMapSnapshots = searchParams?.mapSnapshotSource !== "1";
+
   return (
     <>
       <div className="no-print sticky top-0 z-50 border-b border-[#dfd2c2] bg-[#f7f1e8]/95 px-4 py-3 shadow-[0_10px_26px_rgba(55,42,32,0.08)] backdrop-blur">
@@ -19,7 +27,11 @@ export default function PrintPage() {
           <PrintButton />
         </div>
       </div>
-      <PrintLayout payload={fallbackTravelPayload} printDesign={staticPrintGuideDesign} />
+      <PrintLayout
+        payload={fallbackTravelPayload}
+        printDesign={staticPrintGuideDesign}
+        preferMapSnapshots={preferMapSnapshots}
+      />
     </>
   );
 }

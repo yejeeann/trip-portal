@@ -8,7 +8,7 @@ export function PrintButton() {
     if (typeof window === "undefined") return;
 
     const previousTitle = document.title;
-    document.title = "sicily-malta-rome-travel-guidebook";
+    document.title = "Sicily & Malta Travel Guide · May 2026";
     window.print();
 
     window.setTimeout(() => {
